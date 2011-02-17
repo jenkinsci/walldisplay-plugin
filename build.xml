@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="clientcomplete" name="HudsonTrayApp1">
+	
+	<target name="clientcomplete" depends="clientbuild,clientcopy"/>
+	
+	<target name="clientbuild">
+		<ant antfile="build.xml" dir="client"/>
+	</target>
+	
+	<target name="clientcopy">
+		<copy todir="src/main/webapp">
+			<fileset dir="client/dist/" />
+		</copy>
+	</target>
+</project>

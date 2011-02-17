@@ -1,0 +1,33 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jvnet.hudson.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>1.394</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.jvnet.hudson.plugins</groupId>
+    <artifactId>jenkinswalldisplay-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1-SNAPSHOT</version>
+    <name>Jenkins Wall Display Master Project</name>
+
+    <developers>
+        <developer>
+            <id>pellepelster</id>
+            <name>Christian Pelster</name>
+            <email>pellepelster@gmail.com</email>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>client</module>
+        <module>plugin</module>
+    </modules>
+
+</project>
