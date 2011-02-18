@@ -63,7 +63,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     }
     private static final long serialVersionUID = 7190596411432294617L;
     private String message = "";
-    private HudsonWorker hudsonWorker;
+    private JenkinsWorker hudsonWorker;
     private Image bufferedImage;
     private Graphics2D bufferedGraphics;
     private List<Job> jobs = new ArrayList<Job>();
@@ -275,7 +275,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent event) {
 
                 if (hudsonWorker == null) {
-                    hudsonWorker = new HudsonWorker(jenkinsUrl);
+                    hudsonWorker = new JenkinsWorker(jenkinsUrl);
                     hudsonWorker.execute();
                 }
 
@@ -295,7 +295,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                         message = e.getMessage();
                     }
 
-                    hudsonWorker = new HudsonWorker(jenkinsUrl);
+                    hudsonWorker = new JenkinsWorker(jenkinsUrl);
                     hudsonWorker.execute();
                 }
 
