@@ -34,11 +34,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 
 import de.pellepelster.jenkins.walldisplay.model.Job;
 
@@ -83,17 +78,16 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static String MESSAGE_NO_URL_ENTERED = "No URL given, exiting";
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
     private final static int MAX_QUEUE_POSITIONS = 3;
-    private final static String ARGUMENT_URL = "url";
 
     public WallDisplayFrame() {
 
         initFrame();
         setTitle(MESSAGE_JEKINS_WALL_DISPLAY);
 
-        String jenkinsUrl = JOptionPane.showInputDialog(null, MESSAGE_ENTER_JEKINS_URL, MESSAGE_JEKINS_WALL_DISPLAY, 1);
+        String url = JOptionPane.showInputDialog(null, MESSAGE_ENTER_JEKINS_URL, MESSAGE_JEKINS_WALL_DISPLAY, 1);
 
-        if (jenkinsUrl != null) {
-            this.jenkinsUrl = jenkinsUrl;
+        if (url != null) {
+            this.jenkinsUrl = url;
         } else {
             JOptionPane.showMessageDialog(null, MESSAGE_NO_URL_ENTERED, MESSAGE_JEKINS_WALL_DISPLAY, 1);
             System.exit(1);
@@ -504,15 +498,5 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         } else {
             new WallDisplayFrame();
         }
-
-        //Options options = new Options();
-        //options.addOption(ARGUMENT_URL, true, "url of the jenkins server");
-
-        //CommandLineParser parser = new PosixParser();
-        //CommandLine cmd = parser.parse(options, args);
-
-//		} catch (ParseException e) {
-//			throw new RuntimeException(e);
-//		}
     }
 }
