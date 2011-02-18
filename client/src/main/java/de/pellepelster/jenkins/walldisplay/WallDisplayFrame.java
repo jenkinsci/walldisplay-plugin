@@ -63,6 +63,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private Graphics2D bufferedGraphics;
     private List<Job> jobs = new ArrayList<Job>();
     private String jenkinsUrl;
+    
     private final static Color BACKGROUND_COLOR = Color.WHITE;
     private final static Color JOB_TEXT_COLOR = Color.WHITE;
     private final static Color QUEUE_POSITIONS_COLOR = Color.YELLOW;
@@ -73,10 +74,11 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static int MESSAGE_FONT_SIZE = 24;
     private final static int JOB_ARC_WIDTH = 20;
     private final static int JOB_ARC_HEIGHT = 20;
-    private final static String MESSAGE_INITIALIZING = "initializing jenkins wall display";
+    private final static String MESSAGE_INITIALIZING = "Initializing Jenkins Wall Display";
     private final static String MESSAGE_ENTER_JEKINS_URL = "Enter Jenkins URL";
     private final static String MESSAGE_NO_URL_ENTERED = "No URL given, exiting";
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
+    
     private final static int MAX_QUEUE_POSITIONS = 3;
 
     public WallDisplayFrame() {
