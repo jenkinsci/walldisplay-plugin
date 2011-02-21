@@ -279,7 +279,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent event) {
 
                 if (hudsonWorker == null) {
-                    hudsonWorker = new JenkinsWorker(jenkinsUrl);
+                    hudsonWorker = new JenkinsWorker(jenkinsUrl, viewName);
                     hudsonWorker.execute();
                 }
 
@@ -291,7 +291,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                         if (hudsonWorker.getException() != null) {
                             message = hudsonWorker.getException().getMessage();
                         } else {
-                            jobs.addAll(hudsonWorker.get().getJobs());
+                            jobs.addAll(JenkinsWorker.getJobsToDisplay(hudsonWorker.get(), viewName));
                             Collections.sort(jobs, new JobComperator());
                         }
 
@@ -299,7 +299,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                         message = e.getMessage();
                     }
 
-                    hudsonWorker = new JenkinsWorker(jenkinsUrl);
+                    hudsonWorker = new JenkinsWorker(jenkinsUrl, viewName);
                     hudsonWorker.execute();
                 }
 
@@ -377,7 +377,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
         } else {
 
-            if (!message.isEmpty()) {
+            if (message != null && !message.isEmpty()) {
                 drawMessage(bufferedGraphics);
             }
         }
