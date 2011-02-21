@@ -7,6 +7,9 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import hudson.Plugin;
+import hudson.model.Hudson;
+import hudson.model.TransientViewActionFactory;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This plugin provides a application that monitors jobs in a way suitable for public wall displays
@@ -18,7 +21,17 @@ public class PluginImpl extends Plugin {
 
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
+    @Override
+    public void start() throws Exception {
+        super.start();
+
+        Hudson.getInstance().getExtensionList(TransientViewActionFactory.class).add(0, new WallDisplayTransientViewActionFactory());
+    }
+
     public void doLaunch(StaplerRequest req, StaplerResponse res) throws IOException {
+
+        String viewName = req.getOriginalRestOfPath();
+        viewName = StringUtils.removeStart(viewName, "/");
 
         res.setHeader("Content-Disposition", "filename=JenkinsWallDisplay.jnlp");
         res.setContentType("application/x-java-jnlp-file");
@@ -45,6 +58,7 @@ public class PluginImpl extends Plugin {
         w.write("</resources>");
         w.write("<application-desc main-class=\"de.pellepelster.jenkins.walldisplay.WallDisplayFrame\">");
         w.write("<argument>" + req.getRootPath() + "</argument>");
+        w.write("<argument>" + viewName + "</argument>");
         w.write("</application-desc>");
         w.write("</jnlp>");
 

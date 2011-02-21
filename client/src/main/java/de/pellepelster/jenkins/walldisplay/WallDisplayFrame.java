@@ -63,7 +63,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private Graphics2D bufferedGraphics;
     private List<Job> jobs = new ArrayList<Job>();
     private String jenkinsUrl;
-    
+    private String viewName;
     private final static Color BACKGROUND_COLOR = Color.WHITE;
     private final static Color JOB_TEXT_COLOR = Color.WHITE;
     private final static Color QUEUE_POSITIONS_COLOR = Color.YELLOW;
@@ -78,7 +78,6 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static String MESSAGE_ENTER_JEKINS_URL = "Enter Jenkins URL";
     private final static String MESSAGE_NO_URL_ENTERED = "No URL given, exiting";
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
-    
     private final static int MAX_QUEUE_POSITIONS = 3;
 
     public WallDisplayFrame() {
@@ -98,11 +97,15 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         init();
     }
 
-    public WallDisplayFrame(final String jenkinsUrl) {
+    public WallDisplayFrame(final String jenkinsUrl, String viewName) {
         this.jenkinsUrl = jenkinsUrl;
-
+        this.viewName = viewName;
         initFrame();
         init();
+    }
+
+    public WallDisplayFrame(final String jenkinsUrl) {
+        this(jenkinsUrl, null);
     }
 
     private void drawMessage(Graphics2D g2) {
@@ -221,7 +224,12 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
     private void init() {
 
-        setTitle(jenkinsUrl);
+        if (viewName == null) {
+            setTitle(jenkinsUrl);
+        } else {
+            setTitle(String.format("%s (%s)", jenkinsUrl, viewName));
+        }
+
         message = MESSAGE_INITIALIZING;
         initRepaintTimer();
         initWorkerTimer();
@@ -493,10 +501,14 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args1) {
 
+        String[] args = new String[] {"http://109.239.57.117:8080/jenkins", "test1"};
+        
         if (args.length == 1) {
             new WallDisplayFrame(args[0]);
+        } else if (args.length == 2) {
+            new WallDisplayFrame(args[0], args[1]);
         } else {
             new WallDisplayFrame();
         }

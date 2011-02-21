@@ -13,6 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class Hudson {
 
     private List<Job> jobs = new ArrayList<Job>();
+    private List<View> views = new ArrayList<View>();
     private String nodeDescription;
 
     /**
@@ -30,6 +31,20 @@ public class Hudson {
     }
 
     /**
+     * @return the views
+     */
+    public List<View> getViews() {
+        return views;
+    }
+
+    /**
+     * @param views the views to set
+     */
+    public void setViews(List<View> views) {
+        this.views = views;
+    }
+
+    /**
      * @return the jobs
      */
     public List<Job> getJobs() {
@@ -42,5 +57,4 @@ public class Hudson {
     public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
     }
-
 }
