@@ -42,56 +42,6 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
     @Override
     protected Hudson doInBackground() throws Exception {
         exception = null;
-        return read();
-    }
-
-    private XStream getDefaultXStream() {
-
-        XStream xstream = new XStream() {
-
-            @Override
-            protected MapperWrapper wrapMapper(MapperWrapper next) {
-                return new MapperWrapper(next) {
-
-                    @Override
-                    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
-                        return definedIn != Object.class ? super.shouldSerializeMember(definedIn, fieldName) : false;
-                    }
-                };
-            }
-        };
-
-        return xstream;
-    }
-
-    public Exception getException() {
-        return exception;
-    }
-
-    private InputStream openStream(URL url) throws IOException {
-
-        URLConnection conn = url.openConnection();
-
-        conn.setConnectTimeout(CONNECT_TIMEOUT);
-        conn.setReadTimeout(READ_TIMEOUT);
-
-        return conn.getInputStream();
-    }
-
-    public static List<Job> getJobsToDisplay(Hudson hudson, String viewName) {
-
-        List<Job> result = hudson.getJobs();
-
-        for (View view : hudson.getViews()) {
-            if (view.getName().equals(viewName) == true) {
-                result = view.getJobs();
-            }
-        }
-
-        return result;
-    }
-
-    public Hudson read() {
 
         try {
             URL hudsonQueueApiUrl = new URL(String.format("%s/queue/api/xml", jenkinsUrl));
@@ -149,5 +99,52 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             exception = e;
             return null;
         }
+
+    }
+
+    private XStream getDefaultXStream() {
+
+        XStream xstream = new XStream() {
+
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new MapperWrapper(next) {
+
+                    @Override
+                    public boolean shouldSerializeMember(Class definedIn, String fieldName) {
+                        return definedIn != Object.class ? super.shouldSerializeMember(definedIn, fieldName) : false;
+                    }
+                };
+            }
+        };
+
+        return xstream;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    private InputStream openStream(URL url) throws IOException {
+
+        URLConnection conn = url.openConnection();
+
+        conn.setConnectTimeout(CONNECT_TIMEOUT);
+        conn.setReadTimeout(READ_TIMEOUT);
+
+        return conn.getInputStream();
+    }
+
+    public static List<Job> getJobsToDisplay(Hudson hudson, String viewName) {
+
+        List<Job> result = hudson.getJobs();
+
+        for (View view : hudson.getViews()) {
+            if (view.getName().equals(viewName) == true) {
+                result = view.getJobs();
+            }
+        }
+
+        return result;
     }
 }
