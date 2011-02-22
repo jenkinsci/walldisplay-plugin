@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.jvnet.hudson.plugins</groupId>
         <artifactId>jenkinswalldisplay-pom</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jenkinswalldisplay</artifactId>
     <packaging>hpi</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <name>Jenkins Wall Display Plugin</name>
 
     <dependencies>
@@ -69,7 +69,7 @@
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/jenkinswalldisplay</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <stripVersion>true</stripVersion>
                         </configuration>

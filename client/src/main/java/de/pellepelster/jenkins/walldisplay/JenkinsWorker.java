@@ -18,6 +18,7 @@ import de.pellepelster.jenkins.walldisplay.model.View;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.List;
+import org.apache.commons.collections.ListUtils;
 
 /**
  * Reads the jenkins remote api
@@ -78,16 +79,16 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
     }
 
     public static List<Job> getJobsToDisplay(Hudson hudson, String viewName) {
-        
-        List<Job> jobs = hudson.getJobs();
+
+        List<Job> result = hudson.getJobs();
 
         for (View view : hudson.getViews()) {
-            if (view.getName().equals(viewName)) {
-                jobs = view.getJobs();
+            if (view.getName().equals(viewName) == true) {
+                result = view.getJobs();
             }
         }
 
-        return jobs;
+        return result;
     }
 
     public Hudson read() {

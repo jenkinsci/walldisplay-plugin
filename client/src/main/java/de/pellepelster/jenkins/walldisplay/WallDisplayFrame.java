@@ -41,6 +41,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -502,27 +503,28 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             setVisible(true);
         }
     }
-    private static String OPTION_URL = "url";
-    private static String OPTION_VIEW = "view";
+    private static String OPTION_URL = "u";
+    private static String OPTION_VIEW = "v";
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args1) {
+
+        String[] args = new String[] { "-u http://myadmin.pellepelster.de:8080/jenkins/", "-v test1"};
 
         Options options = new Options();
-        options.addOption(OPTION_URL.substring(0, 1), OPTION_URL, true, "url of the jenkins server");
-        options.addOption(OPTION_VIEW.substring(0, 1), OPTION_VIEW, true, "view to display");
-
+        options.addOption(OPTION_URL, true, "url of the jenkins server");
+        options.addOption(OPTION_VIEW, true, "view to display");
 
         try {
             CommandLineParser parser = new PosixParser();
             CommandLine cmd = parser.parse(options, args);
 
-            if (cmd.hasOption(OPTION_URL)) {
+            if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
                 new WallDisplayFrame(cmd.getOptionValue(OPTION_URL), cmd.getOptionValue(OPTION_VIEW));
             } else {
-                new WallDisplayFrame();
+                throw new RuntimeException(String.format("invalid arguments '%s'", StringUtils.join(args, " ")));
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
