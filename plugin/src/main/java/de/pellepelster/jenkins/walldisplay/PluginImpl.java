@@ -57,8 +57,8 @@ public class PluginImpl extends Plugin {
         w.write("<jar href=\"xstream.jar\"/>");
         w.write("</resources>");
         w.write("<application-desc main-class=\"de.pellepelster.jenkins.walldisplay.WallDisplayFrame\">");
-        w.write("<argument>" + req.getRootPath() + "</argument>");
-        w.write("<argument>" + viewName + "</argument>");
+        w.write("<argument>-url " + req.getRootPath() + "</argument>");
+        w.write("<argument>-view " + viewName + "</argument>");
         w.write("</application-desc>");
         w.write("</jnlp>");
 

@@ -36,6 +36,11 @@ import javax.swing.Timer;
 
 
 import de.pellepelster.jenkins.walldisplay.model.Job;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 
 /**
  * 
@@ -497,20 +502,30 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             setVisible(true);
         }
     }
+    private static String OPTION_URL = "url";
+    private static String OPTION_VIEW = "view";
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args1) {
+    public static void main(String[] args) {
 
-        String[] args = new String[] {"http://109.239.57.117:8080/jenkins", "test1"};
-        
-        if (args.length == 1) {
-            new WallDisplayFrame(args[0]);
-        } else if (args.length == 2) {
-            new WallDisplayFrame(args[0], args[1]);
-        } else {
-            new WallDisplayFrame();
+        Options options = new Options();
+        options.addOption(OPTION_URL.substring(0, 1), OPTION_URL, true, "url of the jenkins server");
+        options.addOption(OPTION_VIEW.substring(0, 1), OPTION_VIEW, true, "view to display");
+
+
+        try {
+            CommandLineParser parser = new PosixParser();
+            CommandLine cmd = parser.parse(options, args);
+
+            if (cmd.hasOption(OPTION_URL)) {
+                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL), cmd.getOptionValue(OPTION_VIEW));
+            } else {
+                new WallDisplayFrame();
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 }
