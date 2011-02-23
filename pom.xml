@@ -30,4 +30,9 @@
         <module>plugin</module>
     </modules>
 
+    <scm>
+        <connection>scm:git:git://github.com/jenkinsci/walldisplay-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/walldisplay-plugin.git</developerConnection>
+    </scm>
+
 </project>
