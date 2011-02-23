@@ -66,7 +66,16 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
 
             Hudson hudson = (Hudson) hudsonXstream.fromXML(openStream(hudsonApiUrl));
 
-            List<Job> jobs = getJobsToDisplay(hudson, viewName);
+
+            List<Job> jobs = hudson.getJobs();
+
+            for (View view : hudson.getViews()) {
+                if (viewName.equals(view.getName())) {
+                    jobs = view.getJobs();
+                }
+            }
+
+
 
             //load detailed jobs infos for all displayed jobs
             for (Job job : jobs) {

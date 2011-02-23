@@ -509,9 +509,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args1) {
-
-        String[] args = new String[] { "-u http://myadmin.pellepelster.de:8080/jenkins/", "-v test1"};
+    public static void main(String[] args) {
 
         Options options = new Options();
         options.addOption(OPTION_URL, true, "url of the jenkins server");
