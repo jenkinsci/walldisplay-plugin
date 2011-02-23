@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>jenkinswalldisplay-pom</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jenkinswalldisplay</artifactId>
     <packaging>hpi</packaging>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <name>Jenkins Wall Display Plugin</name>
 
     <dependencies>
