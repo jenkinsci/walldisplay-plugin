@@ -4,15 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jvnet.hudson.plugins</groupId>
+        <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>jenkinswalldisplay-pom</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jenkinswalldisplay</artifactId>
     <packaging>hpi</packaging>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <name>Jenkins Wall Display Plugin</name>
 
     <dependencies>
@@ -27,7 +27,7 @@
             <version>1.3.1-hudson-8</version>
         </dependency>
         <dependency>
-            <groupId>org.jvnet.hudson.plugins</groupId>
+            <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>client</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -63,7 +63,7 @@
                                     <version>1.1.4c</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.jvnet.hudson.plugins</groupId>
+                                    <groupId>org.jenkins-ci.plugins</groupId>
                                     <artifactId>client</artifactId>
                                     <version>${pom.version}</version>
                                 </artifactItem>
