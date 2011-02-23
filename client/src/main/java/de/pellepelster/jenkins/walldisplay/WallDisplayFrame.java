@@ -520,7 +520,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
-                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL), cmd.getOptionValue(OPTION_VIEW));
+                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL).trim(), cmd.getOptionValue(OPTION_VIEW).trim());
             } else {
                 throw new RuntimeException(String.format("invalid arguments '%s'", StringUtils.join(args, " ")));
             }

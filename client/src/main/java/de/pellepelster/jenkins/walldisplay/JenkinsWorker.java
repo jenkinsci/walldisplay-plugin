@@ -149,7 +149,7 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
         List<Job> result = hudson.getJobs();
 
         for (View view : hudson.getViews()) {
-            if (view.getName().equals(viewName) == true) {
+            if (view.getName().equals(viewName)) {
                 result = view.getJobs();
             }
         }
