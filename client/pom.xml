@@ -29,6 +29,7 @@
     <artifactId>client</artifactId>
     <packaging>jar</packaging>
     <name>Jenkins Wall Display Client App</name>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Wall+Display+Plugin</url>
 
     <build>
         <plugins>

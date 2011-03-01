@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
     <version>0.4-SNAPSHOT</version>
     <name>Jenkins Wall Display Master Project</name>
-	<url>http://wiki.jenkins-ci.org/display/JENKINS/Wall+Display+Plugin</url>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Wall+Display+Plugin</url>
 
     <developers>
         <developer>
