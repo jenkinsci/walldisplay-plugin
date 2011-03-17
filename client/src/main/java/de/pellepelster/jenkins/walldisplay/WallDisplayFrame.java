@@ -36,6 +36,7 @@ import javax.swing.Timer;
 
 
 import de.pellepelster.jenkins.walldisplay.model.Job;
+import java.net.URLDecoder;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -520,7 +521,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
-                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL).trim(), cmd.getOptionValue(OPTION_VIEW).trim());
+                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL).trim(), URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()));
             } else {
                 throw new RuntimeException(String.format("invalid arguments '%s'", StringUtils.join(args, " ")));
             }
