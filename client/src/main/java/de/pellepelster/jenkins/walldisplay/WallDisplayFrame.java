@@ -190,14 +190,22 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private String getJobText(Job job) {
 
         String jobText = "";
-
+        
         if (job.getDescription() != null && !job.getDescription().isEmpty()) {
             jobText = job.getDescription();
         } else {
             jobText = job.getName();
         }
 
-        return String.format("%s #%d", jobText, job.getLastBuild().getNumber());
+        if (job.getLastBuild() != null)
+        {
+            return String.format("%s #%d", jobText, job.getLastBuild().getNumber());
+        }
+        else
+        {
+            return String.format("%s", jobText);
+        }
+        
     }
 
     private Font getJobTextFont(int fontSize) {
@@ -414,7 +422,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                     graphics.setColor(jobColor);
                     graphics.fill(new RoundRectangle2D.Double(jobX, jobY, jobWidth, jobHeight, JOB_ARC_WIDTH, JOB_ARC_HEIGHT));
 
-                    if (job.getLastBuild().getBuilding()) {
+                    if (job.getLastBuild() != null && job.getLastBuild().getBuilding()) {
                         paintProgress(graphics, jobX, jobY, jobWidth, jobHeight, job);
                     } else if (job.getQueuePosition() != null) {
                         paintQueuePosition(graphics, jobX, jobY, jobWidth, jobHeight, job);
@@ -528,5 +536,6 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
     }
 }

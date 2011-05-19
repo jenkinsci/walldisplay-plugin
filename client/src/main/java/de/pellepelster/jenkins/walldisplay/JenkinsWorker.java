@@ -70,12 +70,10 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             List<Job> jobs = hudson.getJobs();
 
             for (View view : hudson.getViews()) {
-                if (viewName.equals(view.getName())) {
+                if (viewName != null && viewName.equals(view.getName())) {
                     jobs = view.getJobs();
                 }
             }
-
-
 
             //load detailed jobs infos for all displayed jobs
             for (Job job : jobs) {
