@@ -74,8 +74,8 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static Color BACKGROUND_COLOR = Color.WHITE;
     private final static Color JOB_TEXT_COLOR = Color.WHITE;
     private final static Color QUEUE_POSITIONS_COLOR = Color.YELLOW;
-    private final static int MARGIN = 10;
-    private final static int JOB_MARGIN = 20;
+    private final static int MARGIN = 4;
+    private final static int JOB_MARGIN = 10;
     private final static String FONT_NAME = "Arial";
     private final static Color MESSAGE_FONT_COLOR = Color.BLACK;
     private final static int MESSAGE_FONT_SIZE = 24;
@@ -350,8 +350,8 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             Job jobLongName = getLongestJobName();
 
             Map<Integer, Rectangle2D> fontDimensions = new HashMap<Integer, Rectangle2D>();
-            for (int i = 12; i <= 64; i++) {
-                Rectangle2D fontDimension = getJobTextFont(i).getStringBounds(jobLongName.getName(), frc);
+            for (int i = 12; i <= 128; i++) {
+                Rectangle2D fontDimension = getJobTextFont(i).getStringBounds(getJobText(jobLongName), frc);
                 fontDimensions.put(i, fontDimension);
             }
 
