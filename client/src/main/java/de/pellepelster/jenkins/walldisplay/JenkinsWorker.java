@@ -77,7 +77,7 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
 
             //load detailed jobs infos for all displayed jobs
             for (Job job : jobs) {
-                URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName()));
+                URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName().replace(" ","%20")));
 
                 XStream jobXStream = getDefaultXStream();
                 jobXStream.alias("job", Job.class);
