@@ -13,7 +13,7 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>jenkinswalldisplay-pom</artifactId>
     <packaging>pom</packaging>
-    <version>0.5.7</version>
+    <version>0.5.8-SNAPSHOT</version>
     <name>Jenkins Wall Display Master Project</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Wall+Display+Plugin</url>
 
