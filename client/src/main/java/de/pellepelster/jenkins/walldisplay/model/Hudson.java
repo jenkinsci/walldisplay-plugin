@@ -15,6 +15,7 @@ public class Hudson {
     private List<Job> jobs = new ArrayList<Job>();
     private List<View> views = new ArrayList<View>();
     private String nodeDescription;
+    private long serverResponseTimestamp;
 
     /**
      * @return the nodeDescription
@@ -56,5 +57,19 @@ public class Hudson {
      */
     public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    /**
+     * @return the serverResponseTimestamp
+     */
+    public long getServerResponseTimestamp() {
+        return serverResponseTimestamp;
+    }
+
+    /**
+     * @param serverResponseTimestamp the serverResponseTimestamp to set
+     */
+    public void setServerResponseTimestamp(long serverResponseTimestamp) {
+        this.serverResponseTimestamp = serverResponseTimestamp;
     }
 }

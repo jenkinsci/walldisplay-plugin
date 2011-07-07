@@ -33,7 +33,6 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
     private final static int READ_TIMEOUT = 5000;
     private final static int JOB_API_EXECUTORS = 5;
     private final static int JOB_API_TIMEOUT = CONNECT_TIMEOUT + READ_TIMEOUT + 1000;
-    
     private String jenkinsUrl;
     private Exception exception = null;
     private String viewName;
@@ -71,12 +70,26 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
         }
     }
 
+    private long getServerResponseTime(String jenkinsUrl) {
+        
+        try {
+            URL url = new URL(jenkinsUrl);
+            URLConnection conn = url.openConnection();
+
+            return conn.getHeaderFieldDate("Date", 0);
+
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     protected Hudson doInBackground() throws Exception {
         exception = null;
 
         try {
+
             URL hudsonQueueApiUrl = new URL(String.format("%s/queue/api/xml", jenkinsUrl));
 
             XStream queueXstream = getDefaultXStream();
@@ -97,22 +110,22 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             hudsonXstream.addImplicitCollection(View.class, "jobs", "job", Job.class);
 
             Hudson hudson = (Hudson) hudsonXstream.fromXML(openStream(hudsonApiUrl));
-
-
+            hudson.setServerResponseTimestamp(getServerResponseTime(jenkinsUrl));
+            
             List<Job> jobs = hudson.getJobs();
             for (View view : hudson.getViews()) {
                 if (viewName != null && viewName.equals(view.getName())) {
                     jobs = view.getJobs();
                 }
             }
-            
+
             ExecutorService executor = Executors.newFixedThreadPool(JOB_API_EXECUTORS);
 
             //load detailed jobs infos for all displayed jobs
             for (Job job : jobs) {
                 executor.execute(new JobApiRunnable(job));
             }
-            
+
             executor.shutdown();
             executor.awaitTermination(JOB_API_TIMEOUT, TimeUnit.MILLISECONDS);
 

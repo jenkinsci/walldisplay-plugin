@@ -86,7 +86,8 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static String MESSAGE_NO_URL_ENTERED = "No URL given, exiting";
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
     private final static int MAX_QUEUE_POSITIONS = 3;
-
+    private long currentServerTimestamp = 0;
+    
     public WallDisplayFrame() {
 
         initFrame();
@@ -307,6 +308,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                             message = hudsonWorker.getException().getMessage();
                         } else {
                             jobs.addAll(JenkinsWorker.getJobsToDisplay(hudsonWorker.get(), viewName));
+                            currentServerTimestamp = hudsonWorker.get().getServerResponseTimestamp();
                             Collections.sort(jobs, new JobComperator());
                         }
 
@@ -467,7 +469,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         Area jobRectangleArea =
                 new Area(new RoundRectangle2D.Double(jobX, jobY, jobWidth, jobHeight, JOB_ARC_WIDTH, JOB_ARC_HEIGHT));
 
-        long currentDuration = System.currentTimeMillis() - job.getLastBuild().getTimestamp();
+        long currentDuration = currentServerTimestamp - job.getLastBuild().getTimestamp();
         long lastDuration = job.getLastSuccessfulBuild().getDuration();
         long percentage = currentDuration / (lastDuration / 100);
 
