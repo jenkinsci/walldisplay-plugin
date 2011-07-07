@@ -321,6 +321,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             }
         });
 
+        workerTimer.setInitialDelay(0);
         workerTimer.start();
     }
 
