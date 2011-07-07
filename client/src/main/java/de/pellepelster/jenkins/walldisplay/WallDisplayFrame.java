@@ -370,7 +370,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
                     double width = (MARGIN * 2) + ((columns - 1) * JOB_MARGIN) + columns * entry.getValue().getWidth();
 
-                    int rows = (int) Math.ceil(maxDimension / columns);
+                    int rows = getRows(jobs, maxDimension, columns);
                     double height = (MARGIN * 2) + ((rows - 1) * JOB_MARGIN) + rows * entry.getValue().getHeight();
 
                     if (width > getCanvasWidth() || height > getCanvasHeight()) {
@@ -386,7 +386,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             }
 
             int columns = maxFontHeightColumns;
-            int rows = (int) Math.ceil(maxDimension / columns);
+            int rows = getRows(jobs, maxDimension, columns);
 
             paintJobs(rows, columns, maxFontSize - 4, bufferedGraphics);
 
@@ -398,6 +398,17 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         }
 
         graphics.drawImage(bufferedImage, 0, 0, this);
+    }
+    
+    private int getRows(List<Job> jobs, int maxDimension, int columns)
+    {
+        int rows = jobs.size();
+        if (columns > 1)
+        {
+            rows = (int) Math.ceil(maxDimension / columns);
+        }        
+        
+        return rows;
     }
 
     private void paintJobs(int rows, int columns, int fontSize, Graphics2D graphics) {
