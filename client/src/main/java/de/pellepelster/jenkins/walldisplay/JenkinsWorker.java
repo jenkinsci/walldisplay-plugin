@@ -17,9 +17,10 @@ import de.pellepelster.jenkins.walldisplay.model.Task;
 import de.pellepelster.jenkins.walldisplay.model.View;
 import java.io.InputStream;
 import java.net.URLConnection;
-import java.util.Iterator;
 import java.util.List;
-import org.apache.commons.collections.ListUtils;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Reads the jenkins remote api
@@ -28,8 +29,11 @@ import org.apache.commons.collections.ListUtils;
  */
 public class JenkinsWorker extends SwingWorker<Hudson, Void> {
 
-    private final static int CONNECT_TIMEOUT = 15000;
-    private final static int READ_TIMEOUT = 15000;
+    private final static int CONNECT_TIMEOUT = 5000;
+    private final static int READ_TIMEOUT = 5000;
+    private final static int JOB_API_EXECUTORS = 5;
+    private final static int JOB_API_TIMEOUT = CONNECT_TIMEOUT + READ_TIMEOUT + 1000;
+    
     private String jenkinsUrl;
     private Exception exception = null;
     private String viewName;
@@ -37,6 +41,34 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
     public JenkinsWorker(String jenkinsUrl, String viewName) {
         this.jenkinsUrl = jenkinsUrl;
         this.viewName = viewName;
+    }
+
+    private class JobApiRunnable implements Runnable {
+
+        private Job job;
+
+        public JobApiRunnable(Job job) {
+            this.job = job;
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName().replace(" ", "%20")));
+
+                XStream jobXStream = getDefaultXStream();
+                jobXStream.alias("job", Job.class);
+                jobXStream.alias("freeStyleProject", Job.class);
+                jobXStream.alias("lastSuccessfulBuild", Build.class);
+                jobXStream.alias("build", Build.class);
+
+                jobXStream.fromXML(openStream(jobApiUrl), job);
+            } catch (Exception e) {
+                job.setColor("grey");
+            }
+
+        }
     }
 
     /** {@inheritDoc} */
@@ -64,38 +96,25 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             hudsonXstream.addImplicitCollection(Hudson.class, "jobs", "job", Job.class);
             hudsonXstream.addImplicitCollection(View.class, "jobs", "job", Job.class);
 
-
             Hudson hudson = (Hudson) hudsonXstream.fromXML(openStream(hudsonApiUrl));
 
 
             List<Job> jobs = hudson.getJobs();
-
             for (View view : hudson.getViews()) {
                 if (viewName != null && viewName.equals(view.getName())) {
                     jobs = view.getJobs();
                 }
             }
+            
+            ExecutorService executor = Executors.newFixedThreadPool(JOB_API_EXECUTORS);
 
             //load detailed jobs infos for all displayed jobs
-            Iterator<Job> jobIterator = jobs.iterator();
-            while (jobIterator.hasNext()) {
-
-                Job job = jobIterator.next();
-
-                try {
-                    URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName().replace(" ", "%20")));
-
-                    XStream jobXStream = getDefaultXStream();
-                    jobXStream.alias("job", Job.class);
-                    jobXStream.alias("freeStyleProject", Job.class);
-                    jobXStream.alias("lastSuccessfulBuild", Build.class);
-                    jobXStream.alias("build", Build.class);
-
-                    jobXStream.fromXML(openStream(jobApiUrl), job);
-                } catch (Exception e) {
-                    job.setColor("grey");
-                }
+            for (Job job : jobs) {
+                executor.execute(new JobApiRunnable(job));
             }
+            
+            executor.shutdown();
+            executor.awaitTermination(JOB_API_TIMEOUT, TimeUnit.MILLISECONDS);
 
             if (queue.getItems() != null) {
                 int i = queue.getItems().size() + 1;
