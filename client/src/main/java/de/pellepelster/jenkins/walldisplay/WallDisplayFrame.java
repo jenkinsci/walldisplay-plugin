@@ -362,7 +362,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             }
 
             int maxFontHeight = 0;
-            int maxFontHeightColumns = 0;
+            int maxFontHeightColumns = 1;
             int maxFontSize = 0;
 
             for (int columns = 1; columns <= maxDimension; columns++) {
@@ -472,11 +472,11 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         long percentage = currentDuration / (lastDuration / 100);
 
         // draw job percentage
-        double percentageWidth = jobWidth / 100 * (100 - percentage);
+        double percentageWidth = jobWidth / 100 * percentage;
         Area jobPercentageRectangleArea =
-                new Area(new Rectangle2D.Double(jobX + jobWidth - percentageWidth, jobY, jobX + jobWidth, jobHeight));
+                new Area(new Rectangle2D.Double(jobX, jobY, percentageWidth, jobHeight));
 
-        jobRectangleArea.subtract(jobPercentageRectangleArea);
+        jobRectangleArea.intersect(jobPercentageRectangleArea);
         graphics.setColor(jobColor.brighter().brighter());
         graphics.fill(jobRectangleArea);
     }
