@@ -520,6 +520,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
 
+        
         Options options = new Options();
         options.addOption(OPTION_URL, true, "url of the jenkins server");
         options.addOption(OPTION_VIEW, true, "view to display");
@@ -528,8 +529,10 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             CommandLineParser parser = new PosixParser();
             CommandLine cmd = parser.parse(options, args);
 
+            String url = cmd.getOptionValue(OPTION_URL).trim();
+            
             if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
-                new WallDisplayFrame(cmd.getOptionValue(OPTION_URL).trim(), URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()));
+                new WallDisplayFrame(url, URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()));
             } else {
                 throw new RuntimeException(String.format("invalid arguments '%s'", StringUtils.join(args, " ")));
             }

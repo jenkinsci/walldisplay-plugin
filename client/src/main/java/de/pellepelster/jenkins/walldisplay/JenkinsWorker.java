@@ -17,6 +17,7 @@ import de.pellepelster.jenkins.walldisplay.model.Task;
 import de.pellepelster.jenkins.walldisplay.model.View;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.collections.ListUtils;
 
@@ -76,16 +77,24 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             }
 
             //load detailed jobs infos for all displayed jobs
-            for (Job job : jobs) {
-                URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName().replace(" ","%20")));
+            Iterator<Job> jobIterator = jobs.iterator();
+            while (jobIterator.hasNext()) {
 
-                XStream jobXStream = getDefaultXStream();
-                jobXStream.alias("job", Job.class);
-                jobXStream.alias("freeStyleProject", Job.class);
-                jobXStream.alias("lastSuccessfulBuild", Build.class);
-                jobXStream.alias("build", Build.class);
+                Job job = jobIterator.next();
 
-                jobXStream.fromXML(openStream(jobApiUrl), job);
+                try {
+                    URL jobApiUrl = new URL(String.format("%s/job/%s/api/xml?depth=1", jenkinsUrl, job.getName().replace(" ", "%20")));
+
+                    XStream jobXStream = getDefaultXStream();
+                    jobXStream.alias("job", Job.class);
+                    jobXStream.alias("freeStyleProject", Job.class);
+                    jobXStream.alias("lastSuccessfulBuild", Build.class);
+                    jobXStream.alias("build", Build.class);
+
+                    jobXStream.fromXML(openStream(jobApiUrl), job);
+                } catch (Exception e) {
+                    job.setColor("grey");
+                }
             }
 
             if (queue.getItems() != null) {
