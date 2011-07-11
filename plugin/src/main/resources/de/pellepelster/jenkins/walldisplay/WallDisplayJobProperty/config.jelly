@@ -1,0 +1,22 @@
+<j:jelly
+xmlns:j="jelly:core"
+xmlns:st="jelly:stapler"
+xmlns:d="jelly:define"
+xmlns:l="/lib/layout"
+xmlns:t="/lib/hudson"
+xmlns:f="/lib/form">
+
+    <f:block>
+        <table>
+            <j:set var="wallDisplayGroupDynamic" value="${instance.wallDisplayName}"/>
+            <f:optionalBlock name="wallDisplayGroupDynamic" title="Use custom Walldisplay Name" checked="${wallDisplayGroupDynamic != null}">
+
+                <f:entry title="Walldisplay Name" field="wallDisplayName">
+                    <f:textbox name="wallDisplayName" value="${instance.wallDisplayName}" />
+                </f:entry>
+
+            </f:optionalBlock>
+        </table>
+    </f:block>
+
+</j:jelly>
