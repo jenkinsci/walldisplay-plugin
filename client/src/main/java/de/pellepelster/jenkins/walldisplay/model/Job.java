@@ -14,6 +14,7 @@ public class Job {
 	private Build lastBuild;
 	private Integer queuePosition;
 	private String description;
+        private JobProperty property;
 
 	/**
 	 * @return the color
@@ -29,6 +30,14 @@ public class Job {
 		return description;
 	}
 
+        
+	/**
+	 * @return the displayName configured for this job
+	 */
+	public JobProperty getProperty() {
+		return property;
+	}
+        
 	/**
 	 * @return the displayName
 	 */
@@ -85,6 +94,13 @@ public class Job {
 		this.description = description;
 	}
 
+        /**
+	 * @param walldisplayName to set
+	 */
+	public void setProperty(JobProperty property) {
+		this.property = property;
+	}
+        
 	/**
 	 * @param displayName the displayName to set
 	 */

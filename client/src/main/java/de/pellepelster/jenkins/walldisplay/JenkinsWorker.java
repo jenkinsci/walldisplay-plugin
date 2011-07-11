@@ -12,6 +12,7 @@ import de.pellepelster.jenkins.walldisplay.model.Build;
 import de.pellepelster.jenkins.walldisplay.model.Hudson;
 import de.pellepelster.jenkins.walldisplay.model.Item;
 import de.pellepelster.jenkins.walldisplay.model.Job;
+import de.pellepelster.jenkins.walldisplay.model.JobProperty;
 import de.pellepelster.jenkins.walldisplay.model.Queue;
 import de.pellepelster.jenkins.walldisplay.model.Task;
 import de.pellepelster.jenkins.walldisplay.model.View;
@@ -61,6 +62,7 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
                 jobXStream.alias("freeStyleProject", Job.class);
                 jobXStream.alias("lastSuccessfulBuild", Build.class);
                 jobXStream.alias("build", Build.class);
+                jobXStream.alias("property", JobProperty.class);
 
                 jobXStream.fromXML(openStream(jobApiUrl), job);
             } catch (Exception e) {

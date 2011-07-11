@@ -87,7 +87,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
     private final static int MAX_QUEUE_POSITIONS = 3;
     private long currentServerTimestamp = 0;
-    
+
     public WallDisplayFrame() {
 
         initFrame();
@@ -191,22 +191,19 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private String getJobText(Job job) {
 
         String jobText = "";
-        
-        if (job.getDescription() != null && !job.getDescription().isEmpty()) {
-            jobText = job.getDescription();
+
+        if (job.getProperty() != null && job.getProperty().getWallDisplayName() != null && !job.getProperty().getWallDisplayName().isEmpty()) {
+            jobText = job.getProperty().getWallDisplayName();
         } else {
             jobText = job.getName();
         }
 
-        if (job.getLastBuild() != null)
-        {
+        if (job.getLastBuild() != null) {
             return String.format("%s #%d", jobText, job.getLastBuild().getNumber());
-        }
-        else
-        {
+        } else {
             return String.format("%s", jobText);
         }
-        
+
     }
 
     private Font getJobTextFont(int fontSize) {
@@ -402,15 +399,13 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
         graphics.drawImage(bufferedImage, 0, 0, this);
     }
-    
-    private int getRows(List<Job> jobs, int maxDimension, int columns)
-    {
+
+    private int getRows(List<Job> jobs, int maxDimension, int columns) {
         int rows = jobs.size();
-        if (columns > 1)
-        {
+        if (columns > 1) {
             rows = (int) Math.ceil(maxDimension / columns);
-        }        
-        
+        }
+
         return rows;
     }
 
@@ -534,7 +529,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
 
-        
+
         Options options = new Options();
         options.addOption(OPTION_URL, true, "url of the jenkins server");
         options.addOption(OPTION_VIEW, true, "view to display");
@@ -544,7 +539,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             CommandLine cmd = parser.parse(options, args);
 
             String url = cmd.getOptionValue(OPTION_URL).trim();
-            
+
             if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
                 new WallDisplayFrame(url, URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()));
             } else {

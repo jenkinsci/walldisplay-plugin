@@ -15,10 +15,9 @@ import org.kohsuke.stapler.export.ExportedBean;
  *
  * @author pelle
  */
-@ExportedBean(defaultVisibility=0)
+@ExportedBean
 public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?, ?>> {
 
-    @Exported(name="wallDisplayName", inline=true)
     private String wallDisplayName = null;
 
     @DataBoundConstructor
@@ -26,15 +25,11 @@ public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?,
         this.wallDisplayName = wallDisplayName;
     }
 
+    @Exported
     public String getWallDisplayName() {
         return wallDisplayName;
     }
 
-    @Override
-    public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl) super.getDescriptor();
-    }
-        
     @Extension
     public static final class DescriptorImpl extends JobPropertyDescriptor {
 
