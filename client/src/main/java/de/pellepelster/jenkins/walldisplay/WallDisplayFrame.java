@@ -1,5 +1,6 @@
 package de.pellepelster.jenkins.walldisplay;
 
+import de.pellepelster.jenkins.walldisplay.model.Build;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -37,6 +38,7 @@ import javax.swing.Timer;
 
 import de.pellepelster.jenkins.walldisplay.model.Job;
 import java.net.URLDecoder;
+import java.util.Random;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -63,6 +65,8 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             return getJobText(job1).compareTo(getJobText(job2));
         }
     }
+    
+    private boolean demoMode = false;
     private static final long serialVersionUID = 7190596411432294617L;
     private String message = "";
     private JenkinsWorker hudsonWorker;
@@ -106,15 +110,16 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         init();
     }
 
-    public WallDisplayFrame(final String jenkinsUrl, String viewName) {
+    public WallDisplayFrame(final String jenkinsUrl, String viewName, boolean demoMode) {
         this.jenkinsUrl = jenkinsUrl;
         this.viewName = viewName;
+        this.demoMode = demoMode;
         initFrame();
         init();
     }
 
-    public WallDisplayFrame(final String jenkinsUrl) {
-        this(jenkinsUrl, null);
+    public WallDisplayFrame(final String jenkinsUrl, boolean demoMode) {
+        this(jenkinsUrl, null, demoMode);
     }
 
     private void drawMessage(Graphics2D g2) {
@@ -175,7 +180,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         } else if ("aborted".equals(job.getColor()) || "aborted_anime".equals(job.getColor())) {
             result = Color.GRAY;
         } else {
-            result = Color.GRAY;
+            result = Color.magenta.brighter().brighter();
         }
 
         return result.darker().darker();
@@ -193,7 +198,6 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
         String jobText = "";
 
-      
         if (job.hasJobProperty(WALL_DISPLAY_JOB_PROPERTY_NAME)) {
             jobText = job.getJobProperty(WALL_DISPLAY_JOB_PROPERTY_NAME);
         } else {
@@ -247,7 +251,73 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
         message = MESSAGE_INITIALIZING;
         initRepaintTimer();
-        initWorkerTimer();
+        
+        if (demoMode)
+        {
+            initDemoJobs();
+        }
+        else
+        {
+            initWorkerTimer();
+        }
+        
+    }
+    
+    private Job getDemoJob(String jobName, String jobColor, boolean running, int queuePosition)
+    {
+        Random randomGenerator = new Random();
+        
+        Job job = new Job();
+        job.setName(jobName);
+        job.setColor(jobColor);
+
+        Build lastBuild = new Build();
+        lastBuild.setNumber(randomGenerator.nextInt(500) + 100);
+        job.setLastBuild(lastBuild);
+
+        Build lastSuccessfulBuild = new Build();
+        lastSuccessfulBuild.setDuration(12000);
+        job.setLastSuccessfulBuild(lastSuccessfulBuild);
+
+        if (running)
+        {
+            lastBuild.setTimestamp(currentServerTimestamp - randomGenerator.nextInt(10) * 1000);
+            lastBuild.setBuilding(true);
+        }
+        
+        if (queuePosition > -1)
+        {
+            job.setQueuePosition(queuePosition);
+        }
+
+        return job;
+    }
+    
+    private void initDemoJobs()
+    {
+        currentServerTimestamp = System.currentTimeMillis();
+        
+        jobs.add(getDemoJob("successfull job", "blue", false, -1));
+        jobs.add(getDemoJob("successfull job running", "blue_anime", true, -1));
+
+        jobs.add(getDemoJob("unstable job", "yellow", false, -1));
+        jobs.add(getDemoJob("unstable job running", "yellow_anime", true, -1));
+
+        jobs.add(getDemoJob("aborted or disabled job", "grey", false, -1));
+        jobs.add(getDemoJob("aborted Job running", "grey_anime", true, -1));
+
+        jobs.add(getDemoJob("failed job", "red", false, -1));
+        jobs.add(getDemoJob("failed job running", "red_anime", true, -1));
+
+        jobs.add(getDemoJob("queued job number 1", "blue", false, 1));
+        jobs.add(getDemoJob("queued job number 2", "blue", false, 2));
+        jobs.add(getDemoJob("queued job number 3", "blue", false, 3));
+        
+        Job failedApiJob = new Job();
+        failedApiJob.setName("job with failed api call");
+        jobs.add(failedApiJob);
+
+        
     }
 
     private void initDoubleClickListener() {
@@ -435,7 +505,9 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
                     if (job.getLastBuild() != null && job.getLastBuild().getBuilding()) {
                         paintProgress(graphics, jobX, jobY, jobWidth, jobHeight, job);
-                    } else if (job.getQueuePosition() != null) {
+                    }  
+                    
+                    if (job.getQueuePosition() != null) {
                         paintQueuePosition(graphics, jobX, jobY, jobWidth, jobHeight, job);
                     }
 
@@ -525,6 +597,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     }
     private static String OPTION_URL = "u";
     private static String OPTION_VIEW = "v";
+    private static String OPTION_DEMO = "d";
 
     /**
      * @param args the command line arguments
@@ -535,6 +608,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         Options options = new Options();
         options.addOption(OPTION_URL, true, "url of the jenkins server");
         options.addOption(OPTION_VIEW, true, "view to display");
+        options.addOption(OPTION_DEMO, false, "start demo mode");
 
         try {
             CommandLineParser parser = new PosixParser();
@@ -543,7 +617,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             String url = cmd.getOptionValue(OPTION_URL).trim();
 
             if (cmd.hasOption(OPTION_URL) && cmd.hasOption(OPTION_VIEW)) {
-                new WallDisplayFrame(url, URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()));
+                new WallDisplayFrame(url, URLDecoder.decode(cmd.getOptionValue(OPTION_VIEW).trim()), cmd.hasOption(OPTION_DEMO));
             } else {
                 throw new RuntimeException(String.format("invalid arguments '%s'", StringUtils.join(args, " ")));
             }
