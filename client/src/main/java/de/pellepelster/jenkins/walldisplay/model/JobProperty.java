@@ -10,14 +10,24 @@ package de.pellepelster.jenkins.walldisplay.model;
  */
 public class JobProperty {
     
-    private String wallDisplayName;
+    private String name;
+    private String value;
 
-    public String getWallDisplayName() {
-        return wallDisplayName;
+    public String getName() {
+        return name;
     }
 
-    public void setWallDisplayName(String wallDisplayName) {
-        this.wallDisplayName = wallDisplayName;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     
 }

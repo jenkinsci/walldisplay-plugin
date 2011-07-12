@@ -85,6 +85,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private final static String MESSAGE_ENTER_JEKINS_URL = "Enter Jenkins URL";
     private final static String MESSAGE_NO_URL_ENTERED = "No URL given, exiting";
     private final static String MESSAGE_JEKINS_WALL_DISPLAY = "Jenkins Wall Display";
+    private final static String WALL_DISPLAY_JOB_PROPERTY_NAME = "wallDisplayName";
     private final static int MAX_QUEUE_POSITIONS = 3;
     private long currentServerTimestamp = 0;
 
@@ -192,8 +193,9 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
         String jobText = "";
 
-        if (job.getProperty() != null && job.getProperty().getWallDisplayName() != null && !job.getProperty().getWallDisplayName().isEmpty()) {
-            jobText = job.getProperty().getWallDisplayName();
+      
+        if (job.hasJobProperty(WALL_DISPLAY_JOB_PROPERTY_NAME)) {
+            jobText = job.getJobProperty(WALL_DISPLAY_JOB_PROPERTY_NAME);
         } else {
             jobText = job.getName();
         }
