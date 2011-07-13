@@ -1,7 +1,7 @@
 <project name="matrixbuild1" basedir="." default="build">
 
 	<target name="build">
-		<sleep seconds="20"/>
+		<sleep seconds="180"/>
 	</target>
 
 </project>
