@@ -30,6 +30,8 @@ public class PropertyConverter  implements Converter {
             jobProperty = new JobProperty();
             jobProperty.setValue(reader.getValue());
             jobProperty.setName(reader.getNodeName());
+            
+            reader.moveUp();
         }
         
         
