@@ -1,5 +1,6 @@
 package de.pellepelster.jenkins.walldisplay;
 
+import de.pellepelster.jenkins.walldisplay.model.BaseProject;
 import de.pellepelster.jenkins.walldisplay.model.Build;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,7 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
-import de.pellepelster.jenkins.walldisplay.model.Job;
+import de.pellepelster.jenkins.walldisplay.model.FreeStyleProject;
 import java.net.URLDecoder;
 import java.util.Random;
 import org.apache.commons.cli.CommandLine;
@@ -52,11 +53,11 @@ import org.apache.commons.lang.StringUtils;
  */
 public class WallDisplayFrame extends javax.swing.JFrame {
 
-    private class JobComperator implements Comparator<Job> {
+    private class JobComperator implements Comparator<BaseProject> {
 
         /** {@inheritDoc} */
         @Override
-        public int compare(Job job1, Job job2) {
+        public int compare(BaseProject job1, BaseProject job2) {
 
             if (job1 == null || job2 == null) {
                 return 0;
@@ -72,7 +73,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
     private JenkinsWorker hudsonWorker;
     private Image bufferedImage;
     private Graphics2D bufferedGraphics;
-    private List<Job> jobs = new ArrayList<Job>();
+    private List<BaseProject> jobs = new ArrayList<BaseProject>();
     private String jenkinsUrl;
     private String viewName;
     private final static Color BACKGROUND_COLOR = Color.WHITE;
@@ -163,7 +164,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         return getWidth() - (getInsets().left + getInsets().right);
     }
 
-    private Color getJobColor(Job job) {
+    private Color getJobColor(BaseProject job) {
 
         Color result = Color.GRAY;
 
@@ -194,7 +195,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         return result / rows;
     }
 
-    private String getJobText(Job job) {
+    private String getJobText(BaseProject job) {
 
         String jobText = "";
 
@@ -225,10 +226,10 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         return result / columns;
     }
 
-    private Job getLongestJobName() {
-        Job result = null;
+    private BaseProject getLongestJobName() {
+        BaseProject result = null;
 
-        for (Job job : jobs) {
+        for (BaseProject job : jobs) {
             if (result == null || getJobText(result).length() < getJobText(job).length()) {
                 result = job;
             }
@@ -263,11 +264,11 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         
     }
     
-    private Job getDemoJob(String jobName, String jobColor, boolean running, int queuePosition)
+    private FreeStyleProject getDemoJob(String jobName, String jobColor, boolean running, int queuePosition)
     {
         Random randomGenerator = new Random();
         
-        Job job = new Job();
+        FreeStyleProject job = new FreeStyleProject();
         job.setName(jobName);
         job.setColor(jobColor);
 
@@ -313,7 +314,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         jobs.add(getDemoJob("queued job number 2", "blue", false, 2));
         jobs.add(getDemoJob("queued job number 3", "blue", false, 3));
         
-        Job failedApiJob = new Job();
+        FreeStyleProject failedApiJob = new FreeStyleProject();
         failedApiJob.setName("job with failed api call");
         jobs.add(failedApiJob);
 
@@ -376,7 +377,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                         if (hudsonWorker.getException() != null) {
                             message = hudsonWorker.getException().getMessage();
                         } else {
-                            jobs.addAll(JenkinsWorker.getJobsToDisplay(hudsonWorker.get(), viewName));
+                            jobs.addAll(hudsonWorker.get().getJobs());
                             currentServerTimestamp = hudsonWorker.get().getServerResponseTimestamp();
                             Collections.sort(jobs, new JobComperator());
                         }
@@ -419,7 +420,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
             renderHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             bufferedGraphics.setRenderingHints(renderHints);
 
-            Job jobLongName = getLongestJobName();
+            BaseProject jobLongName = getLongestJobName();
 
             Map<Integer, Rectangle2D> fontDimensions = new HashMap<Integer, Rectangle2D>();
             for (int i = 12; i <= 128; i++) {
@@ -472,7 +473,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         graphics.drawImage(bufferedImage, 0, 0, this);
     }
 
-    private int getRows(List<Job> jobs, int maxDimension, int columns) {
+    private int getRows(List<BaseProject> jobs, int maxDimension, int columns) {
         int rows = jobs.size();
         if (columns > 1) {
             rows = (int) Math.ceil(maxDimension / columns);
@@ -495,7 +496,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
 
                 if (jobIndex < jobs.size()) {
 
-                    Job job = jobs.get(jobIndex);
+                    BaseProject job = jobs.get(jobIndex);
                     Font jobTextFont = getJobTextFont(fontSize);
                     String jobText = getJobText(job);
                     Color jobColor = getJobColor(job);
@@ -503,7 +504,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                     graphics.setColor(jobColor);
                     graphics.fill(new RoundRectangle2D.Double(jobX, jobY, jobWidth, jobHeight, JOB_ARC_WIDTH, JOB_ARC_HEIGHT));
 
-                    if (job.getLastBuild() != null && job.getLastBuild().getBuilding()) {
+                    if (job.getLastBuild() != null && job.isBuilding()) {
                         paintProgress(graphics, jobX, jobY, jobWidth, jobHeight, job);
                     }  
                     
@@ -532,14 +533,14 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         }
     }
 
-    private void paintProgress(Graphics2D graphics, int jobX, int jobY, int jobWidth, int jobHeight, Job job) {
+    private void paintProgress(Graphics2D graphics, int jobX, int jobY, int jobWidth, int jobHeight, BaseProject job) {
 
         Color jobColor = getJobColor(job);
         Area jobRectangleArea =
                 new Area(new RoundRectangle2D.Double(jobX, jobY, jobWidth, jobHeight, JOB_ARC_WIDTH, JOB_ARC_HEIGHT));
 
         long currentDuration = currentServerTimestamp - job.getLastBuild().getTimestamp();
-        long lastDuration = job.getLastSuccessfulBuild().getDuration();
+        long lastDuration = job.getTotalDuration();
         long percentage = currentDuration / (lastDuration / 100);
 
         // draw job percentage
@@ -552,7 +553,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
         graphics.fill(jobRectangleArea);
     }
 
-    private void paintQueuePosition(Graphics2D graphics, int jobX, int jobY, int jobWidth, int jobHeight, Job job) {
+    private void paintQueuePosition(Graphics2D graphics, int jobX, int jobY, int jobWidth, int jobHeight, BaseProject job) {
 
         int queuePosition = job.getQueuePosition();
 

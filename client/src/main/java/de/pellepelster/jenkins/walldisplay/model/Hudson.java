@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("hudson")
 public class Hudson {
 
-    private List<Job> jobs = new ArrayList<Job>();
+    private List<BaseProject> jobs = new ArrayList<BaseProject>();
     private List<View> views = new ArrayList<View>();
     private String nodeDescription;
     private long serverResponseTimestamp;
@@ -48,14 +48,14 @@ public class Hudson {
     /**
      * @return the jobs
      */
-    public List<Job> getJobs() {
+    public List<BaseProject> getJobs() {
         return jobs;
     }
 
     /**
      * @param jobs the jobs to set
      */
-    public void setJobs(List<Job> jobs) {
+    public void setJobs(List<BaseProject> jobs) {
         this.jobs = jobs;
     }
 

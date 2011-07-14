@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @author pelle
  */
-public class Job {
+public class BaseProject {
 
     private String displayName;
     private String name;
@@ -160,5 +160,24 @@ public class Job {
         }
 
         return null;
+    }
+    
+    
+    public boolean isBuilding()
+    {
+        return (getLastBuild() != null) && (getLastBuild().getBuilding());
+    }
+
+    public long getTotalDuration() {
+        
+        if (getLastSuccessfulBuild() != null)
+        {
+            return getLastSuccessfulBuild().getDuration();
+        }
+        else
+        {
+            return 0;
+        }
+        
     }
 }
