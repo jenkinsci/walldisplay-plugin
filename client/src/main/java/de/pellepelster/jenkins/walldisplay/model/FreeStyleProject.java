@@ -1,6 +1,7 @@
 package de.pellepelster.jenkins.walldisplay.model;
 
 /**
+ * XStream object for freestyle projects
  * 
  * @author pelle
  */

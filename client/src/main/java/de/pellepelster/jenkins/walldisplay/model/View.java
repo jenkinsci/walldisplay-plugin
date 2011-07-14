@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * XStream object for jenkins views
  * 
  * @author pelle
  */
@@ -25,7 +26,7 @@ public class View {
     }
 
     /**
-     * @param name the name to set
+     * @param name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -39,7 +40,7 @@ public class View {
     }
 
     /**
-     * @param jobs the jobs to set
+     * @param jobs to set
      */
     public void setJobs(List<BaseProject> jobs) {
         this.jobs = jobs;

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.pellepelster.jenkins.walldisplay.model;
 
 import java.util.ArrayList;
@@ -10,7 +5,9 @@ import java.util.List;
 
 /**
  *
- * @author U299468
+ * XStream objects for the build queue
+ * 
+ * @author pelle
  */
 public class Queue {
 
@@ -24,7 +21,7 @@ public class Queue {
     }
 
     /**
-     * @param items the items to set
+     * @param items to set
      */
     public void setItems(List<Item> items) {
         this.items = items;

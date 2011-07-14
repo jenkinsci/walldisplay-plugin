@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Basix XStream object for project properties shared by all projects
  * 
  * @author pelle
  */
 public class BaseProject {
 
+    private List<ActiveConfiguration> activeConfigurations = new ArrayList<ActiveConfiguration>();
     private String displayName;
     private String name;
     private String url;
@@ -34,7 +36,7 @@ public class BaseProject {
     }
 
     /**
-     * @return the displayName configured for this job
+     * @return job properties for this job
      */
     public List<JobProperty> getJobProperties() {
         return jobProperties;
@@ -97,58 +99,81 @@ public class BaseProject {
     }
 
     /**
-     * @param jobProperties to set
+     * @param job properties to set
      */
     public void setJobProperties(List<JobProperty> jobProperties) {
         this.jobProperties = jobProperties;
     }
 
     /**
-     * @param displayName the displayName to set
+     * @param displayName to set
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
     /**
-     * @param build the build to set
+     * @param build to set
      */
     public void setLastBuild(Build lastBuild) {
         this.lastBuild = lastBuild;
     }
 
     /**
-     * @param lastSuccessfulBuild the lastSuccessfulBuild to set
+     * @param lastSuccessfulBuild to set
      */
     public void setLastSuccessfulBuild(Build lastSuccessfulBuild) {
         this.lastSuccessfulBuild = lastSuccessfulBuild;
     }
 
+    public List<ActiveConfiguration> getActiveConfigurations() {
+        return activeConfigurations;
+    }
+
+    public void setActiveConfigurations(List<ActiveConfiguration> activeConfigurations) {
+        this.activeConfigurations = activeConfigurations;
+    }
+
+
     /**
-     * @param name the name to set
+     * @param name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @param queuePosition the queuePosition to set
+     * @param queuePosition to set
      */
     public void setQueuePosition(Integer queuePosition) {
         this.queuePosition = queuePosition;
     }
 
     /**
-     * @param url the url to set
+     * @param url to set
      */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Checks a job for the existence of a certain job property
+     * 
+     * @param name of the job property
+     * 
+     * @return true if the job property exists
+     */
     public boolean hasJobProperty(String propertyName) {
         return getJobProperty(propertyName) != null;
     }
 
+    /**
+     * Returns a certain job property
+     * 
+     * @param name of the job property
+     * 
+     * @return null if not found, otherwise the properties value
+     */
     public String getJobProperty(String propertyName) {
 
         if (jobProperties != null) {
@@ -163,12 +188,22 @@ public class BaseProject {
     }
     
     
+    /**
+     * Returns the running state of this job
+     * 
+     * @return true if the job is running
+     */
     public boolean isBuilding()
     {
-        return (getLastBuild() != null) && (getLastBuild().getBuilding());
+        return getLastBuild() != null && getLastBuild().getBuilding();
     }
 
-    public long getTotalDuration() {
+    /**
+     * Returns the duration of the last successfull build
+     * 
+     * @return the job duration of 0 if not available
+     */
+    public long getLastSuccessfulDuration() {
         
         if (getLastSuccessfulBuild() != null)
         {
@@ -178,6 +213,5 @@ public class BaseProject {
         {
             return 0;
         }
-        
     }
 }

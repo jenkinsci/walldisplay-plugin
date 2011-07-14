@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.pellepelster.jenkins.walldisplay.model;
 
 /**
- *
+ * XStram object for matrix projects active configurations
+ * 
  * @author pelle
  */
 public class ActiveConfiguration {
@@ -29,7 +26,5 @@ public class ActiveConfiguration {
     public void setUrl(String url) {
         this.url = url;
     }
-    
-    
     
 }

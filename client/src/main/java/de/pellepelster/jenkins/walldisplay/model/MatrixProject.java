@@ -1,19 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.pellepelster.jenkins.walldisplay.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * XStream object for matrix projects
+ * 
  * @author pelle
  */
 public class MatrixProject extends BaseProject {
 
-    private List<ActiveConfiguration> activeConfigurations = new ArrayList<ActiveConfiguration>();
     private List<BaseProject> jobs = new ArrayList<BaseProject>();
 
     public List<BaseProject> getJobs() {
@@ -22,14 +18,6 @@ public class MatrixProject extends BaseProject {
 
     public void setJobs(List<BaseProject> jobs) {
         this.jobs = jobs;
-    }
-
-    public List<ActiveConfiguration> getActiveConfigurations() {
-        return activeConfigurations;
-    }
-
-    public void setActiveConfigurations(List<ActiveConfiguration> activeConfigurations) {
-        this.activeConfigurations = activeConfigurations;
     }
 
     private int getNumberOfBuildingJobs() {
@@ -46,11 +34,13 @@ public class MatrixProject extends BaseProject {
         return result;
     }
 
+    @Override
     public boolean isBuilding() {
         return getNumberOfBuildingJobs() > 0;
     }
 
-    public long getTotalDuration() {
+    @Override
+    public long getLastSuccessfulDuration() {
 
         int result = 0;
 

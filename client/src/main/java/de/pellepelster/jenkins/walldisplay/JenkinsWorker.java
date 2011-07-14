@@ -7,7 +7,6 @@ import javax.swing.SwingWorker;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import com.trilead.ssh2.crypto.Base64;
 import de.pellepelster.jenkins.walldisplay.model.ActiveConfiguration;
 import de.pellepelster.jenkins.walldisplay.model.BaseProject;
 
@@ -18,14 +17,13 @@ import de.pellepelster.jenkins.walldisplay.model.FreeStyleProject;
 import de.pellepelster.jenkins.walldisplay.model.JobProperty;
 import de.pellepelster.jenkins.walldisplay.model.MatrixConfiguration;
 import de.pellepelster.jenkins.walldisplay.model.MatrixProject;
-import de.pellepelster.jenkins.walldisplay.model.PropertyConverter;
+import de.pellepelster.jenkins.walldisplay.model.JobPropertyConverter;
 import de.pellepelster.jenkins.walldisplay.model.Queue;
 import de.pellepelster.jenkins.walldisplay.model.Task;
 import de.pellepelster.jenkins.walldisplay.model.View;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +41,7 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
     private final static int READ_TIMEOUT = 5000;
     private final static int JOB_API_EXECUTORS = 5;
     private final static int JOB_API_TIMEOUT = CONNECT_TIMEOUT + READ_TIMEOUT + 1000;
+    private final static String HTTP_HEADER_DATE_FIELD = "Date";
     private String jenkinsUrl;
     private Exception exception = null;
     private String viewName;
@@ -79,7 +78,7 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
                 jobXStream.alias("freeStyleProject", FreeStyleProject.class);
                 jobXStream.addImplicitCollection(FreeStyleProject.class, "jobProperties", "property", JobProperty.class);
                 jobXStream.addImplicitCollection(MatrixProject.class, "activeConfigurations", "activeConfiguration", ActiveConfiguration.class);
-                jobXStream.registerConverter(new PropertyConverter());
+                jobXStream.registerConverter(new JobPropertyConverter());
 
                 BaseProject detailedJob = (BaseProject) jobXStream.fromXML(openStream(jobApiUrl));
 
@@ -102,8 +101,6 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
 
                     executor.shutdown();
                     executor.awaitTermination(JOB_API_TIMEOUT, TimeUnit.MILLISECONDS);
-                    matrixProject.toString();
-
                 }
 
             } catch (Exception e) {
@@ -123,15 +120,15 @@ public class JenkinsWorker extends SwingWorker<Hudson, Void> {
             URL url = new URL(jenkinsUrl);
             URLConnection conn = url.openConnection();
 
-            return conn.getHeaderFieldDate("Date", 0);
+            return conn.getHeaderFieldDate(HTTP_HEADER_DATE_FIELD, 0);
 
         } catch (Exception e) {
-            return 0;
+            return System.currentTimeMillis();
         }
     }
 
-    /** {@inheritDoc} */
     @Override
+    /** {@inheritDoc} */
     protected Hudson doInBackground() throws Exception {
         exception = null;
 

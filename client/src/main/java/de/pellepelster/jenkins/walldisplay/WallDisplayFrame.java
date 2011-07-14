@@ -48,6 +48,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * main frame for the jenkins wall display plugin
  * 
  * @author pelle
  */
@@ -540,7 +541,7 @@ public class WallDisplayFrame extends javax.swing.JFrame {
                 new Area(new RoundRectangle2D.Double(jobX, jobY, jobWidth, jobHeight, JOB_ARC_WIDTH, JOB_ARC_HEIGHT));
 
         long currentDuration = currentServerTimestamp - job.getLastBuild().getTimestamp();
-        long lastDuration = job.getTotalDuration();
+        long lastDuration = job.getLastSuccessfulDuration();
         long percentage = currentDuration / (lastDuration / 100);
 
         // draw job percentage

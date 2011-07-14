@@ -1,7 +1,8 @@
 package de.pellepelster.jenkins.walldisplay.model;
 
 /**
- *
+ * Xstream object for build information
+ * 
  * @author pelle
  */
 public class Build {
@@ -20,7 +21,7 @@ public class Build {
     }
 
     /**
-     * @param duration the duration to set
+     * @param duration to set
      */
     public void setDuration(Integer duration) {
         this.duration = duration;
@@ -34,21 +35,21 @@ public class Build {
     }
 
     /**
-     * @param number the number to set
+     * @param number to set
      */
     public void setNumber(Integer number) {
         this.number = number;
     }
 
     /**
-     * @return the building
+     * @return the building state
      */
     public Boolean getBuilding() {
         return building;
     }
 
     /**
-     * @param building the building to set
+     * @param building state to set
      */
     public void setBuilding(Boolean building) {
         this.building = building;
@@ -62,7 +63,7 @@ public class Build {
     }
 
     /**
-     * @param timestamp the timestamp to set
+     * @param timestamp to set
      */
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
@@ -76,7 +77,7 @@ public class Build {
     }
 
     /**
-     * @param color the color to set
+     * @param color to set
      */
     public void setColor(String color) {
         this.color = color;
