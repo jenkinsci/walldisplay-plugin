@@ -10,7 +10,7 @@
   </parent>
 
     <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>jenkinswalldisplay-pom</artifactId>
+    <artifactId>jenkinswalldisplay</artifactId>
     <packaging>hpi</packaging>
     <version>0.5.12-SNAPSHOT</version>
     <name>Jenkins Wall Display Master Project</name>

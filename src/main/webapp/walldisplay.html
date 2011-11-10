@@ -107,6 +107,12 @@
 			}
 		}
 
+		function updateWindowSizes()
+		{	
+			clientWidth = $('body')[0].clientWidth - 10;
+			clientHeight = $('body')[0].clientHeight - 10;
+		}
+
 		function getJobText(job) {  
 		
         	var jobText = job.name;
@@ -536,9 +542,10 @@
  			});
  		}
 
+		//- initialize variables ----------------------------------------------
 		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);;
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);;
-		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname);
+		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 
 		//---------------------------------------------------------------------
@@ -561,8 +568,7 @@
 		
 		$(document).ready(function() {
 
-			clientWidth = $('body')[0].clientWidth - 10;
-			clientHeight = $('body')[0].clientHeight - 10;
+			updateWindowSizes();
 			document.title = "Jenkins Wall Display (" + viewName + ")";
 
 			setInterval(function() {
@@ -584,6 +590,10 @@
 				repaint();
 			}, paintInterval);
 		});
+
+		window.onresize = function(event) {
+			updateWindowSizes();
+		}
 
   </script>
 </head>

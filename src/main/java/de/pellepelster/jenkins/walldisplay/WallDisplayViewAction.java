@@ -7,6 +7,8 @@ package de.pellepelster.jenkins.walldisplay;
 
 import hudson.model.Action;
 import hudson.model.Hudson;
+import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
@@ -33,7 +35,18 @@ public class WallDisplayViewAction implements  Action {
 
     @Override
     public String getUrlName() {
-        return String.format("%s/plugin/jenkinswalldisplay/launch/%s", Hudson.getInstance().getRootUrl(), viewName);
+
+		String encodedUrl = null;
+		try
+		{
+			encodedUrl = URLEncoder.encode(Hudson.getInstance().getRootUrl(), "UTF-8");
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			encodedUrl = Hudson.getInstance().getRootUrl();
+		}
+
+        return String.format("%s/plugin/jenkinswalldisplay/walldisplay.html?viewName=%s&jenkinsUrl=%s", Hudson.getInstance().getRootUrl(), viewName, encodedUrl);
     }
 
 }
