@@ -1,5 +1,8 @@
 apache-tomcat
 work
+jenkins_home
 nbactions.xml
 release.properties
 target
+*~
+

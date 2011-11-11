@@ -4,8 +4,30 @@
 	<style type="text/css">
 
 		body {
-            font-family: Arial, Helvetica, Verdana, sans-serif;
+			font-family: Arial, Helvetica, Verdana, sans-serif;
 			font-weight: bold;
+			overflow: hidden;
+		}
+
+		.debug
+		{
+			position: absolute;
+			top: 20px;
+			left: 20px;
+			height: auto;
+			width: 33%;
+			-moz-opacity:.70;
+			filter:alpha(opacity=70);
+			opacity:.70;
+			border-radius: 20px;
+			-moz-border-radius: 20px;
+			background-color: #000000;
+			padding: 10px;
+			margin: 10px;
+			font-family: monospace;
+			font-size: 12px;
+			color: #ffffff;
+			overflow: auto;
 		}
 
 		#TextDimensionDiv
@@ -25,13 +47,13 @@
 			text-align: center;
 		}
 
-        .message_error {
-            background-color: #550000;
-        }
+		.message_error {
+			background-color: #550000;
+		}
 
-        .message_info {
-            background-color: #888888;
-        }
+		.message_info {
+			background-color: #888888;
+		}
 
 		.job_wrapper 
 		{
@@ -64,7 +86,7 @@
 			background-color: #FFFF00;
 		}
 
-        .queued { 
+		.queued { 
 			background-color: #DFC500;
 		}
 
@@ -77,8 +99,11 @@
 		}
 	</style>
 
-    <script type="text/javascript" src="jquery.js"></script>          
-    <script type="text/javascript">
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dateformat.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.8.16.js"></script>
+
+	<script type="text/javascript">
 
 		function getParameterByName(name, defaultValue)
 		{
@@ -109,23 +134,31 @@
 
 		function updateWindowSizes()
 		{	
-			clientWidth = $('body')[0].clientWidth - 10;
-			clientHeight = $('body')[0].clientHeight - 10;
+			clientWidth = $(window).width();
+			clientHeight = $(window).height();
+
+			if ($("#debug").length)
+			{
+				var now = new Date();
+				$("#debug").css("height", (clientHeight - 80) + "px");
+			}
+
+			debug("clientHeight: " + clientHeight + ", clientWidth: " + clientWidth);
 		}
 
 		function getJobText(job) {  
 		
-        	var jobText = job.name;
+			var jobText = job.name;
 
-   			if (job.property != null)
+			if (job.property != null)
 			{
-    			$.each(job.property, function(index, property) { 
-    				if (property.wallDisplayName != null)
-    				{
-    					jobText = property.wallDisplayName;
-    				}
-    			});
-            }
+				$.each(job.property, function(index, property) { 
+					if (property.wallDisplayName != null)
+					{
+						jobText = property.wallDisplayName;
+					}
+				});
+			}
 			
 			if (job.lastBuild != null && job.lastBuild.number != null)
 			{
@@ -184,7 +217,7 @@
 
 		function displayMessage(messageText, colorClass)
 		{
-            //height:' + (clientHeight - 4 * messageMargin) + '; width:' + (clientWidth - 4 * messageMargin) + ';'
+			//height:' + (clientHeight - 4 * messageMargin) + '; width:' + (clientWidth - 4 * messageMargin) + ';'
 			var messageMargin = 50;
 			var positionStyle = 'position: absolute; padding: ' + messageMargin + 'px; left: ' + messageMargin + 'px; top: ' + messageMargin + 'px; width:' + (clientWidth - 4 * messageMargin) + ';';
 			var divContent = '<div class="' + colorClass + '" style="' + positionStyle + '" id="Message">' + messageText + '</div>'
@@ -214,11 +247,11 @@
 			else if (jobsToDisplay.length == 0)
 			{
 				displayMessage("loading jobs...", "message_info");
-            }
+			}
 			else
 			{
-			    removeMessage();
-			    
+				removeMessage();
+				
 				var maxFontSize = 0;
 				var longestJob = getLongestJob(jobsToDisplay);
 
@@ -296,8 +329,8 @@
 							
 							var jobDimensions = getJobDimensions(job, maxFontSize);
 
-						    var jobDimensionsStyle = { "width": jobWidth, "height": jobHeight };
-						    var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
+							var jobDimensionsStyle = { "width": jobWidth, "height": jobHeight };
+							var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
 						
 							var percentageDiv = $('<div />');;
 							var jobOverdue = false;
@@ -313,80 +346,80 @@
 									jobOverdue = true;
 								}
 							
-                                percentageDiv.css({
-                                    "height": jobHeight + "px",
-                                    "width": percentageWidth + "px",
-                                    "left": "0px",
-                                    "top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
-                                });
-                                percentageDiv.addClass("job");
-                                percentageDiv.addClass("job_color_" + jobColor + "_building");
+								percentageDiv.css({
+									"height": jobHeight + "px",
+									"width": percentageWidth + "px",
+									"left": "0px",
+									"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
+								});
+								percentageDiv.addClass("job");
+								percentageDiv.addClass("job_color_" + jobColor + "_building");
 							}
 							
 							var maxQueueItems = 3;
-							var queuePosition = job.queuePosition;
+							var queuePosition = getBuildQueuePosition(job.name);
 							
 							if (queuePosition > maxQueueItems)
 							{
-                                queuePosition = maxQueueItems; 
-                            }
+								queuePosition = maxQueueItems; 
+							}
 							
 							var radius = Math.round(jobHeight / (maxQueueItems + 1));
 
 							var queueDivs = new Array();
 							
-                            var increment = (jobHeight - queuePosition * radius) / (queuePosition + 1);
+							var increment = (jobHeight - queuePosition * radius) / (queuePosition + 1);
 							var queueTop = increment;
-							for (i=0; i< queuePosition; i++)
-                            {
-                                var queueDiv = $('<div />');
-                                queueDiv.css({
-                                    "position": "absolute",
-                                    "top": queueTop + "px",
-                                    "left": jobWidth - 2 * radius + "px",
-                                    "height": radius + "px",
-                                    "width": radius + "px", 
-                                    "border-radius": + Math.round(radius / 2) + "px",
-                                    "-moz-border-radius": Math.round(radius / 2) + "px",
-                                    "-webkit-border-radius": Math.round(radius / 2) + "px"
-                                });
-                                queueDiv.addClass("queued"); 
-                                queueDivs.push(queueDiv);
-                                queueTop += increment + radius;
-                            }
+							for (i=0; i < queuePosition; i++)
+							{
+								var queueDiv = $('<div />');
+								queueDiv.css({
+									"position": "absolute",
+									"top": queueTop + "px",
+									"left": jobWidth - 2 * radius + "px",
+									"height": radius + "px",
+									"width": radius + "px", 
+									"border-radius": + Math.round(radius / 2) + "px",
+									"-moz-border-radius": Math.round(radius / 2) + "px",
+									"-webkit-border-radius": Math.round(radius / 2) + "px"
+								});
+								queueDiv.addClass("queued"); 
+								queueDivs.push(queueDiv);
+								queueTop += increment + radius;
+							}
 							
 							
-                            //- create the job content div ---------------------
-                            var jobContent = $('<div />');
-                            jobContent.css({
-                                "position": "absolute",
-                                "top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
-                            });
-                            jobContent.addClass("job_content");
-                            jobContent.css(jobDimensionsStyle);
-                            jobContent.text(getJobText(job));
+							//- create the job content div ---------------------
+							var jobContent = $('<div />');
+							jobContent.css({
+								"position": "absolute",
+								"top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
+							});
+							jobContent.addClass("job_content");
+							jobContent.css(jobDimensionsStyle);
+							jobContent.text(getJobText(job));
 
-                            //- create the job wrapper div ---------------------
-                            var jobWrapper = $('<div />').attr({
-                                "id": job.name
-                            });
-                            
-                            jobWrapper.css({
-                                "font-size": (maxFontSize-4) + "px",
-                            });
-                            jobWrapper.css(jobPositionStyle);
-                            jobWrapper.css(jobDimensionsStyle);
-                            jobWrapper.addClass("job");
-                            jobWrapper.addClass("job_color_" + jobColor);
-                            jobWrapper.addClass("job_wrapper");
+							//- create the job wrapper div ---------------------
+							var jobWrapper = $('<div />').attr({
+								"id": job.name
+							});
+							
+							jobWrapper.css({
+								"font-size": (maxFontSize-4) + "px",
+							});
+							jobWrapper.css(jobPositionStyle);
+							jobWrapper.css(jobDimensionsStyle);
+							jobWrapper.addClass("job");
+							jobWrapper.addClass("job_color_" + jobColor);
+							jobWrapper.addClass("job_wrapper");
 
-                            //- assemble job divs ------------------------------
-                            jobWrapper.append(jobContent);
-                            jobWrapper.append(percentageDiv);
-                            $.each(queueDivs, function(index, queueDiv) { 
-                                jobWrapper.append(queueDiv);
-                            });
-                                             
+							//- assemble job divs ------------------------------
+							jobWrapper.append(jobContent);
+							jobWrapper.append(percentageDiv);
+							$.each(queueDivs, function(index, queueDiv) { 
+								jobWrapper.append(queueDiv);
+							});
+											
 							if ($("#" + job.name).length)
 							{
 								$("#" + job.name).replaceWith(jobWrapper);
@@ -418,42 +451,46 @@
 		
 		function getJobs(jenkinsApi, jobNames)
 		{
-            $.each(jobNames, function(index, jobName) {
-                if (!updateRunning[jobName])
-                {
-                    updateRunning[jobName] = true;
+			$.each(jobNames, function(index, jobName) {
+				if (!updateRunning[jobName])
+				{
+					debug("starting getting api for job '" + jobName + "'");
+					updateRunning[jobName] = true;
 
-                    $.ajax({
-                        url: jenkinsUrl +  "/job/" + jobName + "/api/json",
-                        dataType: "json",
-                        data: {
-                            "depth": "1"
-                        },
-                        success: function(job, textStatus, jqXHR) {
-    
-                            var add = true;                    
-                            $.each(jobsToDisplay, function(index, oldJob) { 
-                                if (oldJob.name == job.name)
-                                {
-                                    jobsToDisplay[index] = job;
-                                    add = false;
-                                }
-                            });
-                            
-                            if (add)
-                            {
-                                jobsToDisplay[jobsToDisplay.length] = job;
-                            }
-                            
-                            updateRunning[jobName] = false;
-                        },
-                        error: function(e, xhr) {
-                            updateRunning[jobName] = false;
-                        },
-                        timeout: jenkinsTimeOut
-                    });
-                }
-            });
+					$.ajax({
+						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
+						dataType: "json",
+						data: {
+							"depth": "1"
+						},
+						success: function(job, textStatus, jqXHR) {
+							debug("finished getting api for job '" + jobName + "'");
+							var add = true;                    
+							$.each(jobsToDisplay, function(index, oldJob) { 
+								if (oldJob.name == job.name)
+								{
+									jobsToDisplay[index] = job;
+									add = false;
+								}
+							});
+							
+							if (add)
+							{
+								jobsToDisplay[jobsToDisplay.length] = job;
+							}
+							
+							jobsToDisplay.sort(function(job1, job2) { return job1.name.toLowerCase() > job2.name.toLowerCase(); });
+							
+							updateRunning[jobName] = false;
+						},
+						error: function(e, xhr) {
+							debug("error getting api for job '" + jobName + "': '" + e.statusText + "'");
+							updateRunning[jobName] = false;
+						},
+						timeout: jenkinsTimeOut
+					});
+				}
+			});
 		}
 
 		function getJobNamesToDisplay(jenkinsApi)
@@ -476,11 +513,33 @@
 			return jobNames;
 		}
 
+
+		function debug(logMessage)
+		{
+			if ($("#debug").length)
+			{
+				var now = new Date();
+				$("#debug").append(now.format("G:i:s.u: ") + logMessage + "<br />");
+				$("#debug").prop({ scrollTop: $("#debug").prop("scrollHeight") });
+			}
+		}
+
+		function showDebug()
+		{
+			var debugDiv = $('<div />').attr({
+				"id": "debug"
+			});
+			debugDiv.addClass("debug");
+
+			$("body").prepend(debugDiv);
+		}
+
 		function getJenkinsApi(jenkinsUrl) {
 
+			debug("starting getting jenkins api");
 			updateRunning[viewName] = true;
 
- 			//- get jenkins api ------------------------------------------------
+			//- get jenkins api ------------------------------------------------
 			$.ajax({
 				url: jenkinsUrl +  "/api/json",
 				dataType: 'json',
@@ -488,6 +547,7 @@
 					"depth": "1"
 				},
 				success: function(jenkinsApi, textStatus, jqXHR) {
+					debug("finished getting jenkins api");
 
 					var dateHeader = jqXHR.getResponseHeader("Date");
 					var date = new Date(dateHeader);
@@ -500,47 +560,53 @@
 					updateError =  null;
 				},
 				error: function(e, xhr) {
+					debug("error getting jenkins api: '" + e.statusText + "'");
 					updateRunning[viewName] = false;
 					updateError =  e.statusText;
+					jobsToDisplay = new Array();
 				},
 				timeout: jenkinsTimeOut
- 			});
+			});
 		}
 
+		function getBuildQueuePosition(jobName)
+		{
+			var queuePosition = 0;
+			
+			$.each(buildQueue["items"], function(index, queueItem) {
+				
+				if (queueItem != null && queueItem.task != null && queueItem.task.name != null && queueItem.task.name == jobName)
+				{
+					queuePosition = index + 1;
+				} 
+			});
+			
+			return queuePosition;
+		}
+		
+		var buildQueue = null;
 		function getJenkinsQueue(jenkinsUrl) {
 
-            updateRunning["queue"] = true;
+			debug("starting getting queue api");
+			updateRunning["queue"] = true;
 
-            //- get build queue ------------------------------------------------
+			//- get build queue ------------------------------------------------
 			$.ajax({
 				url: jenkinsUrl +  "/queue/api/json",
 				dataType: 'json',
 				success: function(queue, textStatus, jqXHR) {
 
-                    var queueIndex = 1;				
-                    $.each(queue, function(index, queueItem) {
-                        queueItem = queueItem[0];
-                        
-                        if (queueItem != null && queueItem.task != null && queueItem.task.name != null)
-                        {
-                            var job = getJobByName(jobsToDisplay, queueItem.task.name);
-                            
-                            if (job.length)
-                            {
-                                job[0].queuePosition = queueIndex;
-                                queueIndex++;
-                            }
-                        } 
-                    });
-                    
-                    updateRunning["queue"] = false;
+					debug("finished getting queue api");
+					buildQueue = queue;					
+					updateRunning["queue"] = false;
 				},
 				error: function(e, xhr) {
-                    updateRunning["queue"] = false;
+					debug("error getting queue api: '" + e.statusText + "'");
+					updateRunning["queue"] = false;
 				},
 				timeout: jenkinsTimeOut
- 			});
- 		}
+			});
+		}
 
 		//- initialize variables ----------------------------------------------
 		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);;
@@ -548,8 +614,15 @@
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 
+		var isDebug = false;
+		var debugString = getParameterByName("debug", null);
+		if (debugString != null)
+		{
+			isDebug  = true;
+		}
+		
 		//---------------------------------------------------------------------
-        $.ajaxSetup({ cache: false });
+		$.ajaxSetup({ cache: false });
 
 		var jobPadding = 5;
 		var jobMargin = 10;
@@ -568,8 +641,21 @@
 		
 		$(document).ready(function() {
 
+			if (isDebug)
+			{
+				showDebug();
+			}
+
+			debug("started jenkins wall display");
+			debug("url '" + jenkinsUrl + "'");
+			debug("timeOut: " + jenkinsTimeOut + "ms");
+			debug("update interval: " + jenkinsUpdateInterval + "ms");
+			debug("view name: '" + viewName + "'");
+
 			updateWindowSizes();
+
 			document.title = "Jenkins Wall Display (" + viewName + ")";
+
 
 			setInterval(function() {
 				if (!updateRunning[viewName])
@@ -595,7 +681,7 @@
 			updateWindowSizes();
 		}
 
-  </script>
+</script>
 </head>
 <body>
 <div id="TextDimensionDiv"></div>
