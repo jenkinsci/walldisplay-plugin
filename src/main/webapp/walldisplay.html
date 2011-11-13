@@ -105,6 +105,61 @@
 
 	<script type="text/javascript">
 
+		function getQueueDivs(jobWidth, jobHeight, queuePosition)
+		{
+			var queueDivs = new Array();
+
+			var maxPerColumn = 3;
+			var perColumn = queuePosition;
+			if (perColumn > maxPerColumn)
+			{
+				perColumn = maxPerColumn; 
+			}
+
+			var queueColumns = Math.ceil(queuePosition / perColumn);
+			
+			var maxQueueItems = 15;
+			if (queuePosition > maxQueueItems)
+			{
+				queuePosition = maxQueueItems; 
+			}
+										
+			var radius = Math.round(jobHeight / (maxPerColumn + 1));
+			var increment = (jobHeight - perColumn * radius) / (perColumn + 1);
+			
+			var queueLeft = jobWidth - 2 * radius;
+
+			for(queueColumn=0; queueColumn < queueColumns; queueColumn++)
+			{
+				var queueTop = increment;
+				
+				for (i=0; i < perColumn; i++)
+				{
+					if (queueDivs.length < queuePosition)
+					{
+						var queueDiv = $('<div />');
+						queueDiv.css({
+							"position": "absolute",
+							"top": queueTop + "px",
+							"left": queueLeft + "px",
+							"height": radius + "px",
+							"width": radius + "px", 
+							"border-radius": + Math.round(radius / 2) + "px",
+							"-moz-border-radius": Math.round(radius / 2) + "px",
+							"-webkit-border-radius": Math.round(radius / 2) + "px"
+						});
+						queueDiv.addClass("queued"); 
+						queueDivs.push(queueDiv);
+					}
+					queueTop += increment + radius;
+				}
+				
+				queueLeft -= increment + radius;
+			}
+			
+			return queueDivs;
+		}
+
 		function getParameterByName(name, defaultValue)
 		{
 			name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -355,40 +410,9 @@
 								percentageDiv.addClass("job");
 								percentageDiv.addClass("job_color_" + jobColor + "_building");
 							}
-							
-							var maxQueueItems = 3;
-							var queuePosition = getBuildQueuePosition(job.name);
-							
-							if (queuePosition > maxQueueItems)
-							{
-								queuePosition = maxQueueItems; 
-							}
-							
-							var radius = Math.round(jobHeight / (maxQueueItems + 1));
 
-							var queueDivs = new Array();
-							
-							var increment = (jobHeight - queuePosition * radius) / (queuePosition + 1);
-							var queueTop = increment;
-							for (i=0; i < queuePosition; i++)
-							{
-								var queueDiv = $('<div />');
-								queueDiv.css({
-									"position": "absolute",
-									"top": queueTop + "px",
-									"left": jobWidth - 2 * radius + "px",
-									"height": radius + "px",
-									"width": radius + "px", 
-									"border-radius": + Math.round(radius / 2) + "px",
-									"-moz-border-radius": Math.round(radius / 2) + "px",
-									"-webkit-border-radius": Math.round(radius / 2) + "px"
-								});
-								queueDiv.addClass("queued"); 
-								queueDivs.push(queueDiv);
-								queueTop += increment + radius;
-							}
-							
-							
+							var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
+		
 							//- create the job content div ---------------------
 							var jobContent = $('<div />');
 							jobContent.css({
