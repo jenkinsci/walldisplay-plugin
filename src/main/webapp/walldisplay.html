@@ -118,7 +118,7 @@
 
 			var queueColumns = Math.ceil(queuePosition / perColumn);
 			
-			var maxQueueItems = 15;
+			var maxQueueItems = maxQueuePositionToShow;
 			if (queuePosition > maxQueueItems)
 			{
 				queuePosition = maxQueueItems; 
@@ -633,10 +633,11 @@
 		}
 
 		//- initialize variables ----------------------------------------------
-		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);;
-		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);;
+		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);
+		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
+		var maxQueuePositionToShow = 15;
 
 		var isDebug = false;
 		var debugString = getParameterByName("debug", null);
