@@ -30,6 +30,21 @@
 			overflow: auto;
 		}
 
+		.job_info
+		{
+			position: absolute;
+			-moz-opacity:.70;
+			filter:alpha(opacity=70);
+			opacity:.70;
+			border-radius: 20px;
+			-moz-border-radius: 20px;
+			background-color: #000000;
+			padding: 10px;
+			color: #ffffff;
+			overflow: auto;
+			display: none;
+		}
+
 		#TextDimensionDiv
 		{
 			position: absolute;
@@ -443,7 +458,11 @@
 							$.each(queueDivs, function(index, queueDiv) { 
 								jobWrapper.append(queueDiv);
 							});
-											
+
+							jobWrapper.click(function() {
+								showJobinfo(job);
+							});
+							
 							if ($("#" + job.name).length)
 							{
 								$("#" + job.name).replaceWith(jobWrapper);
@@ -556,6 +575,26 @@
 			debugDiv.addClass("debug");
 
 			$("body").prepend(debugDiv);
+		}
+
+		function showJobinfo(job)
+		{
+			var jobInfoMargin = 50;
+			
+			var jobInfoDiv = $('<div />').attr({
+				"id": "jobInfo"
+			});
+			jobInfoDiv.css({
+				"height": clientHeight - 2 * jobInfoMargin + "px",
+				"width": clientWidth - 2 * jobInfoMargin + "px",
+				"left": jobInfoMargin + "px",
+				"top": jobInfoMargin + "px"
+			});
+			jobInfoDiv.addClass("job_info");
+
+			$("body").append(jobInfoDiv);
+			
+			jobInfoDiv.fadeTo("slow", 1);
 		}
 
 		function getJenkinsApi(jenkinsUrl) {
@@ -680,7 +719,6 @@
 			updateWindowSizes();
 
 			document.title = "Jenkins Wall Display (" + viewName + ")";
-
 
 			setInterval(function() {
 				if (!updateRunning[viewName])
