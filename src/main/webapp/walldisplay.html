@@ -43,6 +43,7 @@
 			color: #ffffff;
 			overflow: auto;
 			display: none;
+			text-align: center;
 		}
 
 		#TextDimensionDiv
@@ -120,14 +121,65 @@
 
 	<script type="text/javascript">
 
-        jQuery.fn.center = function () {
-        
-            this.css("position", "absolute");
-            this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
-            this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
-            
-            return this;
-        }
+		function plural(text, count) {
+			if (count == 0)
+			{
+				return "";
+			}
+			else
+			{
+				return count + " " + ((count > 1) ? text + "s" : text);
+			}
+		}
+
+		function getUserFriendlyTimespan(milliseconds) {
+
+			var time = milliseconds / 1000
+			var seconds = Math.floor(time % 60)
+
+			time /= 60	
+			var minutes = Math.floor(time % 60)
+			
+			time /= 60
+			var hours = Math.floor(time % 24)
+			
+			time /= 24
+			var days = Math.floor(time)
+
+			time /= 30
+			var months = Math.floor(time)
+
+			if (months > 0)
+			{
+				return plural("month", months) +  " " + plural("day", days);
+			}
+
+			if (days > 0)
+			{
+				return plural("day", days) +  " " + plural("hour", hours);
+			}
+
+			if (hours > 0)
+			{
+				return plural("hour", hours) + " " + plural("minute", minutes);
+			}
+
+			if (minutes > 0)
+			{
+				return plural("minute", minutes) + " " + plural("second", seconds);
+			}
+
+			return seconds + " seconds";
+		}
+
+		jQuery.fn.center = function () {
+
+			this.css("position", "absolute");
+			this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
+			this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+
+			return this;
+		}
 
 		function getQueueDivs(jobWidth, jobHeight, queuePosition)
 		{
@@ -225,20 +277,27 @@
 			debug("clientHeight: " + clientHeight + ", clientWidth: " + clientWidth);
 		}
 
-		function getJobText(job) {  
+		function getJobTitle(job) {  
 		
-			var jobText = job.name;
+			var jobTitle = job.name;
 
 			if (job.property != null)
 			{
 				$.each(job.property, function(index, property) { 
 					if (property.wallDisplayName != null)
 					{
-						jobText = property.wallDisplayName;
+						jobTitle = property.wallDisplayName;
 					}
 				});
 			}
 			
+			return jobTitle;
+		}
+
+		function getJobText(job) {  
+		
+			var jobText = getJobTitle(job);
+
 			if (job.lastBuild != null && job.lastBuild.number != null)
 			{
 				jobText += ' #' + job.lastBuild.number; 
@@ -329,9 +388,9 @@
 			}
 			else
 			{
+				var maxFontSize = 0;
 				removeMessage();
 				
-				var maxFontSize = 0;
 				var longestJob = getLongestJob(jobsToDisplay);
 
 				for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
@@ -360,6 +419,7 @@
 					}
 				}
 				
+				currentFontSize = maxFontSize;
 				var left = jobMargin;
 				var jobIndex = 0;
 				var jobWidth = Math.round((clientWidth - (columns + 1) * jobMargin) / columns);
@@ -468,9 +528,9 @@
 								jobWrapper.append(queueDiv);
 							});
 
-							//jobWrapper.click(function() {
-							//	showJobinfo(job);
-							//});
+							jobWrapper.click({ "job": job },function(eventData) {
+								showJobinfo(eventData.data.job);
+							});
 							
 							if ($("#" + job.name).length)
 							{
@@ -480,7 +540,8 @@
 							{
 								$("body").prepend(jobWrapper);
 							}
-
+							
+							$("#" + job.name)
 							jobsToRemove.remove(job.name);
 
 							jobIndex++;	
@@ -594,18 +655,43 @@
     				"id": "JobInfo"
     			});
     			jobInfoDiv.css({
-    				"height": Math.ceil(clientHeight / 3) + "px",
-    				"width": Math.ceil(clientWidth / 3) + "px"
+    				"height": Math.ceil(clientHeight / 2) + "px",
+    				"width": Math.ceil(clientWidth / 2) + "px"
     			});
     			jobInfoDiv.addClass("job_info");
     			jobInfoDiv.center();
-    			
-    			$("body").append(jobInfoDiv);
-    			jobInfoDiv.fadeTo("slow", 0.8, function() {
+				
+				var jobInfoTitle = $('<span />');
+				jobInfoTitle.css({
+					"font-size": Math.ceil(currentFontSize / 2) + "px",
+				});
+				jobInfoTitle.text(getJobTitle(job));
+    			jobInfoDiv.append(jobInfoTitle);
+				
+				var lastBuildText = "";
+				if (job.lastBuild != null)
+				{
+					lastBuildText += "Last build started " + getUserFriendlyTimespan(serverTime -job.lastBuild.timestamp) + " ago and  took " + getUserFriendlyTimespan(job.lastBuild.duration); 
+				}
+				jobInfoDiv.append("<br/><br/>");
+				
+				var jobLastBuild = $('<span />');
+				jobLastBuild.css({
+					"font-size": Math.ceil(currentFontSize / 3) + "px",
+				});
+				jobLastBuild.text(lastBuildText);
+    			jobInfoDiv.append(jobLastBuild);
+
+				
+				$("body").append(jobInfoDiv);
+				
+    			jobInfoDiv.fadeTo(1500, 0.95, function() {
 
         			setInterval(function() {
-        			     jobInfoDiv.fadeTo("slow", 0.0);
-        			     $("#JobInfo").remove();
+						jobInfoDiv.fadeTo(1500, 0.0, function() {
+							$("#JobInfo").remove();
+						}
+						);
         			}, jobInfoTimout);
                 
                 });
@@ -718,6 +804,7 @@
 		var updateError = null;
 		var clientWidth;
 		var clientHeight;
+		var currentFontSize = 0;
 		
 		$(document).ready(function() {
 
