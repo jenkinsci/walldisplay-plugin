@@ -120,6 +120,15 @@
 
 	<script type="text/javascript">
 
+        jQuery.fn.center = function () {
+        
+            this.css("position", "absolute");
+            this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
+            this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+            
+            return this;
+        }
+
 		function getQueueDivs(jobWidth, jobHeight, queuePosition)
 		{
 			var queueDivs = new Array();
@@ -364,27 +373,27 @@
 					jobsToRemove.push($(this).attr("id"));
 				});
 
-				for (var row = 0; row < rows; row++) {
+				for (var column = 0; column < columns; column++) {  
 
-					if (row == 0)
+					if (column == 0)
 					{
-						top = jobMargin;
+						left = jobMargin;
 					}
 					else
 					{
-						top += jobHeight + jobMargin;
+						left += jobWidth + jobMargin;
 					}
 
-					for (var column = 0; column < columns; column++) {  
+    				for (var row = 0; row < rows; row++) {
 
-						if (column == 0)
-						{
-							left = jobMargin;
-						}
-						else
-						{
-							left += jobWidth + jobMargin;
-						}
+    					if (row == 0)
+    					{
+    						top = jobMargin;
+    					}
+    					else
+    					{
+    						top += jobHeight + jobMargin;
+    					}
 						
 						if (jobIndex < jobsToDisplay.length)
 						{
@@ -459,9 +468,9 @@
 								jobWrapper.append(queueDiv);
 							});
 
-							jobWrapper.click(function() {
-								showJobinfo(job);
-							});
+							//jobWrapper.click(function() {
+							//	showJobinfo(job);
+							//});
 							
 							if ($("#" + job.name).length)
 							{
@@ -522,7 +531,7 @@
 								jobsToDisplay[jobsToDisplay.length] = job;
 							}
 							
-							jobsToDisplay.sort(function(job1, job2) { return job1.name.toLowerCase() > job2.name.toLowerCase(); });
+							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1).localeCompare(getJobText(job2)); });
 							
 							updateRunning[jobName] = false;
 						},
@@ -579,22 +588,28 @@
 
 		function showJobinfo(job)
 		{
-			var jobInfoMargin = 50;
-			
-			var jobInfoDiv = $('<div />').attr({
-				"id": "jobInfo"
-			});
-			jobInfoDiv.css({
-				"height": clientHeight - 2 * jobInfoMargin + "px",
-				"width": clientWidth - 2 * jobInfoMargin + "px",
-				"left": jobInfoMargin + "px",
-				"top": jobInfoMargin + "px"
-			});
-			jobInfoDiv.addClass("job_info");
+			if (!$("#JobInfo").length)
+			{
+    			var jobInfoDiv = $('<div />').attr({
+    				"id": "JobInfo"
+    			});
+    			jobInfoDiv.css({
+    				"height": Math.ceil(clientHeight / 3) + "px",
+    				"width": Math.ceil(clientWidth / 3) + "px"
+    			});
+    			jobInfoDiv.addClass("job_info");
+    			jobInfoDiv.center();
+    			
+    			$("body").append(jobInfoDiv);
+    			jobInfoDiv.fadeTo("slow", 0.8, function() {
 
-			$("body").append(jobInfoDiv);
-			
-			jobInfoDiv.fadeTo("slow", 1);
+        			setInterval(function() {
+        			     jobInfoDiv.fadeTo("slow", 0.0);
+        			     $("#JobInfo").remove();
+        			}, jobInfoTimout);
+                
+                });
+			}
 		}
 
 		function getJenkinsApi(jenkinsUrl) {
@@ -692,6 +707,7 @@
 		var jobMargin = 10;
 		var jobBorderWidth = 0;
 		var paintInterval = 1000;
+		var jobInfoTimout = 5000;
 		
 		var rows = 0;
 		var columns = 0
@@ -730,7 +746,6 @@
 				{
 					getJenkinsQueue(jenkinsUrl);
 				}
-				
 				
 			}, jenkinsUpdateInterval);
 
