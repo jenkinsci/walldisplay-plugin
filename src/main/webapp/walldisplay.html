@@ -770,14 +770,16 @@
 		{
 			var queuePosition = 0;
 			
-			$.each(buildQueue["items"], function(index, queueItem) {
-				
-				if (queueItem != null && queueItem.task != null && queueItem.task.name != null && queueItem.task.name == jobName)
-				{
-					queuePosition = index + 1;
-				} 
-			});
-			
+			if (buildQueue != null)
+			{
+				$.each(buildQueue["items"], function(index, queueItem) {
+					
+					if (queueItem != null && queueItem.task != null && queueItem.task.name != null && queueItem.task.name == jobName)
+					{
+						queuePosition = index + 1;
+					} 
+				});
+			}
 			return queuePosition;
 		}
 		
@@ -805,6 +807,33 @@
 			});
 		}
 
+		function getPluginVersion(jenkinsUrl) {
+
+			debug("starting getting plugin api");
+			updateRunning["queue"] = true;
+
+			//- get plugin version ------------------------------------------------
+			$.ajax({
+				url: jenkinsUrl +  "/plugin/jenkinswalldisplay/api/json",
+				dataType: 'json',
+				success: function(plugin, textStatus, jqXHR) {
+					debug("finished getting plugin api, plugin version: '" + plugin.version + "'");
+					updateRunning["pluginversion"] = false;
+
+					if (lastPluginVersion != null && lastPluginVersion != plugin.version)
+					{
+						window.location.reload();
+					}
+					
+					lastPluginVersion = plugin.version;
+				},
+				error: function(e, xhr) {
+					debug("error getting plugin api: '" + e.statusText + "'");
+					updateRunning["pluginversion"] = false;
+				},
+				timeout: jenkinsTimeOut
+			});
+		}
 		//- initialize variables ----------------------------------------------
 		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
@@ -823,11 +852,13 @@
 		$.ajaxSetup({ cache: false });
 
 		var jobPadding = 5;
-		var jobMargin = 10;
+		var jobMargin = 5;
 		var jobBorderWidth = 0;
 		var paintInterval = 1000;
 		var jobInfoTimout = 5000;
-		
+		var pluginUpdateInterval = 15 * 60 * 1000;
+
+		//---------------------------------------------------------------------
 		var rows = 0;
 		var columns = 0
 		var jobIndex = 0;
@@ -837,6 +868,7 @@
 		var updateError = null;
 		var clientWidth;
 		var clientHeight;
+		var lastPluginVersion = null;
 		
 		$(document).ready(function() {
 
@@ -849,6 +881,7 @@
 			debug("url '" + jenkinsUrl + "'");
 			debug("timeOut: " + jenkinsTimeOut + "ms");
 			debug("update interval: " + jenkinsUpdateInterval + "ms");
+			debug("plugin update interval: " + pluginUpdateInterval + "ms");
 			debug("view name: '" + viewName + "'");
 
 			updateWindowSizes();
@@ -865,8 +898,15 @@
 				{
 					getJenkinsQueue(jenkinsUrl);
 				}
-				
 			}, jenkinsUpdateInterval);
+
+			setInterval(function() {
+				if (!updateRunning["plugin"])
+				{
+					getPluginVersion(jenkinsUrl);
+				}
+				
+			}, pluginUpdateInterval);
 
 			setInterval(function() {
 				serverTime += paintInterval;
