@@ -28,6 +28,7 @@
 			font-size: 12px;
 			color: #ffffff;
 			overflow: auto;
+			z-index: 99;
 		}
 
 		.job_info
@@ -39,7 +40,6 @@
 			border-radius: 20px;
 			-moz-border-radius: 20px;
 			background-color: #000000;
-			padding: 10px;
 			color: #ffffff;
 			overflow: auto;
 			display: none;
@@ -61,6 +61,7 @@
 			color: #FFFFFF;
 			font-size: 300%;
 			text-align: center;
+			z-index: 99;
 		}
 
 		.message_error {
@@ -355,6 +356,8 @@
 
 		function displayMessage(messageText, colorClass)
 		{
+			removeAllJobs();
+
 			//height:' + (clientHeight - 4 * messageMargin) + '; width:' + (clientWidth - 4 * messageMargin) + ';'
 			var messageMargin = 50;
 			var positionStyle = 'position: absolute; padding: ' + messageMargin + 'px; left: ' + messageMargin + 'px; top: ' + messageMargin + 'px; width:' + (clientWidth - 4 * messageMargin) + ';';
@@ -388,10 +391,11 @@
 			}
 			else
 			{
-				var maxFontSize = 0;
 				removeMessage();
-				
 				var longestJob = getLongestJob(jobsToDisplay);
+
+				var maxFontSize = 0;
+				
 
 				for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
 					for (var fontSize = 10; fontSize <= 302; fontSize++) {
@@ -419,7 +423,6 @@
 					}
 				}
 				
-				currentFontSize = maxFontSize;
 				var left = jobMargin;
 				var jobIndex = 0;
 				var jobWidth = Math.round((clientWidth - (columns + 1) * jobMargin) / columns);
@@ -555,6 +558,11 @@
 			}
 		}
 
+		function removeAllJobs()
+		{
+			$(".job").remove();
+		}
+
 		function getJobByName(jobs, jobName)
 		{
 			return $.grep(jobs, function(job, i) {
@@ -562,7 +570,7 @@
 			});
 		}
 		
-		function getJobs(jenkinsApi, jobNames)
+		function getJobs(jobNames)
 		{
 			$.each(jobNames, function(index, jobName) {
 				if (!updateRunning[jobName])
@@ -606,22 +614,23 @@
 			});
 		}
 
-		function getJobNamesToDisplay(jenkinsApi)
+		function getJobNamesToDisplay(viewApi)
 		{
-			var view = null;
-
-			$.each(jenkinsApi.views, function(index, currentView) { 
-				if (currentView.name == viewName)
-				{
-					view = currentView;
-				}
-			});
-
 			var jobNames = new Array();;
 
-			$.each(view.jobs, function(index, job) { 
+			$.each(viewApi.jobs, function(index, job) { 
 				jobNames.push(job.name);
 			});
+			
+			if (viewApi.views != null && viewApi.views.length)
+			{
+				$.each(viewApi.views, function(index, nestedView) { 
+					$.each(nestedView.jobs, function(index, job) { 
+						jobNames.push(job.name);
+					});
+				});
+			}
+
 
 			return jobNames;
 		}
@@ -651,19 +660,43 @@
 		{
 			if (!$("#JobInfo").length)
 			{
+				var jobInfoPadding = 10;
+				var maxFontSize = 0;
+				var jobInfoWidth = Math.ceil(clientWidth / 2);
+				var jobInfoHeight = Math.ceil(clientHeight / 2);
+
+				for (var fontSize = 10; fontSize <= 302; fontSize++) {
+					
+					var textDimensions = getTextDimensions(getJobText(job, fontSize));
+
+					if (textDimensions.width <= (jobInfoWidth - jobInfoPadding) && textDimensions.height <= (jobInfoHeight - jobInfoPadding))
+					{
+						if (fontSize > maxFontSize)
+						{
+							maxFontSize = fontSize;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+
+
     			var jobInfoDiv = $('<div />').attr({
     				"id": "JobInfo"
     			});
     			jobInfoDiv.css({
-    				"height": Math.ceil(clientHeight / 2) + "px",
-    				"width": Math.ceil(clientWidth / 2) + "px"
+    				"height": jobInfoHeight + "px",
+    				"width": jobInfoWidth + "px",
+					"padding": jobInfoPadding + "px"
     			});
     			jobInfoDiv.addClass("job_info");
     			jobInfoDiv.center();
 				
 				var jobInfoTitle = $('<span />');
 				jobInfoTitle.css({
-					"font-size": Math.ceil(currentFontSize / 2) + "px",
+					"font-size": maxFontSize + "px",
 				});
 				jobInfoTitle.text(getJobTitle(job));
     			jobInfoDiv.append(jobInfoTitle);
@@ -677,7 +710,7 @@
 				
 				var jobLastBuild = $('<span />');
 				jobLastBuild.css({
-					"font-size": Math.ceil(currentFontSize / 3) + "px",
+					"font-size": 12 + "px",
 				});
 				jobLastBuild.text(lastBuildText);
     			jobInfoDiv.append(jobLastBuild);
@@ -705,20 +738,20 @@
 
 			//- get jenkins api ------------------------------------------------
 			$.ajax({
-				url: jenkinsUrl +  "/api/json",
+				url: jenkinsUrl +  "/view/" + viewName + "/api/json",
 				dataType: 'json',
 				data: {
-					"depth": "1"
+					"depth": 1
 				},
-				success: function(jenkinsApi, textStatus, jqXHR) {
+				success: function(viewApi, textStatus, jqXHR) {
 					debug("finished getting jenkins api");
 
 					var dateHeader = jqXHR.getResponseHeader("Date");
 					var date = new Date(dateHeader);
 					serverTime = date.getTime();
 						
-					var jobNames = getJobNamesToDisplay(jenkinsApi);
-					getJobs(jenkinsApi, jobNames);
+					var jobNames = getJobNamesToDisplay(viewApi);
+					getJobs(jobNames);
 
 					updateRunning[viewName] = false;
 					updateError =  null;
@@ -804,7 +837,6 @@
 		var updateError = null;
 		var clientWidth;
 		var clientHeight;
-		var currentFontSize = 0;
 		
 		$(document).ready(function() {
 
