@@ -857,7 +857,6 @@
 		var jobBorderWidth = 0;
 		var paintInterval = 1000;
 		var jobInfoTimout = 5000;
-		var pluginUpdateInterval = 15 * 60 * 1000;
 
 		//---------------------------------------------------------------------
 		var rows = 0;
@@ -899,15 +898,13 @@
 				{
 					getJenkinsQueue(jenkinsUrl);
 				}
-			}, jenkinsUpdateInterval);
-
-			setInterval(function() {
+				
 				if (!updateRunning["plugin"])
 				{
 					getPluginVersion(jenkinsUrl);
 				}
-				
-			}, pluginUpdateInterval);
+
+			}, jenkinsUpdateInterval);
 
 			setInterval(function() {
 				serverTime += paintInterval;

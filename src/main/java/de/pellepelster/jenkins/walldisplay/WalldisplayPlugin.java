@@ -11,6 +11,7 @@ import hudson.model.Api;
 import hudson.model.Hudson;
 import hudson.model.TransientViewActionFactory;
 import org.apache.commons.lang.StringUtils;
+import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
@@ -21,17 +22,24 @@ import org.kohsuke.stapler.export.ExportedBean;
  * @plugin jenkinswalldisplay
  */
 @ExportedBean
-public class PluginImpl extends Plugin {
+public class WalldisplayPlugin extends Plugin {
 
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
+    private final String theme;
+    
+    @DataBoundConstructor
+    public WalldisplayPlugin(String theme) {
+        this.theme = theme;
+    }
+    
     public Api getApi() {
         return new Api(this);
     }
 
     @Exported
     public String getVersion() {
-        return Hudson.getInstance().getPluginManager().getPlugin(PluginImpl.class).getVersion();
+        return Hudson.getInstance().getPluginManager().getPlugin(WalldisplayPlugin.class).getVersion();
     }
 
     @Override
