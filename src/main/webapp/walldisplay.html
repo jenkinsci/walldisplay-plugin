@@ -8,6 +8,11 @@
 			font-weight: bold;
 			overflow: hidden;
 		}
+		
+		html, body { 
+			padding: 0; 
+			margin: 0;
+		}
 
 		.debug
 		{
@@ -119,6 +124,7 @@
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dateformat.js"></script>
 	<script type="text/javascript" src="jquery-ui-1.8.16.js"></script>
+	<script type="text/javascript" src='snowfall.jquery.js'></script>
 
 	<script type="text/javascript">
 
@@ -393,10 +399,8 @@
 			{
 				removeMessage();
 				var longestJob = getLongestJob(jobsToDisplay);
-
 				var maxFontSize = 0;
 				
-
 				for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
 					for (var fontSize = 10; fontSize <= 302; fontSize++) {
 						
@@ -808,18 +812,18 @@
 			});
 		}
 
-		function getPluginVersion(jenkinsUrl) {
+		function getPluginConfiguration(jenkinsUrl) {
 
 			debug("starting getting plugin api");
-			updateRunning["queue"] = true;
+			updateRunning["pluginconfiguration"] = true;
 
 			//- get plugin version ------------------------------------------------
 			$.ajax({
-				url: jenkinsUrl +  "/plugin/jenkinswalldisplay/api/json",
+				url: jenkinsUrl +  "/plugin/jenkinswalldisplay/api/json?depth=1",
 				dataType: 'json',
 				success: function(plugin, textStatus, jqXHR) {
-					debug("finished getting plugin api, plugin version: '" + plugin.version + "'");
-					updateRunning["pluginversion"] = false;
+					debug("finished getting plugin api, plugin configuration: '" + plugin.version + "'");
+					updateRunning["pluginconfiguration"] = false;
 
 					if (lastPluginVersion != null && lastPluginVersion != plugin.version)
 					{
@@ -827,10 +831,31 @@
 					}
 					
 					lastPluginVersion = plugin.version;
+				
+					theme = plugin.config.theme;
+					if (lastTheme != theme)
+					{
+						$("body").css({'backgroundColor': themes[theme].backgroundColor});
+						
+						if (theme == "default")
+						{
+							$(document).snowfall('clear'); // How you clear
+						}
+						
+
+						if (theme == "christmas")
+						{
+						$(document).snowfall('clear');
+						$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
+						}
+
+					}
+					
+					lastTheme = theme;
 				},
 				error: function(e, xhr) {
 					debug("error getting plugin api: '" + e.statusText + "'");
-					updateRunning["pluginversion"] = false;
+					updateRunning["pluginconfiguration"] = false;
 				},
 				timeout: jenkinsTimeOut
 			});
@@ -853,7 +878,7 @@
 		$.ajaxSetup({ cache: false });
 
 		var jobPadding = 5;
-		var jobMargin = 5;
+		var jobMargin = 10;
 		var jobBorderWidth = 0;
 		var paintInterval = 1000;
 		var jobInfoTimout = 5000;
@@ -869,6 +894,13 @@
 		var clientWidth;
 		var clientHeight;
 		var lastPluginVersion = null;
+		var lastTheme = "default";
+		var themes = new Array();
+		themes["default"] = new Array();
+		themes["default"].backgroundColor = "#ffffff";
+		themes["christmas"] = new Array();
+		themes["christmas"].backgroundColor = "#000000";
+		
 		
 		$(document).ready(function() {
 
@@ -881,7 +913,6 @@
 			debug("url '" + jenkinsUrl + "'");
 			debug("timeOut: " + jenkinsTimeOut + "ms");
 			debug("update interval: " + jenkinsUpdateInterval + "ms");
-			debug("plugin update interval: " + pluginUpdateInterval + "ms");
 			debug("view name: '" + viewName + "'");
 
 			updateWindowSizes();
@@ -899,9 +930,9 @@
 					getJenkinsQueue(jenkinsUrl);
 				}
 				
-				if (!updateRunning["plugin"])
+				if (!updateRunning["pluginconfiguration"])
 				{
-					getPluginVersion(jenkinsUrl);
+					getPluginConfiguration(jenkinsUrl);
 				}
 
 			}, jenkinsUpdateInterval);
