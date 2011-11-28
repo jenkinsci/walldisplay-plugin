@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.pellepelster.jenkins.walldisplay;
 
 import hudson.model.Action;
@@ -12,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author pelle
+ * Adds the walldisplay link action to all views
+ * 
+ * @author Christian Pelster
  */
 public class WallDisplayTransientViewActionFactory extends TransientViewActionFactory {
 

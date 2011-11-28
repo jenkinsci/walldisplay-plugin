@@ -12,8 +12,9 @@ import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
 /**
- *
- * @author pelle
+ * Job property allowing to override the name of the job that is displayed on the walldisplay
+ * 
+ * @author Christian Pelster
  */
 @ExportedBean
 public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?, ?>> {

@@ -1,6 +1,5 @@
 package de.pellepelster.jenkins.walldisplay;
 
-import hudson.Extension;
 import java.io.IOException;
 
 import org.kohsuke.stapler.StaplerRequest;
@@ -9,10 +8,8 @@ import hudson.Plugin;
 import hudson.Util;
 import hudson.XmlFile;
 import hudson.model.Api;
-import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.TransientViewActionFactory;
-import hudson.util.ListBoxModel;
 import java.io.File;
 import java.util.logging.Logger;
 import net.sf.json.JSONObject;

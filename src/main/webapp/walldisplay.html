@@ -1,192 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Jenkins Wall Display</title>
-	<style type="text/css">
-
-		body {
-			font-family: Arial, Helvetica, Verdana, sans-serif;
-			font-weight: bold;
-			overflow: hidden;
-		}
-		
-		html, body { 
-			padding: 0; 
-			margin: 0;
-		}
-
-		.debug
-		{
-			position: absolute;
-			top: 20px;
-			left: 20px;
-			height: auto;
-			width: 33%;
-			-moz-opacity:.70;
-			filter:alpha(opacity=70);
-			opacity:.70;
-			border-radius: 20px;
-			-moz-border-radius: 20px;
-			background-color: #000000;
-			padding: 10px;
-			margin: 10px;
-			font-family: monospace;
-			font-size: 12px;
-			color: #ffffff;
-			overflow: auto;
-			z-index: 99;
-		}
-
-		.job_info
-		{
-			position: absolute;
-			-moz-opacity:.70;
-			filter:alpha(opacity=70);
-			opacity:.70;
-			border-radius: 20px;
-			-moz-border-radius: 20px;
-			background-color: #000000;
-			color: #ffffff;
-			overflow: auto;
-			display: none;
-			text-align: center;
-		}
-
-		#TextDimensionDiv
-		{
-			position: absolute;
-			visibility: hidden;
-			height: auto;
-			width: auto;
-		}
-
-		#Message
-		{
-			border-radius: 60px;
-			-moz-border-radius: 60px;
-			color: #FFFFFF;
-			font-size: 300%;
-			text-align: center;
-			z-index: 99;
-		}
-
-		.message_error {
-			background-color: #550000;
-		}
-
-		.message_info {
-			background-color: #888888;
-		}
-
-		.job_wrapper 
-		{
-			text-align: center;
-			background-color: #ADADAD;
-			color: #FFFFFF;
-		}
-
-		.job_color_blue {
-			background-color: #008800;
-		}
-
-		.job_color_blue_building {
-			background-color: #00FF00;
-		}
-
-		.job_color_red {
-			background-color: #880000;
-		}
-
-		.job_color_red_building {
-			background-color: #FF0000;
-		}
-
-		.job_yellow_blue {
-			background-color: #888800;
-		}
-
-		.job_color_yellow_building {
-			background-color: #FFFF00;
-		}
-
-		.queued { 
-			background-color: #DFC500;
-		}
-
-		.job_content { 
-		}
-
-		.job { 
-			border-radius: 20px;
-			-moz-border-radius: 20px;
-		}
-	</style>
+	
+	<link type="text/css" rel="stylesheet" media="all" href="walldisplay.css" />
 
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dateformat.js"></script>
 	<script type="text/javascript" src="jquery-ui-1.8.16.js"></script>
 	<script type="text/javascript" src='snowfall.jquery.js'></script>
+	<script type="text/javascript" src="utils.js"></script>
 
 	<script type="text/javascript">
-
-		function plural(text, count) {
-			if (count == 0)
-			{
-				return "";
-			}
-			else
-			{
-				return count + " " + ((count > 1) ? text + "s" : text);
-			}
-		}
-
-		function getUserFriendlyTimespan(milliseconds) {
-
-			var time = milliseconds / 1000
-			var seconds = Math.floor(time % 60)
-
-			time /= 60	
-			var minutes = Math.floor(time % 60)
-			
-			time /= 60
-			var hours = Math.floor(time % 24)
-			
-			time /= 24
-			var days = Math.floor(time)
-
-			time /= 30
-			var months = Math.floor(time)
-
-			if (months > 0)
-			{
-				return plural("month", months) +  " " + plural("day", days);
-			}
-
-			if (days > 0)
-			{
-				return plural("day", days) +  " " + plural("hour", hours);
-			}
-
-			if (hours > 0)
-			{
-				return plural("hour", hours) + " " + plural("minute", minutes);
-			}
-
-			if (minutes > 0)
-			{
-				return plural("minute", minutes) + " " + plural("second", seconds);
-			}
-
-			return seconds + " seconds";
-		}
-
-		jQuery.fn.center = function () {
-
-			this.css("position", "absolute");
-			this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
-			this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
-
-			return this;
-		}
 
 		function getQueueDivs(jobWidth, jobHeight, queuePosition)
 		{
@@ -243,33 +67,6 @@
 			return queueDivs;
 		}
 
-		function getParameterByName(name, defaultValue)
-		{
-			name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-			var regexS = "[\\?&]" + name + "=([^&#]*)";
-			var regex = new RegExp(regexS);
-			var results = regex.exec(window.location.href);
-			if(results == null)
-				return defaultValue;
-			else
-				return decodeURIComponent(results[1].replace(/\+/g, " "));
-		}
-
-		Array.prototype.remove = function (value)
-		{
-			for (var i = 0; i < this.length; )
-			{
-				if (this[i] === value)
-				{
-					this.splice(i, 1);
-				}
-				else
-				{
-					++i;
-				}
-			}
-		}
-
 		function updateWindowSizes()
 		{	
 			clientWidth = $(window).width();
@@ -284,37 +81,7 @@
 			debug("clientHeight: " + clientHeight + ", clientWidth: " + clientWidth);
 		}
 
-		function getJobTitle(job) {  
-		
-			var jobTitle = job.name;
-
-			if (job.property != null)
-			{
-				$.each(job.property, function(index, property) { 
-					if (property.wallDisplayName != null)
-					{
-						jobTitle = property.wallDisplayName;
-					}
-				});
-			}
-			
-			return jobTitle;
-		}
-
-		function getJobText(job) {  
-		
-			var jobText = getJobTitle(job);
-
-			if (job.lastBuild != null && job.lastBuild.number != null)
-			{
-				jobText += ' #' + job.lastBuild.number; 
-			}
-
-			return jobText;
-		}
-
 		var cachedTextDimensions = new Array();
-
 		function getTextDimensions(text, fontSize) {
 			
 			var cacheKey = text + fontSize;
@@ -346,20 +113,6 @@
 
 		}
 
-		function getLongestJob(jobs) {
-
-			var job = null;
-
-			$.each(jobs, function(index, currentJob) { 
-				if (job == null || getJobText(currentJob).length > getJobText(job).length)
-				{
-					job = currentJob;
-				}
-			});
-
-			return job;
-		}
-
 		function displayMessage(messageText, colorClass)
 		{
 			removeAllJobs();
@@ -380,10 +133,6 @@
 			}
 		}
 
-		function removeMessage()
-		{
-			$("#Message").remove()
-		}
 
 		function repaint()
 		{			
@@ -565,13 +314,6 @@
 		function removeAllJobs()
 		{
 			$(".job").remove();
-		}
-
-		function getJobByName(jobs, jobName)
-		{
-			return $.grep(jobs, function(job, i) {
-					return ( job.name == jobName);
-			});
 		}
 		
 		function getJobs(jobNames)
@@ -837,16 +579,15 @@
 					{
 						$("body").css({'backgroundColor': themes[theme].backgroundColor});
 						
-						if (theme == "default")
+						if(typeof themes[lastTheme].stop === 'function')
 						{
-							$(document).snowfall('clear'); // How you clear
+							themes[lastTheme].stop();
 						}
 						
 
-						if (theme == "christmas")
+						if(typeof themes[theme].start === 'function') 
 						{
-						$(document).snowfall('clear');
-						$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
+							themes[theme].start();
 						}
 
 					}
@@ -895,12 +636,23 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
+		
+		//---------------------------------------------------------------------
+		// themes
+		//---------------------------------------------------------------------
 		var themes = new Array();
 		themes["default"] = new Array();
 		themes["default"].backgroundColor = "#ffffff";
+
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
-		
+		themes["christmas"].start = function() {
+			$(document).snowfall('clear');
+			$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
+		}
+		themes["christmas"].stop = function() {
+			$(document).snowfall('clear');
+		}
 		
 		$(document).ready(function() {
 

@@ -9,6 +9,11 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
+/**
+ * Configuration holder for the walldisplay plugin
+ * 
+ * @author Christian Pelster
+ */
 @ExportedBean
 public class Configuration {
 

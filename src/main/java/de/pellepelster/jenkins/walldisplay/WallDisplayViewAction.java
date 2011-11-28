@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.pellepelster.jenkins.walldisplay;
 
 import hudson.model.Action;
@@ -11,15 +6,15 @@ import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
 /**
- *
- * @author pelle
+ * Action providing the link to the actual walldisplay page
+ * 
+ * @author Christian Pelster
  */
-public class WallDisplayViewAction implements  Action {
+public class WallDisplayViewAction implements Action {
 
     private String viewName;
 
-    public WallDisplayViewAction(String viewName)
-    {
+    public WallDisplayViewAction(String viewName) {
         this.viewName = viewName;
     }
 
@@ -36,17 +31,13 @@ public class WallDisplayViewAction implements  Action {
     @Override
     public String getUrlName() {
 
-		String encodedUrl = null;
-		try
-		{
-			encodedUrl = URLEncoder.encode(Hudson.getInstance().getRootUrl(), "UTF-8");
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			encodedUrl = Hudson.getInstance().getRootUrl();
-		}
+        String encodedUrl = null;
+        try {
+            encodedUrl = URLEncoder.encode(Hudson.getInstance().getRootUrl(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            encodedUrl = Hudson.getInstance().getRootUrl();
+        }
 
         return String.format("%s/plugin/jenkinswalldisplay/walldisplay.html?viewName=%s&jenkinsUrl=%s", Hudson.getInstance().getRootUrl(), viewName, encodedUrl);
     }
-
 }
