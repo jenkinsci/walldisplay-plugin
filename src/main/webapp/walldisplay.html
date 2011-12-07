@@ -574,8 +574,13 @@
 					
 					lastPluginVersion = plugin.version;
 				
-					theme = plugin.config.theme;
-					if (lastTheme != theme)
+					theme = null;
+					if (plugin.config && plugin.config.theme)
+					{
+						theme = plugin.config.theme;
+					}
+
+					if (lastTheme != theme && theme != null)
 					{
 						$("body").css({'backgroundColor': themes[theme].backgroundColor});
 						
@@ -592,7 +597,10 @@
 
 					}
 					
-					lastTheme = theme;
+					if (theme != null)
+					{
+						lastTheme = theme;
+					}
 				},
 				error: function(e, xhr) {
 					debug("error getting plugin api: '" + e.statusText + "'");
@@ -636,6 +644,7 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
+		var paintRunning = false;
 		
 		//---------------------------------------------------------------------
 		// themes
@@ -689,9 +698,16 @@
 
 			}, jenkinsUpdateInterval);
 
+			
 			setInterval(function() {
 				serverTime += paintInterval;
-				repaint();
+				if (!paintRunning)
+				{
+					paintRunning = true;
+					repaint();
+					paintRunning = false;
+				}
+				
 			}, paintInterval);
 		});
 
