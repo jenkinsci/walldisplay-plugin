@@ -79,30 +79,6 @@ html, body {
 	color: #FFFFFF;
 }
 
-.job_color_blue {
-	background-color: #008800;
-}
-
-.job_color_blue_building {
-	background-color: #00FF00;
-}
-
-.job_color_red {
-	background-color: #880000;
-}
-
-.job_color_red_building {
-	background-color: #FF0000;
-}
-
-.job_yellow {
-	background-color: #888800;
-}
-
-.job_color_yellow_building {
-	background-color: #FFFF00;
-}
-
 .queued { 
 	background-color: #DFC500;
 }

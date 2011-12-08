@@ -245,10 +245,10 @@
 									"height": jobHeight + "px",
 									"width": percentageWidth + "px",
 									"left": "0px",
+									"background-color": themes[theme][jobColor + "_building"],
 									"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
 								});
 								percentageDiv.addClass("job");
-								percentageDiv.addClass("job_color_" + jobColor + "_building");
 							}
 
 							var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
@@ -269,12 +269,12 @@
 							});
 							
 							jobWrapper.css({
-								"font-size": (maxFontSize-4) + "px",
+								"font-size": (maxFontSize) + "px",
+								"background-color": themes[theme][jobColor]
 							});
 							jobWrapper.css(jobPositionStyle);
 							jobWrapper.css(jobDimensionsStyle);
 							jobWrapper.addClass("job");
-							jobWrapper.addClass("job_color_" + jobColor);
 							jobWrapper.addClass("job_wrapper");
 
 							//- assemble job divs ------------------------------
@@ -573,31 +573,30 @@
 					
 					lastPluginVersion = plugin.version;
 				
-					theme = null;
-					if (plugin.config && plugin.config.theme)
+					if (plugin.config && plugin.config.theme && plugin.config.theme != null)
 					{
 						theme = plugin.config.theme;
 					}
 
-					if (lastTheme != theme && theme != null)
-					{
-						$("body").css({'backgroundColor': themes[theme].backgroundColor});
-						
-						if(typeof themes[lastTheme].stop === 'function')
-						{
-							themes[lastTheme].stop();
-						}
-						
 
-						if(typeof themes[theme].start === 'function') 
-						{
-							themes[theme].start();
-						}
-
-					}
-					
 					if (theme != null)
 					{
+						if (lastTheme != theme)
+						{
+							$("body").css({'backgroundColor': themes[theme].backgroundColor});
+							
+							if(typeof themes[lastTheme].stop === 'function')
+							{
+								themes[lastTheme].stop();
+							}
+							
+	
+							if(typeof themes[theme].start === 'function') 
+							{
+								themes[theme].start();
+							}
+						}
+						
 						lastTheme = theme;
 					}
 				},
@@ -626,7 +625,7 @@
 		$.ajaxSetup({ cache: false });
 
 		var jobPadding = 5;
-		var jobMargin = 10;
+		var jobMargin = 8;
 		var jobBorderWidth = 0;
 		var paintInterval = 1000;
 		var jobInfoTimout = 5000;
@@ -643,6 +642,7 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
+		var theme = lastTheme;
 		var paintRunning = false;
 		
 		//---------------------------------------------------------------------
@@ -651,9 +651,21 @@
 		var themes = new Array();
 		themes["default"] = new Array();
 		themes["default"].backgroundColor = "#ffffff";
-
+		themes["default"]["blue"] = "#008800";
+		themes["default"]["blue_building"] = "#00FF00";
+		themes["default"]["red"] = "#880000";
+		themes["default"]["red_building"] = "#FF0000";
+		themes["default"]["yellow"] = "#888800";
+		themes["default"]["yellow_building"] = "#FFFF00";
+		
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
+		themes["christmas"]["blue"] = "#008800";
+		themes["christmas"]["blue_building"] = "#00FF00";
+		themes["christmas"]["red"] = "#880000";
+		themes["christmas"]["red_building"] = "#FF0000";
+		themes["christmas"]["yellow"] = "#888800";
+		themes["christmas"]["yellow_building"] = "#FFFF00";
 		themes["christmas"].start = function() {
 			$(document).snowfall('clear');
 			$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
@@ -661,6 +673,16 @@
 		themes["christmas"].stop = function() {
 			$(document).snowfall('clear');
 		}
+
+		themes["boss"] = new Array();
+		themes["boss"].backgroundColor = "#ffffff";
+		themes["boss"]["blue"] = "#008800";
+		themes["boss"]["blue_building"] = "#00FF00";
+		themes["boss"]["red"] = "#008800";
+		themes["boss"]["red_building"] = "#00FF00";
+		themes["boss"]["yellow"] = "#008800";
+		themes["boss"]["yellow_building"] = "#00FF00";
+
 		
 		$(document).ready(function() {
 

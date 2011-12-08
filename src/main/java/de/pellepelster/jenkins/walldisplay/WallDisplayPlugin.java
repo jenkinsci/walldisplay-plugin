@@ -28,7 +28,7 @@ public class WallDisplayPlugin extends Plugin {
     private static final Logger LOGGER = Logger.getLogger("hudson." + WallDisplayPlugin.class.getName());
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
-    public static final String[] themes = new String[] {"Default", "Christmas" };
+    public static final String[] themes = new String[] {"Default", "Christmas", "Boss" };
     
     @Exported
     public Configuration config;
