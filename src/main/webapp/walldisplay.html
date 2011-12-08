@@ -328,7 +328,6 @@
 						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
 						dataType: "json",
 						data: {
-							"depth": "1"
 						},
 						success: function(job, textStatus, jqXHR) {
 							debug("finished getting api for job '" + jobName + "'");
