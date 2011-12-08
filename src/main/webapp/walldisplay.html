@@ -147,6 +147,15 @@
 			else
 			{
 				removeMessage();
+				
+				$.each(jobsToDisplay, function(index, oldJob) { 
+					if (typeof(oldJob["visited"]) != 'undefined' && !oldJob.visited)
+					{
+						jobsToDisplay.remove(oldJob);
+					}
+				});
+				
+				
 				var longestJob = getLongestJob(jobsToDisplay);
 				var maxFontSize = 0;
 				
@@ -269,7 +278,7 @@
 							});
 							
 							jobWrapper.css({
-								"font-size": (maxFontSize) + "px",
+								"font-size": (maxFontSize-1) + "px",
 								"background-color": themes[theme][jobColor]
 							});
 							jobWrapper.css(jobPositionStyle);
@@ -297,7 +306,6 @@
 								$("body").prepend(jobWrapper);
 							}
 							
-							$("#" + job.name)
 							jobsToRemove.remove(job.name);
 
 							jobIndex++;	
@@ -305,7 +313,7 @@
 					}
 				}
 
-				$(jobsToRemove).each(function(index, jobName) {
+				$.each(jobsToRemove, function(index, jobName) {
 					$("#" + jobName).remove();
 				});
 			}
@@ -318,6 +326,10 @@
 		
 		function getJobs(jobNames)
 		{
+			$.each(jobsToDisplay, function(index, job) { 
+				job.visited = false;
+			});
+		
 			$.each(jobNames, function(index, jobName) {
 				if (!updateRunning[jobName])
 				{
@@ -335,6 +347,7 @@
 							$.each(jobsToDisplay, function(index, oldJob) { 
 								if (oldJob.name == job.name)
 								{
+									job.visited = true;
 									jobsToDisplay[index] = job;
 									add = false;
 								}
