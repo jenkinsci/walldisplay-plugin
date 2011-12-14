@@ -149,7 +149,7 @@
 				removeMessage();
 				
 				$.each(jobsToDisplay, function(index, oldJob) { 
-					if (typeof(oldJob["visited"]) != 'undefined' && !oldJob.visited)
+					if (typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited)
 					{
 						jobsToDisplay.remove(oldJob);
 					}
@@ -340,6 +340,7 @@
 						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
 						dataType: "json",
 						data: {
+							"tree": "name,color,lastBuild[timestamp,duration],lastSuccessfulBuild[duration]"
 						},
 						success: function(job, textStatus, jqXHR) {
 							debug("finished getting api for job '" + jobName + "'");
