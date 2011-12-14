@@ -148,174 +148,178 @@
 			{
 				removeMessage();
 				
-				$.each(jobsToDisplay, function(index, oldJob) { 
-					if (typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited)
-					{
-						jobsToDisplay.remove(oldJob);
-					}
-				});
-				
-				
-				var longestJob = getLongestJob(jobsToDisplay);
-				var maxFontSize = 0;
-				
-				for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
-					for (var fontSize = 10; fontSize <= 302; fontSize++) {
-						
-						var rowCount = Math.ceil(jobsToDisplay.length /  columnCount);
-
-						var jobDimensions = getJobDimensions(longestJob, fontSize);
+				if (!updateRunning["repaint"])
+				{
+					$.each(jobsToDisplay, function(index, oldJob) { 
+						if (typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited && !updateRunning[oldJob.name])
+						{
+							jobsToDisplay.remove(oldJob);
+						}
+					});
+					
+					
+					var longestJob = getLongestJob(jobsToDisplay);
+					var maxFontSize = 0;
+					
+					for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
+						for (var fontSize = 10; fontSize <= 302; fontSize++) {
+							
+							var rowCount = Math.ceil(jobsToDisplay.length /  columnCount);
 	
-						var totalWidth = jobDimensions.width * columnCount + jobMargin * (columnCount-1);
-						var totalHeight = jobDimensions.height * rowCount + jobMargin * (rowCount-1);
-
-						if (totalWidth <= clientWidth && totalHeight <= clientHeight)
-						{
-							if (fontSize > maxFontSize)
-							{
-								maxFontSize = fontSize;
-								rows = rowCount;
-								columns = columnCount;
-							}
-						}
-						else
-						{
-							break;
-						}
-					}
-				}
-				
-				var left = jobMargin;
-				var jobIndex = 0;
-				var jobWidth = Math.round((clientWidth - (columns + 1) * jobMargin) / columns);
-				var top = jobMargin;
-				var jobHeight = Math.round((clientHeight - (rows + 1) * jobMargin) / rows);
-				var textDimensions = getTextDimensions("YgGy", maxFontSize);
-
-				var jobsToRemove = new Array();
-
-				$('.job').each(function(index) {
-					jobsToRemove.push($(this).attr("id"));
-				});
-
-				for (var column = 0; column < columns; column++) {  
-
-					if (column == 0)
-					{
-						left = jobMargin;
-					}
-					else
-					{
-						left += jobWidth + jobMargin;
-					}
-
-    				for (var row = 0; row < rows; row++) {
-
-    					if (row == 0)
-    					{
-    						top = jobMargin;
-    					}
-    					else
-    					{
-    						top += jobHeight + jobMargin;
-    					}
-						
-						if (jobIndex < jobsToDisplay.length)
-						{
-							var job = jobsToDisplay[jobIndex];
-							var isBuilding = ( job.color.substr(-6) === "_anime" );
-							var jobColor = job.color;
-							
-							if (job.color.substr(-6) === "_anime" ) 
-							{
-								jobColor = job.color.substr(0, job.color.length - 6);
-							}
-							
-							var jobDimensions = getJobDimensions(job, maxFontSize);
-
-							var jobDimensionsStyle = { "width": jobWidth, "height": jobHeight };
-							var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
-						
-							var percentageDiv = $('<div />');;
-							var jobOverdue = false;
-							if (isBuilding && job.lastBuild != null && job.lastBuild.timestamp != null && job.lastSuccessfulBuild != null && job.lastSuccessfulBuild.duration != null)
-							{
-								var currentDuration = serverTime - job.lastBuild.timestamp;
-								var percentage = currentDuration / (job.lastSuccessfulBuild.duration / 100);
-								var percentageWidth = Math.round(jobWidth / 100 * percentage);
-								
-								if (percentageWidth > jobWidth)
-								{
-									percentageWidth = jobWidth;
-									jobOverdue = true;
-								}
-							
-								percentageDiv.css({
-									"height": jobHeight + "px",
-									"width": percentageWidth + "px",
-									"left": "0px",
-									"background-color": themes[theme][jobColor + "_building"],
-									"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
-								});
-								percentageDiv.addClass("job");
-							}
-
-							var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
+							var jobDimensions = getJobDimensions(longestJob, fontSize);
 		
-							//- create the job content div ---------------------
-							var jobContent = $('<div />');
-							jobContent.css({
-								"position": "absolute",
-								"top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
-							});
-							jobContent.addClass("job_content");
-							jobContent.css(jobDimensionsStyle);
-							jobContent.text(getJobText(job));
-
-							//- create the job wrapper div ---------------------
-							var jobWrapper = $('<div />').attr({
-								"id": job.name
-							});
-							
-							jobWrapper.css({
-								"font-size": (maxFontSize-1) + "px",
-								"background-color": themes[theme][jobColor]
-							});
-							jobWrapper.css(jobPositionStyle);
-							jobWrapper.css(jobDimensionsStyle);
-							jobWrapper.addClass("job");
-							jobWrapper.addClass("job_wrapper");
-
-							//- assemble job divs ------------------------------
-							jobWrapper.append(jobContent);
-							jobWrapper.append(percentageDiv);
-							$.each(queueDivs, function(index, queueDiv) { 
-								jobWrapper.append(queueDiv);
-							});
-
-							jobWrapper.click({ "job": job },function(eventData) {
-								showJobinfo(eventData.data.job);
-							});
-							
-							if ($("#" + job.name).length)
+							var totalWidth = jobDimensions.width * columnCount + jobMargin * (columnCount-1);
+							var totalHeight = jobDimensions.height * rowCount + jobMargin * (rowCount-1);
+	
+							if (totalWidth <= clientWidth && totalHeight <= clientHeight)
 							{
-								$("#" + job.name).replaceWith(jobWrapper);
+								if (fontSize > maxFontSize)
+								{
+									maxFontSize = fontSize;
+									rows = rowCount;
+									columns = columnCount;
+								}
 							}
 							else
 							{
-								$("body").prepend(jobWrapper);
+								break;
 							}
-							
-							jobsToRemove.remove(job.name);
-
-							jobIndex++;	
 						}
 					}
-				}
+					
+					var left = jobMargin;
+					var jobIndex = 0;
+					var jobWidth = Math.round((clientWidth - (columns + 1) * jobMargin) / columns);
+					var top = jobMargin;
+					var jobHeight = Math.round((clientHeight - (rows + 1) * jobMargin) / rows);
+					var textDimensions = getTextDimensions("YgGy", maxFontSize);
+	
+					var jobsToRemove = new Array();
+	
+					$('.job').each(function(index) {
+						jobsToRemove.push($(this).attr("id"));
+					});
+	
+					for (var column = 0; column < columns; column++) {  
+	
+						if (column == 0)
+						{
+							left = jobMargin;
+						}
+						else
+						{
+							left += jobWidth + jobMargin;
+						}
+	
+	    				for (var row = 0; row < rows; row++) {
+	
+	    					if (row == 0)
+	    					{
+	    						top = jobMargin;
+	    					}
+	    					else
+	    					{
+	    						top += jobHeight + jobMargin;
+	    					}
+							
+							if (jobIndex < jobsToDisplay.length)
+							{
+								var job = jobsToDisplay[jobIndex];
+								var isBuilding = ( job.color.substr(-6) === "_anime" );
+								var jobColor = job.color;
+								
+								if (job.color.substr(-6) === "_anime" ) 
+								{
+									jobColor = job.color.substr(0, job.color.length - 6);
+								}
+								
+								var jobDimensions = getJobDimensions(job, maxFontSize);
+	
+								var jobDimensionsStyle = { "width": jobWidth, "height": jobHeight };
+								var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
+							
+								var percentageDiv = $('<div />');;
+								var jobOverdue = false;
+								if (isBuilding && job.lastBuild != null && job.lastBuild.timestamp != null && job.lastSuccessfulBuild != null && job.lastSuccessfulBuild.duration != null)
+								{
+									var currentDuration = serverTime - job.lastBuild.timestamp;
+									var percentage = currentDuration / (job.lastSuccessfulBuild.duration / 100);
+									var percentageWidth = Math.round(jobWidth / 100 * percentage);
+									
+									if (percentageWidth > jobWidth)
+									{
+										percentageWidth = jobWidth;
+										jobOverdue = true;
+									}
+								
+									percentageDiv.css({
+										"height": jobHeight + "px",
+										"width": percentageWidth + "px",
+										"left": "0px",
+										"background-color": themes[theme][jobColor + "_building"],
+										"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
+									});
+									percentageDiv.addClass("job");
+								}
+	
+								var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
+			
+								//- create the job content div ---------------------
+								var jobContent = $('<div />');
+								jobContent.css({
+									"position": "absolute",
+									"top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
+								});
+								jobContent.addClass("job_content");
+								jobContent.css(jobDimensionsStyle);
+								jobContent.text(getJobText(job));
+	
+								//- create the job wrapper div ---------------------
+								var jobWrapper = $('<div />').attr({
+									"id": job.name
+								});
+								
+								jobWrapper.css({
+									"font-size": (maxFontSize-1) + "px",
+									"background-color": themes[theme][jobColor]
+								});
+								jobWrapper.css(jobPositionStyle);
+								jobWrapper.css(jobDimensionsStyle);
+								jobWrapper.addClass("job");
+								jobWrapper.addClass("job_wrapper");
+	
+								//- assemble job divs ------------------------------
+								jobWrapper.append(jobContent);
+								jobWrapper.append(percentageDiv);
+								$.each(queueDivs, function(index, queueDiv) { 
+									jobWrapper.append(queueDiv);
+								});
+	
+								jobWrapper.click({ "job": job },function(eventData) {
+									showJobinfo(eventData.data.job);
+								});
+								
+								if ($("#" + job.name).length)
+								{
+									$("#" + job.name).replaceWith(jobWrapper);
+								}
+								else
+								{
+									$("body").prepend(jobWrapper);
+								}
+								
+								jobsToRemove.remove(job.name);
+	
+								jobIndex++;	
+							}
+						}
+					}
+	
+					$.each(jobsToRemove, function(index, jobName) {
+						$("#" + jobName).remove();
+					});
 
-				$.each(jobsToRemove, function(index, jobName) {
-					$("#" + jobName).remove();
-				});
+				}
 			}
 		}
 
@@ -326,9 +330,11 @@
 		
 		function getJobs(jobNames)
 		{
+			updateRunning["repaint"] = true;
 			$.each(jobsToDisplay, function(index, job) { 
 				job.visited = false;
 			});
+			updateRunning["repaint"] = false;
 		
 			$.each(jobNames, function(index, jobName) {
 				if (!updateRunning[jobName])
@@ -671,6 +677,8 @@
 		themes["default"]["red_building"] = "#FF0000";
 		themes["default"]["yellow"] = "#888800";
 		themes["default"]["yellow_building"] = "#FFFF00";
+		themes["default"]["aborted"] = "#ADADAD";
+		themes["default"]["aborted_building"] = "#E8E6E6";
 		
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
@@ -680,6 +688,8 @@
 		themes["christmas"]["red_building"] = "#FF0000";
 		themes["christmas"]["yellow"] = "#888800";
 		themes["christmas"]["yellow_building"] = "#FFFF00";
+		themes["christmas"]["aborted"] = "#ADADAD";
+		themes["christmas"]["aborted_building"] = "#E8E6E6";
 		themes["christmas"].start = function() {
 			$(document).snowfall('clear');
 			$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
@@ -696,6 +706,8 @@
 		themes["boss"]["red_building"] = "#00FF00";
 		themes["boss"]["yellow"] = "#008800";
 		themes["boss"]["yellow_building"] = "#00FF00";
+		themes["boss"]["aborted"] = "#ADADAD";
+		themes["boss"]["aborted_building"] = "#E8E6E6";
 
 		
 		$(document).ready(function() {
