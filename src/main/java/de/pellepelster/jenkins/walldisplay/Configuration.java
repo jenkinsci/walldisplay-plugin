@@ -19,6 +19,28 @@ public class Configuration {
 
     private String theme;
 
+    private int jenkinsTimeOut = 15;
+
+    private int jenkinsUpdateInterval = 20;
+
+    @Exported
+    public int getJenkinsTimeOut() {
+        return jenkinsTimeOut;
+    }
+
+    public void setJenkinsTimeOut(int jenkinsTimeOut) {
+        this.jenkinsTimeOut = jenkinsTimeOut;
+    }
+
+    @Exported
+    public int getJenkinsUpdateInterval() {
+        return jenkinsUpdateInterval;
+    }
+
+    public void setJenkinsUpdateInterval(int jenkinsUpdateInterval) {
+        this.jenkinsUpdateInterval = jenkinsUpdateInterval;
+    }
+    
     @Exported
     public String getTheme() {
         return theme;

@@ -9,5 +9,14 @@
                 </j:forEach>
             </select>
         </f:entry> 
+
+        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut;">            
+            <f:textbox name="jenkinsTimeOut;" value="${it.config.jenkinsTimeOut;}" />
+        </f:entry> 
+        
+        <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval">            
+            <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" />
+        </f:entry> 
+        
     </f:section>
 </j:jelly>

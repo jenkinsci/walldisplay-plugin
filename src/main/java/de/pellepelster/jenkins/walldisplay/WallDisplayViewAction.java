@@ -1,7 +1,9 @@
 package de.pellepelster.jenkins.walldisplay;
 
+import hudson.FilePath;
 import hudson.model.Action;
 import hudson.model.Hudson;
+import java.io.File;
 import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 
@@ -37,6 +39,15 @@ public class WallDisplayViewAction implements Action {
         } catch (UnsupportedEncodingException e) {
             encodedUrl = Hudson.getInstance().getRootUrl();
         }
+        
+        String s7 = Hudson.RESOURCE_PATH;
+        
+        String s1 = Hudson.getInstance().getRootUrl();
+        String s2 = Hudson.getInstance().getRootUrlFromRequest();
+        FilePath f1 = Hudson.getInstance().getRootPath();
+        String s5 = f1.toString().toString();
+        File f2 = Hudson.getInstance().getRootDir();
+        String s6 = f2.toURI().toString();
 
         return String.format("%s/plugin/jenkinswalldisplay/walldisplay.html?viewName=%s&jenkinsUrl=%s", Hudson.getInstance().getRootUrl(), viewName, encodedUrl);
     }
