@@ -29,8 +29,13 @@ public class Configuration {
     }
 
     public void setJenkinsTimeOut(int jenkinsTimeOut) {
-        this.jenkinsTimeOut = jenkinsTimeOut;
+        if (jenkinsTimeOut > 0)
+        {
+            this.jenkinsTimeOut = jenkinsTimeOut;
+        }
     }
+
+        
 
     @Exported
     public int getJenkinsUpdateInterval() {
@@ -38,7 +43,10 @@ public class Configuration {
     }
 
     public void setJenkinsUpdateInterval(int jenkinsUpdateInterval) {
-        this.jenkinsUpdateInterval = jenkinsUpdateInterval;
+        if (jenkinsUpdateInterval > 0)
+        {
+            this.jenkinsUpdateInterval = jenkinsUpdateInterval;
+        }
     }
     
     @Exported
