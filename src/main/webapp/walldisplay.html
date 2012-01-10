@@ -150,6 +150,8 @@
 				
 				if (!updateRunning["repaint"])
 				{
+					removeAllJobs();
+					
 					$.each(jobsToDisplay, function(index, oldJob) { 
 						if (typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited && !updateRunning[oldJob.name])
 						{
@@ -193,12 +195,6 @@
 					var top = jobMargin;
 					var jobHeight = Math.round((clientHeight - (rows + 1) * jobMargin) / rows);
 					var textDimensions = getTextDimensions("YgGy", maxFontSize);
-	
-					var jobsToRemove = new Array();
-	
-					$('.job').each(function(index) {
-						jobsToRemove.push($(this).attr("id"));
-					});
 	
 					for (var column = 0; column < columns; column++) {  
 	
@@ -299,26 +295,12 @@
 									showJobinfo(eventData.data.job);
 								});
 								
-								if ($("#" + job.name).length)
-								{
-									$("#" + job.name).replaceWith(jobWrapper);
-								}
-								else
-								{
-									$("body").prepend(jobWrapper);
-								}
-								
-								jobsToRemove.remove(job.name);
+								$("body").prepend(jobWrapper);
 	
 								jobIndex++;	
 							}
 						}
 					}
-	
-					$.each(jobsToRemove, function(index, jobName) {
-						$("#" + jobName).remove();
-					});
-
 				}
 			}
 		}
