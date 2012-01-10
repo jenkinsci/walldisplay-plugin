@@ -579,7 +579,22 @@
 					{
 						theme = plugin.config.theme;
 					}
+          
+          if (isNumber(plugin.config.jenkinsUpdateInterval))
+          {
+            jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
+          }
 
+          if (isNumber(plugin.config.jenkinsTimeOut))
+          {
+            jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
+          }
+
+          if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
+          {
+            clearApiInterval();
+            setApiInterval();
+          }
 
 					if (theme != null)
 					{
@@ -600,6 +615,8 @@
 						}
 						
 						lastTheme = theme;
+            lastJenkinsUpdateInterval = jenkinsUpdateInterval;
+            lastJenkinsTimeOut = jenkinsTimeOut; 
 					}
 				},
 				error: function(e, xhr) {
@@ -611,7 +628,11 @@
 		}
 		//- initialize variables ----------------------------------------------
 		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);
+		var lastJenkinsTimeOut = jenkinsTimeOut;
+    
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
+		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
+    
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var maxQueuePositionToShow = 15;
@@ -661,6 +682,17 @@
 		themes["default"]["yellow_building"] = "#FFFF00";
 		themes["default"]["aborted"] = "#ADADAD";
 		themes["default"]["aborted_building"] = "#E8E6E6";
+
+		themes["dark"] = new Array();
+		themes["dark"].backgroundColor = "#000000";
+		themes["dark"]["blue"] = "#008800";
+		themes["dark"]["blue_building"] = "#00FF00";
+		themes["dark"]["red"] = "#880000";
+		themes["dark"]["red_building"] = "#FF0000";
+		themes["dark"]["yellow"] = "#888800";
+		themes["dark"]["yellow_building"] = "#FFFF00";
+		themes["dark"]["aborted"] = "#ADADAD";
+		themes["dark"]["aborted_building"] = "#E8E6E6";
 		
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
@@ -701,15 +733,42 @@
 
 			debug("started jenkins wall display");
 			debug("url '" + jenkinsUrl + "'");
-			debug("timeOut: " + jenkinsTimeOut + "ms");
-			debug("update interval: " + jenkinsUpdateInterval + "ms");
 			debug("view name: '" + viewName + "'");
 
 			updateWindowSizes();
 
 			document.title = "Jenkins Wall Display (" + viewName + ")";
 
-			setInterval(function() {
+			setApiInterval();
+      
+ 			setInterval(function() {
+				serverTime += paintInterval;
+				if (!paintRunning)
+				{
+					paintRunning = true;
+					repaint();
+					paintRunning = false;
+				}
+				
+			}, paintInterval);;
+
+		});
+
+		window.onresize = function(event) {
+			updateWindowSizes();
+		}
+
+ 		function clearApiInterval()
+    {
+      clearInterval(jenkinsApiIntervalId);
+    }
+    
+ 		function setApiInterval()
+		{
+ 			debug("timeOut: " + jenkinsTimeOut + "ms");
+			debug("update interval: " + jenkinsUpdateInterval + "ms");
+
+			jenkinsApiIntervalId = setInterval(function() {
 				if (!updateRunning[viewName])
 				{
 					getJenkinsApi(jenkinsUrl);
@@ -726,22 +785,6 @@
 				}
 
 			}, jenkinsUpdateInterval);
-
-			
-			setInterval(function() {
-				serverTime += paintInterval;
-				if (!paintRunning)
-				{
-					paintRunning = true;
-					repaint();
-					paintRunning = false;
-				}
-				
-			}, paintInterval);
-		});
-
-		window.onresize = function(event) {
-			updateWindowSizes();
 		}
 
 </script>

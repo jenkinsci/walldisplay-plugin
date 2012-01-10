@@ -10,12 +10,12 @@
             </select>
         </f:entry> 
 
-        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut;">            
-            <f:textbox name="jenkinsTimeOut;" value="${it.config.jenkinsTimeOut;}" />
+        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut">            
+            <f:textbox name="jenkinsTimeOut" value="${it.config.jenkinsTimeOut}" default="15" />
         </f:entry> 
         
         <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval">            
-            <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" />
+            <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" default="20" />
         </f:entry> 
         
     </f:section>
