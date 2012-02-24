@@ -635,6 +635,7 @@
     
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
+		var theme = getParameterByName("theme", "default");
 		var maxQueuePositionToShow = 15;
 
 		var isDebug = false;
@@ -665,7 +666,6 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
-		var theme = lastTheme;
 		var paintRunning = false;
 		
 		//---------------------------------------------------------------------
