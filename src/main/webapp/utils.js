@@ -132,11 +132,6 @@ function getJobText(job) {
 
 	var jobText = getJobTitle(job);
 
-	if (job.lastBuild != null && job.lastBuild.number != null)
-	{
-		jobText += ' #' + job.lastBuild.number; 
-	}
-
 	return jobText;
 }
 
