@@ -97,12 +97,12 @@ function removeMessage()
 	$("#Message").remove()
 }
 
-function getLongestJob(jobs) {
+function getLongestJob(jobs, showDetails) {
 
 	var job = null;
 
 	$.each(jobs, function(index, currentJob) { 
-		if (job == null || getJobText(currentJob).length > getJobText(job).length)
+		if (job == null || getJobText(currentJob, showDetails).length > getJobText(job, showDetails).length)
 		{
 			job = currentJob;
 		}
@@ -128,11 +128,37 @@ function getJobTitle(job) {
 	return jobTitle;
 }
 
-function getJobText(job) {  
+function getJobText(job, showDetails) {  
 
 	var jobText = getJobTitle(job);
 
+	if (showDetails == "true") {
+		var culprit = getCulprit(job);
+		if (job.color == "yellow") {
+			jobText += " (" + job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount;
+			if(culprit != "") {
+				jobText += ", " + culprit;
+			}
+			jobText += ")";
+		}
+		if (job.color == "red") {
+			if(culprit != "") {
+				jobText += " (" + culprit + ")";
+			}
+		}		
+	}
+	
 	return jobText;
+}
+
+function getCulprit(job) {
+	var culprit = "";
+		
+	if(job.lastBuild != null && job.lastBuild.culprits != "") {
+		culprit = job.lastBuild.culprits[0].fullName
+	}
+	
+	return culprit;
 }
 
 function isNumber(n) {
