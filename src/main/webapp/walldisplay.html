@@ -103,7 +103,7 @@
 
 		function getJobDimensions(job, fontSize) {
 
-			var textDimensions = getTextDimensions(getJobText(job), fontSize);
+			var textDimensions = getTextDimensions(getJobText(job, showDetails), fontSize);
 
 			var dimension = {};
 			dimension.width = textDimensions.width + 2 * jobPadding + 2 * jobBorderWidth;
@@ -160,7 +160,7 @@
 					});
 					
 					
-					var longestJob = getLongestJob(jobsToDisplay);
+					var longestJob = getLongestJob(jobsToDisplay, showDetails);
 					var maxFontSize = 0;
 					
 					for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
@@ -268,7 +268,7 @@
 								});
 								jobContent.addClass("job_content");
 								jobContent.css(jobDimensionsStyle);
-								jobContent.text(getJobText(job));
+								jobContent.text(getJobText(job, showDetails));
 	
 								//- create the job wrapper div ---------------------
 								var jobWrapper = $('<div />').attr({
@@ -328,7 +328,7 @@
 						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
 						dataType: "json",
 						data: {
-							"tree": "property[wallDisplayName],name,color,lastBuild[number,timestamp,duration],lastSuccessfulBuild[duration]"
+							"tree": "property[wallDisplayName],name,color,lastBuild[number,timestamp,duration,actions[failCount,skipCount,totalCount],culprits[fullName]],lastSuccessfulBuild[duration]"
 						},
 						success: function(job, textStatus, jqXHR) {
 							debug("finished getting api for job '" + jobName + "'");
@@ -347,7 +347,7 @@
 								jobsToDisplay[jobsToDisplay.length] = job;
 							}
 							
-							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1).localeCompare(getJobText(job2)); });
+							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showDetails).localeCompare(getJobText(job2, showDetails)); });
 							
 							updateRunning[jobName] = false;
 						},
@@ -414,7 +414,7 @@
 
 				for (var fontSize = 10; fontSize <= 302; fontSize++) {
 					
-					var textDimensions = getTextDimensions(getJobText(job, fontSize));
+					var textDimensions = getTextDimensions(getJobText(job, showDetails), fontSize);
 
 					if (textDimensions.width <= (jobInfoWidth - jobInfoPadding) && textDimensions.height <= (jobInfoHeight - jobInfoPadding))
 					{
@@ -635,6 +635,8 @@
     
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
+		var theme = getParameterByName("theme", "default");
+		var showDetails = getParameterByName("details", "false");
 		var maxQueuePositionToShow = 15;
 
 		var isDebug = false;
@@ -665,7 +667,6 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
-		var theme = lastTheme;
 		var paintRunning = false;
 		
 		//---------------------------------------------------------------------
@@ -682,6 +683,17 @@
 		themes["default"]["yellow_building"] = "#FFFF00";
 		themes["default"]["aborted"] = "#ADADAD";
 		themes["default"]["aborted_building"] = "#E8E6E6";
+
+        themes["cb"] = new Array();
+        themes["cb"].backgroundColor = "#ffffff";
+        themes["cb"]["blue"] = "#0041C4";
+        themes["cb"]["blue_building"] = "#BFD4FF";
+        themes["cb"]["red"] = "#B30700";
+        themes["cb"]["red_building"] = "#FF9180";
+        themes["cb"]["yellow"] = "#B3B000";
+        themes["cb"]["yellow_building"] = "#FFF780";
+        themes["cb"]["aborted"] = "#777777";
+        themes["cb"]["aborted_building"] = "#EEEEEE";
 
 		themes["dark"] = new Array();
 		themes["dark"].backgroundColor = "#000000";
