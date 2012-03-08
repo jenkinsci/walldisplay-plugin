@@ -131,15 +131,19 @@ function getJobTitle(job) {
 function getJobText(job, showDetails) {  
 
 	var jobText = getJobTitle(job);
+	var appendText = new Array();
 
 	if (showDetails == "true") {
 		var culprit = getCulprit(job);
 		if (job.color == "yellow") {
-			jobText += " (" + job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount;
-			if(culprit != "") {
-				jobText += ", " + culprit;
+			if(job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
+				appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
 			}
-			jobText += ")";
+			if(culprit != "") {
+				appendText.push(culprit);
+			}
+			if(appendText.length > 0)
+				jobText += " (" + appendText.join(", ") + ")";
 		}
 		if (job.color == "red") {
 			if(culprit != "") {
