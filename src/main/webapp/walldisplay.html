@@ -103,7 +103,7 @@
 
 		function getJobDimensions(job, fontSize) {
 
-			var textDimensions = getTextDimensions(getJobText(job, showDetails), fontSize);
+			var textDimensions = getTextDimensions(getJobText(job, showBuildNumber, showDetails), fontSize);
 
 			var dimension = {};
 			dimension.width = textDimensions.width + 2 * jobPadding + 2 * jobBorderWidth;
@@ -160,7 +160,7 @@
 					});
 					
 					
-					var longestJob = getLongestJob(jobsToDisplay, showDetails);
+					var longestJob = getLongestJob(jobsToDisplay, showBuildNumber, showDetails);
 					var maxFontSize = 0;
 					
 					for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
@@ -268,7 +268,7 @@
 								});
 								jobContent.addClass("job_content");
 								jobContent.css(jobDimensionsStyle);
-								jobContent.text(getJobText(job, showDetails));
+								jobContent.text(getJobText(job, showBuildNumber, showDetails));
 	
 								//- create the job wrapper div ---------------------
 								var jobWrapper = $('<div />').attr({
@@ -347,7 +347,7 @@
 								jobsToDisplay[jobsToDisplay.length] = job;
 							}
 							
-							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showDetails).localeCompare(getJobText(job2, showDetails)); });
+							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails)); });
 							
 							updateRunning[jobName] = false;
 						},
@@ -414,7 +414,7 @@
 
 				for (var fontSize = 10; fontSize <= 302; fontSize++) {
 					
-					var textDimensions = getTextDimensions(getJobText(job, showDetails), fontSize);
+					var textDimensions = getTextDimensions(getJobText(job, showBuildNumber, showDetails), fontSize);
 
 					if (textDimensions.width <= (jobInfoWidth - jobInfoPadding) && textDimensions.height <= (jobInfoHeight - jobInfoPadding))
 					{
@@ -579,22 +579,32 @@
 					{
 						theme = plugin.config.theme;
 					}
-          
-          if (isNumber(plugin.config.jenkinsUpdateInterval))
-          {
-            jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
-          }
 
-          if (isNumber(plugin.config.jenkinsTimeOut))
-          {
-            jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
-          }
+                    if (plugin.config && plugin.config.showDetails != null)
+                    {
+                        showDetails = plugin.config.showDetails;
+                    }
 
-          if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
-          {
-            clearApiInterval();
-            setApiInterval();
-          }
+                    if (plugin.config && plugin.config.showBuildNumber != null)
+                    {
+                        showBuildNumber = plugin.config.showBuildNumber;
+                    }
+
+                    if (isNumber(plugin.config.jenkinsUpdateInterval))
+                    {
+                        jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
+                    }
+
+                    if (isNumber(plugin.config.jenkinsTimeOut))
+                    {
+                        jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
+                    }
+
+                    if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
+                    {
+                        clearApiInterval();
+                        setApiInterval();
+                    }
 
 					if (theme != null)
 					{
@@ -636,7 +646,8 @@
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
-		var showDetails = getParameterByName("details", "false");
+		var showDetails = false;
+		var showBuildNumber = true;
 		var maxQueuePositionToShow = 15;
 
 		var isDebug = false;
@@ -684,16 +695,16 @@
 		themes["default"]["aborted"] = "#ADADAD";
 		themes["default"]["aborted_building"] = "#E8E6E6";
 
-        themes["cb"] = new Array();
-        themes["cb"].backgroundColor = "#ffffff";
-        themes["cb"]["blue"] = "#0041C4";
-        themes["cb"]["blue_building"] = "#BFD4FF";
-        themes["cb"]["red"] = "#B30700";
-        themes["cb"]["red_building"] = "#FF9180";
-        themes["cb"]["yellow"] = "#B3B000";
-        themes["cb"]["yellow_building"] = "#FFF780";
-        themes["cb"]["aborted"] = "#777777";
-        themes["cb"]["aborted_building"] = "#EEEEEE";
+        themes["colorblind"] = new Array();
+        themes["colorblind"].backgroundColor = "#ffffff";
+        themes["colorblind"]["blue"] = "#0041C4";
+        themes["colorblind"]["blue_building"] = "#BFD4FF";
+        themes["colorblind"]["red"] = "#B30700";
+        themes["colorblind"]["red_building"] = "#FF9180";
+        themes["colorblind"]["yellow"] = "#B3B000";
+        themes["colorblind"]["yellow_building"] = "#FFF780";
+        themes["colorblind"]["aborted"] = "#777777";
+        themes["colorblind"]["aborted_building"] = "#EEEEEE";
 
 		themes["dark"] = new Array();
 		themes["dark"].backgroundColor = "#000000";

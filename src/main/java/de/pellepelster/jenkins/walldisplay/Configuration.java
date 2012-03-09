@@ -18,10 +18,19 @@ import org.kohsuke.stapler.export.ExportedBean;
 public class Configuration {
 
     private String theme;
-
     private int jenkinsTimeOut = 15;
-
     private int jenkinsUpdateInterval = 20;
+    private Boolean showDetails = false;
+    private Boolean showBuildNumber = true;
+
+    @Exported
+    public Boolean getShowBuildNumber() {
+        return showBuildNumber;
+    }
+
+    public void setShowBuildNumber(Boolean showBuildNumber) {
+        this.showBuildNumber = showBuildNumber;
+    }
 
     @Exported
     public int getJenkinsTimeOut() {
@@ -29,13 +38,10 @@ public class Configuration {
     }
 
     public void setJenkinsTimeOut(int jenkinsTimeOut) {
-        if (jenkinsTimeOut > 0)
-        {
+        if (jenkinsTimeOut > 0) {
             this.jenkinsTimeOut = jenkinsTimeOut;
         }
     }
-
-        
 
     @Exported
     public int getJenkinsUpdateInterval() {
@@ -43,18 +49,17 @@ public class Configuration {
     }
 
     public void setJenkinsUpdateInterval(int jenkinsUpdateInterval) {
-        if (jenkinsUpdateInterval > 0)
-        {
+        if (jenkinsUpdateInterval > 0) {
             this.jenkinsUpdateInterval = jenkinsUpdateInterval;
         }
     }
-    
+
     @Exported
     public String getTheme() {
         return theme;
     }
 
-    public boolean isValid() {
+    public Boolean isValid() {
         return (theme != null);
     }
 
@@ -62,11 +67,20 @@ public class Configuration {
         this.theme = theme;
     }
 
+    @Exported
+    public boolean getShowDetails() {
+        return showDetails;
+    }
+
+    public void setShowDetails(Boolean showDetails) {
+        this.showDetails = showDetails;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).toString();
     }
 }

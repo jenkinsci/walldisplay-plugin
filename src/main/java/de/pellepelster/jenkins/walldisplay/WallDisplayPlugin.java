@@ -28,7 +28,7 @@ public class WallDisplayPlugin extends Plugin {
     private static final Logger LOGGER = Logger.getLogger("hudson." + WallDisplayPlugin.class.getName());
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
-    public static final String[] themes = new String[] {"Default", "Christmas", "Boss", "Dark" };
+    public static final String[] themes = new String[] {"Default", "Christmas", "Boss", "Dark", "Colorblind" };
     
     @Exported
     public Configuration config;
@@ -70,12 +70,15 @@ public class WallDisplayPlugin extends Plugin {
         config.setTheme(Util.fixEmptyAndTrim(formData.optString("theme")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
+        config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));
+        config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
+        
         getConfigXml().write(config);
     }
 
     @Override
     protected XmlFile getConfigXml() {
-        return new XmlFile(Hudson.XSTREAM,
+         return new XmlFile(Hudson.XSTREAM, 
                 new File(Hudson.getInstance().getRootDir(),
                 WallDisplayPlugin.class.getName() + ".xml"));
     }

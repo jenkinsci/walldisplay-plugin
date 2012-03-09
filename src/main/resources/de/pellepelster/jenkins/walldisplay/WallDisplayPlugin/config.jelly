@@ -17,6 +17,14 @@
         <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval">            
             <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" default="20" />
         </f:entry> 
-        
+
+        <f:entry title="${%Show Job Details}" name="jenkinsShowDetails">            
+            <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
+        </f:entry> 
+
+        <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber">            
+            <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
+        </f:entry> 
+
     </f:section>
 </j:jelly>

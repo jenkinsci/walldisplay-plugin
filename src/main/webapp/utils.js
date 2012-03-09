@@ -97,12 +97,12 @@ function removeMessage()
 	$("#Message").remove()
 }
 
-function getLongestJob(jobs, showDetails) {
+function getLongestJob(jobs, showBuildNumber, showDetails) {
 
 	var job = null;
 
 	$.each(jobs, function(index, currentJob) { 
-		if (job == null || getJobText(currentJob, showDetails).length > getJobText(job, showDetails).length)
+		if (job == null || getJobText(currentJob, showBuildNumber, showDetails).length > getJobText(job, showBuildNumber, showDetails).length)
 		{
 			job = currentJob;
 		}
@@ -128,12 +128,18 @@ function getJobTitle(job) {
 	return jobTitle;
 }
 
-function getJobText(job, showDetails) {  
+function getJobText(job, showBuildNumber, showDetails) {  
 
 	var jobText = getJobTitle(job);
+    
+    if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)    
+    {    
+        jobText += ' #' + job.lastBuild.number;
+    }
+    
 	var appendText = new Array();
 
-	if (showDetails == "true") {
+	if (showDetails == true) {
 		var culprit = getCulprit(job);
 		if (job.color == "yellow") {
 			if(job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
