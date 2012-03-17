@@ -132,10 +132,10 @@ function getJobText(job, showBuildNumber, showDetails) {
 
 	var jobText = getJobTitle(job);
     
-    if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)    
-    {    
-        jobText += ' #' + job.lastBuild.number;
-    }
+      if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)    
+      {    
+	  jobText += ' #' + job.lastBuild.number;
+      }
     
 	var appendText = new Array();
 
@@ -151,6 +151,7 @@ function getJobText(job, showBuildNumber, showDetails) {
 			if(appendText.length > 0)
 				jobText += " (" + appendText.join(", ") + ")";
 		}
+		
 		if (job.color == "red") {
 			if(culprit != "") {
 				jobText += " (" + culprit + ")";
