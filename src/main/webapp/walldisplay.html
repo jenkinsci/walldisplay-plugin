@@ -1,4 +1,5 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<title>Jenkins Wall Display</title>
 	
@@ -475,7 +476,7 @@
 				
 				var jobInfoTitle = $('<span />');
 				jobInfoTitle.css({
-					"font-size": maxFontSize + "px",
+					"font-size": maxFontSize + "px"
 				});
 				jobInfoTitle.text(getJobTitle(job));
     			jobInfoDiv.append(jobInfoTitle);
@@ -489,7 +490,7 @@
 				
 				var jobLastBuild = $('<span />');
 				jobLastBuild.css({
-					"font-size": 12 + "px",
+					"font-size": 12 + "px"
 				});
 				jobLastBuild.text(lastBuildText);
     			jobInfoDiv.append(jobLastBuild);
