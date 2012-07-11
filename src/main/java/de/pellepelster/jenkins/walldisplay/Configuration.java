@@ -22,6 +22,7 @@ public class Configuration {
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
     private Boolean showBuildNumber = true;
+    private Boolean showDisabledBuilds = true;
 
     @Exported
     public Boolean getShowBuildNumber() {
@@ -30,6 +31,15 @@ public class Configuration {
 
     public void setShowBuildNumber(Boolean showBuildNumber) {
         this.showBuildNumber = showBuildNumber;
+    }
+
+    @Exported
+    public Boolean getShowDisabledBuilds() {
+        return showDisabledBuilds;
+    }
+
+    public void setShowDisabledBuilds(Boolean showDisabledBuilds) {
+        this.showDisabledBuilds = showDisabledBuilds;
     }
 
     @Exported

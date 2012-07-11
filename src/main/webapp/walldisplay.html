@@ -373,7 +373,12 @@
 									jobsToDisplay[index] = job;
 									add = false;
 								}
+                                                                
 							});
+
+							if(!showDisabledBuilds && job.color === 'disabled') {
+								add = false;
+							}
 							
 							if (add)
 							{
@@ -623,6 +628,11 @@
                         showBuildNumber = plugin.config.showBuildNumber;
                     }
 
+                    if (plugin.config && plugin.config.showDisabledBuilds != null)
+                    {
+                        showDisabledBuilds = plugin.config.showDisabledBuilds;
+                    }
+
                     if (isNumber(plugin.config.jenkinsUpdateInterval))
                     {
                         jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
@@ -681,6 +691,7 @@
 		var theme = getParameterByName("theme", "default");
 		var showDetails = false;
 		var showBuildNumber = true;
+		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;
 
 		var isDebug = false;

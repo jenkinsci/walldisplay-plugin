@@ -72,6 +72,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
+        config.setShowDisabledBuilds(formData.optBoolean("jenkinsShowDisabledBuilds"));
         
         getConfigXml().write(config);
     }
