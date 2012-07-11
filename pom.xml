@@ -12,7 +12,7 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>jenkinswalldisplay</artifactId>
     <packaging>hpi</packaging>
-    <version>0.6.12-SNAPSHOT</version>
+    <version>0.6.12</version>
     <name>Jenkins Wall Display Master Project</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Wall+Display+Plugin</url>
     
