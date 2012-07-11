@@ -26,5 +26,9 @@
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
         </f:entry> 
 
+        <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds">
+            <f:checkbox name="jenkinsShowDisabledBuilds" checked="${it.config.showDisabledBuilds}" />
+        </f:entry>
+
     </f:section>
 </j:jelly>
