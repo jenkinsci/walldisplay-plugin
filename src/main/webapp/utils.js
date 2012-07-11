@@ -142,7 +142,7 @@ function getJobText(job, showBuildNumber, showDetails) {
 	if (showDetails == true) {
 		var culprit = getCulprit(job);
 		if (job.color == "yellow") {
-			if(job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
+			if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
 				appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
 			}
 			if(culprit != "") {
