@@ -71,7 +71,7 @@ public class WallDisplayPlugin extends Plugin {
     public void configure(StaplerRequest req, JSONObject formData) throws IOException {
         
         config.setTheme(Util.fixEmptyAndTrim(formData.optString("theme")));
-        config.setTheme(Util.fixEmptyAndTrim(formData.optString("fontFamily")));
+        config.setFontFamily(Util.fixEmptyAndTrim(formData.optString("fontFamily")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));

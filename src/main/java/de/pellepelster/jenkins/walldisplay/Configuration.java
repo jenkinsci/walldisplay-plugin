@@ -17,8 +17,8 @@ import org.kohsuke.stapler.export.ExportedBean;
 @ExportedBean
 public class Configuration {
 
-    private String theme;
-    private String fontFamily;
+    private String theme = WallDisplayPlugin.themes[0];
+    private String fontFamily = WallDisplayPlugin.fontFamilies[0];
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
@@ -67,7 +67,14 @@ public class Configuration {
 
     @Exported
     public String getTheme() {
-        return theme;
+        if (theme != null)
+        {
+            return theme.toLowerCase();
+        }
+        else
+        {
+            return theme;
+        }
     }
 
     public Boolean isValid() {
@@ -89,7 +96,14 @@ public class Configuration {
 
     @Exported
     public String getFontFamily() {
-        return fontFamily;
+        if (fontFamily != null)
+        {
+            return fontFamily.toLowerCase();
+        }
+        else
+        {
+            return fontFamily;
+        }
     }
 
     public void setFontFamily(String fontFamily) {

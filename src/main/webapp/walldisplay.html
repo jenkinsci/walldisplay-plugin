@@ -612,41 +612,45 @@
 					}
 					
 					lastPluginVersion = plugin.version;
+
+					if (plugin.config && plugin.config != null)
+					{
 				
-					if (plugin.config && plugin.config.theme && plugin.config.theme != null)
-					{
-						theme = plugin.config.theme;
+						if (plugin.config.theme && plugin.config.theme != null)
+						{
+							theme = plugin.config.theme.toLowerCase();
+						}
+	
+						if (plugin.config.fontFamily && plugin.config.fontFamily != null)
+						{
+							fontFamily = plugin.config.fontFamily.toLowerCase();
+						}
+	
+	                    if (plugin.config.showDetails != null)
+	                    {
+	                        showDetails = plugin.config.showDetails;
+	                    }
+	
+	                    if (plugin.config.showBuildNumber != null)
+	                    {
+	                        showBuildNumber = plugin.config.showBuildNumber;
+	                    }
+	
+	                    if (plugin.config.showDisabledBuilds != null)
+	                    {
+	                        showDisabledBuilds = plugin.config.showDisabledBuilds;
+	                    }
+	
+	                    if (isNumber(plugin.config.jenkinsUpdateInterval))
+	                    {
+	                        jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
+	                    }
+	
+	                    if (isNumber(plugin.config.jenkinsTimeOut))
+	                    {
+	                        jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
+	                    }
 					}
-
-					if (plugin.config && plugin.config.fontFamily && plugin.config.fontFamily != null)
-					{
-						fontFamily = plugin.config.fontFamily;
-					}
-
-                    if (plugin.config && plugin.config.showDetails != null)
-                    {
-                        showDetails = plugin.config.showDetails;
-                    }
-
-                    if (plugin.config && plugin.config.showBuildNumber != null)
-                    {
-                        showBuildNumber = plugin.config.showBuildNumber;
-                    }
-
-                    if (plugin.config && plugin.config.showDisabledBuilds != null)
-                    {
-                        showDisabledBuilds = plugin.config.showDisabledBuilds;
-                    }
-
-                    if (isNumber(plugin.config.jenkinsUpdateInterval))
-                    {
-                        jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
-                    }
-
-                    if (isNumber(plugin.config.jenkinsTimeOut))
-                    {
-                        jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
-                    }
 
                     if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
                     {
