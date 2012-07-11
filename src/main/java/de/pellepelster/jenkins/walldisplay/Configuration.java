@@ -18,6 +18,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 public class Configuration {
 
     private String theme;
+    private String fontFamily;
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
@@ -86,11 +87,20 @@ public class Configuration {
         this.showDetails = showDetails;
     }
 
+    @Exported
+    public String getFontFamily() {
+        return fontFamily;
+    }
+
+    public void setFontFamily(String fontFamily) {
+        this.fontFamily = fontFamily;
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("fontFamily", fontFamily).toString();
     }
 }

@@ -28,8 +28,10 @@ public class WallDisplayPlugin extends Plugin {
     private static final Logger LOGGER = Logger.getLogger("hudson." + WallDisplayPlugin.class.getName());
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
-    public static final String[] themes = new String[] {"Default", "Christmas", "Boss", "Dark", "Colorblind" };
-    
+    public static final String[] themes = new String[] { "Default", "Christmas", "Boss", "Dark", "Colorblind" };
+
+    public static final String[] fontFamilies = new String[] { "Sans-Serif", "Arial", "Helvetica", "Verdana" };
+
     @Exported
     public Configuration config;
 
@@ -67,7 +69,9 @@ public class WallDisplayPlugin extends Plugin {
 
     @Override
     public void configure(StaplerRequest req, JSONObject formData) throws IOException {
+        
         config.setTheme(Util.fixEmptyAndTrim(formData.optString("theme")));
+        config.setTheme(Util.fixEmptyAndTrim(formData.optString("fontFamily")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));

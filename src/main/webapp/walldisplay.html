@@ -618,6 +618,11 @@
 						theme = plugin.config.theme;
 					}
 
+					if (plugin.config && plugin.config.fontFamily && plugin.config.fontFamily != null)
+					{
+						fontFamily = plugin.config.fontFamily;
+					}
+
                     if (plugin.config && plugin.config.showDetails != null)
                     {
                         showDetails = plugin.config.showDetails;
@@ -647,6 +652,9 @@
                     {
                         clearApiInterval();
                         setApiInterval();
+                        
+        			    lastJenkinsUpdateInterval = jenkinsUpdateInterval;
+            			lastJenkinsTimeOut = jenkinsTimeOut; 
                     }
 
 					if (theme != null)
@@ -668,9 +676,14 @@
 						}
 						
 						lastTheme = theme;
-            lastJenkinsUpdateInterval = jenkinsUpdateInterval;
-            lastJenkinsTimeOut = jenkinsTimeOut; 
 					}
+
+					if (fontFamily != null && lastFontFamily != fontFamily)
+					{
+						$("body").css({'font-family': fontFamily});
+						lastFontFamily = fontFamily;
+					}
+
 				},
 				error: function(e, xhr) {
 					debug("error getting plugin api: '" + e.statusText + "'");
@@ -689,6 +702,7 @@
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
+		var fontFamily = getParameterByName("fontFamily", "sans-serif");
 		var showDetails = false;
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
@@ -722,6 +736,7 @@
 		var clientHeight;
 		var lastPluginVersion = null;
 		var lastTheme = "default";
+		var lastFontFamily = fontFamily;
 		var paintRunning = false;
 		
 		//---------------------------------------------------------------------
