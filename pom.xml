@@ -51,4 +51,13 @@
         </pluginRepository>
     </pluginRepositories>
     
+    <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>nested-view</artifactId>
+            <version>1.8</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    
 </project>
