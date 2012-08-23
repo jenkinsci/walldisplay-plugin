@@ -380,7 +380,7 @@
 								add = false;
 							}
 
-
+                                                        var jobFilteredOut = false;
                                                         // show all failed builds, but only show passing builds
                                                         // in the date range the user specifies
                                                         //
@@ -388,7 +388,7 @@
                                                         // so a day is considered the last 24 hours, a week the last
                                                         // 7 days, and a month the last 31 days. It's just so the
                                                         // build screen doesn't fill up with builds.
-                                                        if(add && job.color === "blue") {
+                                                        if(job.color === "blue") {
 
                                                             var timestamp = new Date().getTime();
                                                             var ONE_DAY_MS = 86400000;
@@ -407,6 +407,7 @@
 
                                                             if(job.lastBuild && job.lastBuild.timestamp < minTimestamp) {
                                                                 add = false;
+                                                                jobFilteredOut = true;
                                                             }
                                                         }
 
@@ -414,7 +415,11 @@
 							if (add)
 							{
 								jobsToDisplay[jobsToDisplay.length] = job;
-							}
+							} else {
+                                                            if(jobFilteredOut) {
+                                                                jobsToDisplay.remove(job);
+                                                            }
+                                                        }
 							
 							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails)); });
 							
