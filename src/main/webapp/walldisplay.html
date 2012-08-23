@@ -379,6 +379,37 @@
 							if(!showDisabledBuilds && job.color === 'disabled') {
 								add = false;
 							}
+
+
+                                                        // show all failed builds, but only show passing builds
+                                                        // in the date range the user specifies
+                                                        //
+                                                        // The times are approximate - we're not being totally precise,
+                                                        // so a day is considered the last 24 hours, a week the last
+                                                        // 7 days, and a month the last 31 days. It's just so the
+                                                        // build screen doesn't fill up with builds.
+                                                        if(add && job.color === "blue") {
+
+                                                            var timestamp = new Date().getTime();
+                                                            var ONE_DAY_MS = 86400000;
+                                                            var minTimestamp = 0;
+                                                            switch(buildRange) {
+                                                                case 'active today': // last 24 hours
+                                                                    minTimestamp = timestamp - ONE_DAY_MS;
+                                                                    break;
+                                                                case 'active this week':
+                                                                    minTimestamp = timestamp - ONE_DAY_MS * 7;
+                                                                    break;
+                                                                case 'active this month':
+                                                                    minTimestamp = timestamp - ONE_DAY_MS * 31;
+                                                                    break;
+                                                            }
+
+                                                            if(job.lastBuild && job.lastBuild.timestamp < minTimestamp) {
+                                                                add = false;
+                                                            }
+                                                        }
+
 							
 							if (add)
 							{
@@ -620,6 +651,11 @@
 						{
 							theme = plugin.config.theme.toLowerCase();
 						}
+
+                                                if (plugin.config.buildRange && plugin.config.buildRange != null)
+						{
+							buildRange = plugin.config.buildRange.toLowerCase();
+						}
 	
 						if (plugin.config.fontFamily && plugin.config.fontFamily != null)
 						{
@@ -707,6 +743,7 @@
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
+                var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
