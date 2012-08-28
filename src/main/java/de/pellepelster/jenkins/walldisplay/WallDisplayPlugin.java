@@ -31,6 +31,7 @@ public class WallDisplayPlugin extends Plugin {
     public static final String[] themes = new String[] { "Default", "Christmas", "Boss", "Dark", "Colorblind" };
 
     public static final String[] fontFamilies = new String[] { "Sans-Serif", "Arial", "Helvetica", "Verdana" };
+    public static final String[] buildRange = new String[] { "All", "Active this month", "Active this week", "Active today" };
 
     @Exported
     public Configuration config;
@@ -72,6 +73,7 @@ public class WallDisplayPlugin extends Plugin {
         
         config.setTheme(Util.fixEmptyAndTrim(formData.optString("theme")));
         config.setFontFamily(Util.fixEmptyAndTrim(formData.optString("fontFamily")));
+        config.setBuildRange(Util.fixEmptyAndTrim(formData.optString("buildRange")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));

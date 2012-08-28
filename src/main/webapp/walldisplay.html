@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<title>Jenkins Wall Display</title>
-	
+
 	<link type="text/css" rel="stylesheet" media="all" href="walldisplay.css" />
 
 	<script type="text/javascript" src="jquery.js"></script>
@@ -21,26 +21,26 @@
 			var perColumn = queuePosition;
 			if (perColumn > maxPerColumn)
 			{
-				perColumn = maxPerColumn; 
+				perColumn = maxPerColumn;
 			}
 
 			var queueColumns = Math.ceil(queuePosition / perColumn);
-			
+
 			var maxQueueItems = maxQueuePositionToShow;
 			if (queuePosition > maxQueueItems)
 			{
-				queuePosition = maxQueueItems; 
+				queuePosition = maxQueueItems;
 			}
-										
+
 			var radius = Math.round(jobHeight / (maxPerColumn + 1));
 			var increment = (jobHeight - perColumn * radius) / (perColumn + 1);
-			
+
 			var queueLeft = jobWidth - 2 * radius;
 
 			for(queueColumn=0; queueColumn < queueColumns; queueColumn++)
 			{
 				var queueTop = increment;
-				
+
 				for (i=0; i < perColumn; i++)
 				{
 					if (queueDivs.length < queuePosition)
@@ -51,25 +51,25 @@
 							"top": queueTop + "px",
 							"left": queueLeft + "px",
 							"height": radius + "px",
-							"width": radius + "px", 
+							"width": radius + "px",
 							"border-radius": + Math.round(radius / 2) + "px",
 							"-moz-border-radius": Math.round(radius / 2) + "px",
 							"-webkit-border-radius": Math.round(radius / 2) + "px"
 						});
-						queueDiv.addClass("queued"); 
+						queueDiv.addClass("queued");
 						queueDivs.push(queueDiv);
 					}
 					queueTop += increment + radius;
 				}
-				
+
 				queueLeft -= increment + radius;
 			}
-			
+
 			return queueDivs;
 		}
 
 		function updateWindowSizes()
-		{	
+		{
 			clientWidth = $(window).width();
 			clientHeight = $(window).height();
 
@@ -84,7 +84,7 @@
 
 		var cachedTextDimensions = new Array();
 		function getTextDimensions(text, fontSize) {
-			
+
 			var cacheKey = text + fontSize;
 
 			if (cachedTextDimensions[cacheKey] == null)
@@ -96,7 +96,7 @@
 				dimension.width = $("#TextDimensionDiv")[0].clientWidth;
 				dimension.height = $("#TextDimensionDiv")[0].clientHeight;
 				cachedTextDimensions[cacheKey] = dimension;
-				
+
 			}
 
 			return cachedTextDimensions[cacheKey];
@@ -136,7 +136,7 @@
 
 
 		function repaint()
-		{			
+		{
 			if (updateError != null)
 			{
 				displayMessage(updateError, "message_error");
@@ -148,32 +148,32 @@
 			else
 			{
 				removeMessage();
-				
+
 				if (!updateRunning["repaint"])
 				{
 					removeAllJobs();
-					
-					$.each(jobsToDisplay, function(index, oldJob) { 
+
+					$.each(jobsToDisplay, function(index, oldJob) {
 						if (typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited && !updateRunning[oldJob.name])
 						{
 							jobsToDisplay.remove(oldJob);
 						}
 					});
-					
-					
+
+
 					var longestJob = getLongestJob(jobsToDisplay, showBuildNumber, showDetails);
 					var maxFontSize = 0;
-					
-					for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {  
+
+					for (var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++) {
 						for (var fontSize = 10; fontSize <= 302; fontSize++) {
-							
+
 							var rowCount = Math.ceil(jobsToDisplay.length /  columnCount);
-	
+
 							var jobDimensions = getJobDimensions(longestJob, fontSize);
-		
+
 							var totalWidth = jobDimensions.width * columnCount + jobMargin * (columnCount-1);
 							var totalHeight = jobDimensions.height * rowCount + jobMargin * (rowCount-1);
-	
+
 							if (totalWidth <= clientWidth && totalHeight <= clientHeight)
 							{
 								if (fontSize > maxFontSize)
@@ -189,16 +189,16 @@
 							}
 						}
 					}
-					
+
 					var left = jobMargin;
 					var jobIndex = 0;
 					var jobWidth = Math.round((clientWidth - (columns + 1) * jobMargin) / columns);
 					var top = jobMargin;
 					var jobHeight = Math.round((clientHeight - (rows + 1) * jobMargin) / rows);
 					var textDimensions = getTextDimensions("YgGy", maxFontSize);
-	
-					for (var column = 0; column < columns; column++) {  
-	
+
+					for (var column = 0; column < columns; column++) {
+
 						if (column == 0)
 						{
 							left = jobMargin;
@@ -207,32 +207,32 @@
 						{
 							left += jobWidth + jobMargin;
 						}
-	
-	    				for (var row = 0; row < rows; row++) {
-	
-	    					if (row == 0)
-	    					{
-	    						top = jobMargin;
-	    					}
-	    					else
-	    					{
-	    						top += jobHeight + jobMargin;
-	    					}
-							
+
+						for (var row = 0; row < rows; row++) {
+
+							if (row == 0)
+							{
+								top = jobMargin;
+							}
+							else
+							{
+								top += jobHeight + jobMargin;
+							}
+
 							if (jobIndex < jobsToDisplay.length)
 							{
 								var job = jobsToDisplay[jobIndex];
 								var isBuilding = ( job.color.substr(-6) === "_anime" );
 								var jobColor = job.color;
-								
-								if (job.color.substr(-6) === "_anime" ) 
+
+								if (job.color.substr(-6) === "_anime" )
 								{
 									jobColor = job.color.substr(0, job.color.length - 6);
 								}
-								
+
 								var jobDimensions = getJobDimensions(job, maxFontSize);
 								var claimedBorderWidth = 0;
-								
+
 								if (job.lastBuild && job.lastBuild.actions && isBuildClaimed(job.lastBuild.actions))
 								{
 									claimedBorderWidth = jobMargin;
@@ -240,7 +240,7 @@
 
 								var jobDimensionsStyle = { "width": jobWidth - 2 * claimedBorderWidth, "height": jobHeight - 2 * claimedBorderWidth };
 								var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
-							
+
 								var percentageDiv = $('<div />');;
 								var jobOverdue = false;
 								if (isBuilding && job.lastBuild != null && job.lastBuild.timestamp != null && job.lastSuccessfulBuild != null && job.lastSuccessfulBuild.duration != null)
@@ -248,13 +248,13 @@
 									var currentDuration = serverTime - job.lastBuild.timestamp;
 									var percentage = currentDuration / (job.lastSuccessfulBuild.duration / 100);
 									var percentageWidth = Math.round(jobWidth / 100 * percentage);
-									
+
 									if (percentageWidth > jobWidth)
 									{
 										percentageWidth = jobWidth;
 										jobOverdue = true;
 									}
-								
+
 									percentageDiv.css({
 										"height": jobHeight + "px",
 										"width": percentageWidth + "px",
@@ -264,9 +264,9 @@
 									});
 									percentageDiv.addClass("job");
 								}
-	
+
 								var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
-			
+
 								//- create the job content div ---------------------
 								var jobContent = $('<div />');
 								jobContent.css({
@@ -276,12 +276,12 @@
 								jobContent.addClass("job_content");
 								jobContent.css(jobDimensionsStyle);
 								jobContent.text(getJobText(job, showBuildNumber, showDetails));
-	
+
 								//- create the job wrapper div ---------------------
 								var jobWrapper = $('<div />').attr({
 									"id": job.name
 								});
-	
+
 								if (claimedBorderWidth > 0)
 								{
 									jobWrapper.css({
@@ -291,7 +291,7 @@
 									});
 								}
 
-	
+
 								jobWrapper.css({
 									"font-size": (maxFontSize-1) + "px",
 									"background-color": themes[theme][jobColor]
@@ -300,21 +300,21 @@
 								jobWrapper.css(jobDimensionsStyle);
 								jobWrapper.addClass("job");
 								jobWrapper.addClass("job_wrapper");
-	
+
 								//- assemble job divs ------------------------------
 								jobWrapper.append(jobContent);
 								jobWrapper.append(percentageDiv);
-								$.each(queueDivs, function(index, queueDiv) { 
+								$.each(queueDivs, function(index, queueDiv) {
 									jobWrapper.append(queueDiv);
 								});
-	
+
 								jobWrapper.click({ "job": job },function(eventData) {
 									showJobinfo(eventData.data.job);
 								});
-								
+
 								$("body").prepend(jobWrapper);
-	
-								jobIndex++;	
+
+								jobIndex++;
 							}
 						}
 					}
@@ -326,30 +326,30 @@
 		{
 			$(".job").remove();
 		}
-		
+
 		function isBuildClaimed(actions)
 		{
 			claimed = false;
-			
-			$.each(actions, function(actionIndex, action) { 
+
+			$.each(actions, function(actionIndex, action) {
 
 				if (action.claimed)
 				{
 					claimed =  true;
 				}
 			});
-			
+
 			return claimed;
 		}
-		
+
 		function getJobs(jobNames)
 		{
 			updateRunning["repaint"] = true;
-			$.each(jobsToDisplay, function(index, job) { 
+			$.each(jobsToDisplay, function(index, job) {
 				job.visited = false;
 			});
 			updateRunning["repaint"] = false;
-		
+
 			$.each(jobNames, function(index, jobName) {
 				if (!updateRunning[jobName])
 				{
@@ -364,29 +364,65 @@
 						},
 						success: function(job, textStatus, jqXHR) {
 							debug("finished getting api for job '" + jobName + "'");
-							
-							var add = true;                    
-							$.each(jobsToDisplay, function(index, oldJob) { 
+
+							var add = true;
+							$.each(jobsToDisplay, function(index, oldJob) {
 								if (oldJob.name == job.name)
 								{
 									job.visited = true;
 									jobsToDisplay[index] = job;
 									add = false;
 								}
-                                                                
+
 							});
 
 							if(!showDisabledBuilds && job.color === 'disabled') {
 								add = false;
 							}
-							
+
+							var jobFilteredOut = false;
+							// show all failed builds, but only show passing builds
+							// in the date range the user specifies
+							//
+							// The times are approximate - we're not being totally precise,
+							// so a day is considered the last 24 hours, a week the last
+							// 7 days, and a month the last 31 days. It's just so the
+							// build screen doesn't fill up with builds.
+							if(job.color === "blue") {
+
+								var timestamp = new Date().getTime();
+								var ONE_DAY_MS = 86400000;
+								var minTimestamp = 0;
+								switch(buildRange) {
+									case 'active today': // last 24 hours
+										minTimestamp = timestamp - ONE_DAY_MS;
+										break;
+									case 'active this week':
+										minTimestamp = timestamp - ONE_DAY_MS * 7;
+										break;
+									case 'active this month':
+										minTimestamp = timestamp - ONE_DAY_MS * 31;
+										break;
+								}
+
+								if(job.lastBuild && job.lastBuild.timestamp < minTimestamp) {
+									add = false;
+									jobFilteredOut = true;
+								}
+							}
+
+
 							if (add)
 							{
 								jobsToDisplay[jobsToDisplay.length] = job;
+							} else {
+								if(jobFilteredOut) {
+									jobsToDisplay.remove(job);
+								}
 							}
-							
+
 							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails)); });
-							
+
 							updateRunning[jobName] = false;
 						},
 						error: function(e, xhr) {
@@ -403,14 +439,14 @@
 		{
 			var jobNames = new Array();;
 
-			$.each(viewApi.jobs, function(index, job) { 
+			$.each(viewApi.jobs, function(index, job) {
 				jobNames.push(job.name);
 			});
-			
+
 			if (viewApi.views != null && viewApi.views.length)
 			{
-				$.each(viewApi.views, function(index, nestedView) { 
-					$.each(nestedView.jobs, function(index, job) { 
+				$.each(viewApi.views, function(index, nestedView) {
+					$.each(nestedView.jobs, function(index, job) {
 						jobNames.push(job.name);
 					});
 				});
@@ -451,7 +487,7 @@
 				var jobInfoHeight = Math.ceil(clientHeight / 2);
 
 				for (var fontSize = 10; fontSize <= 302; fontSize++) {
-					
+
 					var textDimensions = getTextDimensions(getJobText(job, showBuildNumber, showDetails), fontSize);
 
 					if (textDimensions.width <= (jobInfoWidth - jobInfoPadding) && textDimensions.height <= (jobInfoHeight - jobInfoPadding))
@@ -468,45 +504,45 @@
 				}
 
 
-    			var jobInfoDiv = $('<div />').attr({
-    				"id": "JobInfo"
-    			});
-    			jobInfoDiv.css({
-    				"height": jobInfoHeight + "px",
-    				"width": jobInfoWidth + "px",
+				var jobInfoDiv = $('<div />').attr({
+					"id": "JobInfo"
+				});
+				jobInfoDiv.css({
+					"height": jobInfoHeight + "px",
+					"width": jobInfoWidth + "px",
 					"padding": jobInfoPadding + "px"
-    			});
-    			jobInfoDiv.addClass("job_info");
-    			jobInfoDiv.center();
-				
+				});
+				jobInfoDiv.addClass("job_info");
+				jobInfoDiv.center();
+
 				var jobInfoTitle = $('<span />');
 				jobInfoTitle.css({
 					"font-size": maxFontSize + "px"
 				});
 				jobInfoTitle.text(getJobTitle(job));
-    			jobInfoDiv.append(jobInfoTitle);
-				
+				jobInfoDiv.append(jobInfoTitle);
+
 				var lastBuildText = "";
 				if (job.lastBuild != null)
 				{
-					lastBuildText += "Last build started " + getUserFriendlyTimespan(serverTime -job.lastBuild.timestamp) + " ago and  took " + getUserFriendlyTimespan(job.lastBuild.duration); 
+					lastBuildText += "Last build started " + getUserFriendlyTimespan(serverTime -job.lastBuild.timestamp) + " ago and  took " + getUserFriendlyTimespan(job.lastBuild.duration);
 				}
 				jobInfoDiv.append("<br/><br/>");
-				
+
 				var jobLastBuild = $('<span />');
 				jobLastBuild.css({
 					"font-size": 12 + "px"
 				});
 				jobLastBuild.text(lastBuildText);
-    			jobInfoDiv.append(jobLastBuild);
+				jobInfoDiv.append(jobLastBuild);
 
-				
+
 				$("body").append(jobInfoDiv);
 
 				/*
-    			jobInfoDiv.fadeTo(1500, 0.95, function() {
+				jobInfoDiv.fadeTo(1500, 0.95, function() {
 
-        			setInterval(function() {
+					setInterval(function() {
 						jobInfoDiv.fadeTo(1500, 0.0, function() {
 							$("#JobInfo").remove();
 						}
@@ -535,7 +571,7 @@
 					var dateHeader = jqXHR.getResponseHeader("Date");
 					var date = new Date(dateHeader);
 					serverTime = date.getTime();
-						
+
 					var jobNames = getJobNamesToDisplay(viewApi);
 					getJobs(jobNames);
 
@@ -555,20 +591,20 @@
 		function getBuildQueuePosition(jobName)
 		{
 			var queuePosition = 0;
-			
+
 			if (buildQueue != null)
 			{
 				$.each(buildQueue["items"], function(index, queueItem) {
-					
+
 					if (queueItem != null && queueItem.task != null && queueItem.task.name != null && queueItem.task.name == jobName)
 					{
 						queuePosition = index + 1;
-					} 
+					}
 				});
 			}
 			return queuePosition;
 		}
-		
+
 		var buildQueue = null;
 		function getJenkinsQueue(jenkinsUrl) {
 
@@ -582,7 +618,7 @@
 				success: function(queue, textStatus, jqXHR) {
 
 					debug("finished getting queue api");
-					buildQueue = queue;					
+					buildQueue = queue;
 					updateRunning["queue"] = false;
 				},
 				error: function(e, xhr) {
@@ -610,75 +646,80 @@
 					{
 						window.location.reload();
 					}
-					
+
 					lastPluginVersion = plugin.version;
 
 					if (plugin.config && plugin.config != null)
 					{
-				
+
 						if (plugin.config.theme && plugin.config.theme != null)
 						{
 							theme = plugin.config.theme.toLowerCase();
 						}
-	
+
+                                                if (plugin.config.buildRange && plugin.config.buildRange != null)
+						{
+							buildRange = plugin.config.buildRange.toLowerCase();
+						}
+
 						if (plugin.config.fontFamily && plugin.config.fontFamily != null)
 						{
 							fontFamily = plugin.config.fontFamily.toLowerCase();
 						}
-	
-	                    if (plugin.config.showDetails != null)
-	                    {
-	                        showDetails = plugin.config.showDetails;
-	                    }
-	
-	                    if (plugin.config.showBuildNumber != null)
-	                    {
-	                        showBuildNumber = plugin.config.showBuildNumber;
-	                    }
-	
-	                    if (plugin.config.showDisabledBuilds != null)
-	                    {
-	                        showDisabledBuilds = plugin.config.showDisabledBuilds;
-	                    }
-	
-	                    if (isNumber(plugin.config.jenkinsUpdateInterval))
-	                    {
-	                        jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
-	                    }
-	
-	                    if (isNumber(plugin.config.jenkinsTimeOut))
-	                    {
-	                        jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
-	                    }
+
+						if (plugin.config.showDetails != null)
+						{
+							showDetails = plugin.config.showDetails;
+						}
+
+						if (plugin.config.showBuildNumber != null)
+						{
+							showBuildNumber = plugin.config.showBuildNumber;
+						}
+
+						if (plugin.config.showDisabledBuilds != null)
+						{
+							showDisabledBuilds = plugin.config.showDisabledBuilds;
+						}
+
+						if (isNumber(plugin.config.jenkinsUpdateInterval))
+						{
+							jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
+						}
+
+						if (isNumber(plugin.config.jenkinsTimeOut))
+						{
+							jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
+						}
 					}
 
-                    if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
-                    {
-                        clearApiInterval();
-                        setApiInterval();
-                        
-        			    lastJenkinsUpdateInterval = jenkinsUpdateInterval;
-            			lastJenkinsTimeOut = jenkinsTimeOut; 
-                    }
+					if (lastJenkinsUpdateInterval != jenkinsUpdateInterval || lastJenkinsTimeOut != jenkinsTimeOut)
+					{
+						clearApiInterval();
+						setApiInterval();
+
+						lastJenkinsUpdateInterval = jenkinsUpdateInterval;
+						lastJenkinsTimeOut = jenkinsTimeOut;
+					}
 
 					if (theme != null)
 					{
 						if (lastTheme != theme)
 						{
 							$("body").css({'backgroundColor': themes[theme].backgroundColor});
-							
+
 							if(typeof themes[lastTheme].stop === 'function')
 							{
 								themes[lastTheme].stop();
 							}
-							
-	
-							if(typeof themes[theme].start === 'function') 
+
+
+							if(typeof themes[theme].start === 'function')
 							{
 								themes[theme].start();
 							}
 						}
-						
+
 						lastTheme = theme;
 					}
 
@@ -699,14 +740,15 @@
 		//- initialize variables ----------------------------------------------
 		var jenkinsTimeOut = getParameterByName("jenkinsTimeOut", 15000);
 		var lastJenkinsTimeOut = jenkinsTimeOut;
-    
+
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
 		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
-    
+
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
+		var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
@@ -718,7 +760,7 @@
 		{
 			isDebug  = true;
 		}
-		
+
 		//---------------------------------------------------------------------
 		$.ajaxSetup({ cache: false });
 
@@ -742,7 +784,7 @@
 		var lastTheme = "default";
 		var lastFontFamily = fontFamily;
 		var paintRunning = false;
-		
+
 		//---------------------------------------------------------------------
 		// themes
 		//---------------------------------------------------------------------
@@ -758,18 +800,18 @@
 		themes["default"]["aborted"] = "#ADADAD";
 		themes["default"]["aborted_building"] = "#E8E6E6";
 		themes["default"]["claimed_border"] = "#F5B800";
-		
 
-        themes["colorblind"] = new Array();
-        themes["colorblind"].backgroundColor = "#ffffff";
-        themes["colorblind"]["blue"] = "#0041C4";
-        themes["colorblind"]["blue_building"] = "#BFD4FF";
-        themes["colorblind"]["red"] = "#B30700";
-        themes["colorblind"]["red_building"] = "#FF9180";
-        themes["colorblind"]["yellow"] = "#B3B000";
-        themes["colorblind"]["yellow_building"] = "#FFF780";
-        themes["colorblind"]["aborted"] = "#777777";
-        themes["colorblind"]["aborted_building"] = "#EEEEEE";
+
+		themes["colorblind"] = new Array();
+		themes["colorblind"].backgroundColor = "#ffffff";
+		themes["colorblind"]["blue"] = "#0041C4";
+		themes["colorblind"]["blue_building"] = "#BFD4FF";
+		themes["colorblind"]["red"] = "#B30700";
+		themes["colorblind"]["red_building"] = "#FF9180";
+		themes["colorblind"]["yellow"] = "#B3B000";
+		themes["colorblind"]["yellow_building"] = "#FFF780";
+		themes["colorblind"]["aborted"] = "#777777";
+		themes["colorblind"]["aborted_building"] = "#EEEEEE";
 		themes["colorblind"]["claimed_border"] = "#F5B800";
 
 		themes["dark"] = new Array();
@@ -783,7 +825,7 @@
 		themes["dark"]["aborted"] = "#ADADAD";
 		themes["dark"]["aborted_building"] = "#E8E6E6";
 		themes["dark"]["claimed_border"] = "#F5B800";
-		
+
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
 		themes["christmas"]["blue"] = "#008800";
@@ -814,7 +856,7 @@
 		themes["boss"]["aborted"] = "#ADADAD";
 		themes["boss"]["aborted_building"] = "#E8E6E6";
 
-		
+
 		$(document).ready(function() {
 
 			if (isDebug)
@@ -831,7 +873,7 @@
 			document.title = "Jenkins Wall Display (" + viewName + ")";
 
 			setApiInterval();
-      
+
  			setInterval(function() {
 				serverTime += paintInterval;
 				if (!paintRunning)
@@ -840,7 +882,7 @@
 					repaint();
 					paintRunning = false;
 				}
-				
+
 			}, paintInterval);;
 
 		});
@@ -850,10 +892,10 @@
 		}
 
  		function clearApiInterval()
-    {
-      clearInterval(jenkinsApiIntervalId);
-    }
-    
+	{
+	  clearInterval(jenkinsApiIntervalId);
+	}
+
  		function setApiInterval()
 		{
  			debug("timeOut: " + jenkinsTimeOut + "ms");
@@ -864,12 +906,12 @@
 				{
 					getJenkinsApi(jenkinsUrl);
 				}
-				
+
 				if (!updateRunning["queue"])
 				{
 					getJenkinsQueue(jenkinsUrl);
 				}
-				
+
 				if (!updateRunning["pluginconfiguration"])
 				{
 					getPluginConfiguration(jenkinsUrl);
