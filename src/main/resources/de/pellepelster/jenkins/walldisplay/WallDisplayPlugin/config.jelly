@@ -1,7 +1,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <f:section title="${%Walldisplay}">
 
-        <f:entry title="${%Theme}" name="theme">            
+        <f:entry title="${%Theme} ${rootURL}" name="theme">
             <select name="theme">
                 <j:forEach  var="m" items="${it.themes}">
                     <f:option value="${m.toLowerCase()}" selected="${it.config.theme.equals(m.toLowerCase())}">
@@ -11,7 +11,7 @@
             </select>
         </f:entry>
 
-        <f:entry title="${%Builds to display}" name="buildRange">
+        <f:entry title="${%Builds to display}" name="buildRange" help="help-buildRange.html">
             <select name="buildRange">
                 <j:forEach  var="m" items="${it.buildRange}">
                     <f:option value="${m.toLowerCase()}" selected="${it.config.buildRange.equals(m.toLowerCase())}">
@@ -21,7 +21,7 @@
             </select>
         </f:entry>
 
-        <f:entry title="${%Font Family}" name="fontFamily">            
+        <f:entry title="${%Font Family}" name="fontFamily" help="/plugin/jenkinswalldisplay/help-buildRange.html">
             <select name="fontFamily">
                 <j:forEach  var="m" items="${it.fontFamilies}">
                     <f:option value="${m.toLowerCase()}" selected="${it.config.fontFamily.equals(m.toLowerCase())}">
@@ -31,23 +31,23 @@
             </select>
         </f:entry> 
 
-        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut">            
+        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut" help="/plugins/jenkinswalldisplay/help-buildRange.html">
             <f:textbox name="jenkinsTimeOut" value="${it.config.jenkinsTimeOut}" default="15" />
         </f:entry>
         
-        <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval">            
+        <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval" help="/WEB-INF/classes/de/pellepelster/jenkins/walldisplay/WallDisplayPlugin/help-buildRange.html">
             <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" default="20" />
         </f:entry> 
 
-        <f:entry title="${%Show Job Details}" name="jenkinsShowDetails">            
+        <f:entry title="${%Show Job Details}" name="jenkinsShowDetails" help="/walldisplay/WallDisplayPlugin/help-buildRange.html">
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
         </f:entry> 
 
-        <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber">            
+        <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber" help="${rootURL}/../plugin/jenkinswalldisplay/help-buildRange.html">
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
         </f:entry> 
 
-        <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds">
+        <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds" help="/plugin/walldisplay/help-buildRange.html">
             <f:checkbox name="jenkinsShowDisabledBuilds" checked="${it.config.showDisabledBuilds}" />
         </f:entry>
 
