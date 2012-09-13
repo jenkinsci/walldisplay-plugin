@@ -1,11 +1,6 @@
-apache-tomcat
-work
-jenkins_home
-nbactions.xml
-release.properties
+.settings
+.project
+.classpath
 target
-*~
-
-
-*.iml
-/.idea
+pom.xml.releaseBackup
+release.properties
