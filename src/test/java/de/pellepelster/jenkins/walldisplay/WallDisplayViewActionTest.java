@@ -29,11 +29,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      * @throws IOException
      */
     public WallDisplayViewAction newAction(String viewName) throws IOException {
-	WallDisplayViewAction action = spy(new WallDisplayViewAction(viewName));
-	rootUrl = getURL().toExternalForm();
-	encodedRootUrl = URLEncoder.encode(rootUrl, "UTF-8");
-	doReturn(rootUrl).when(action).getRootUrl();
-	return action;
+        WallDisplayViewAction action = spy(new WallDisplayViewAction(viewName));
+        rootUrl = getURL().toExternalForm();
+        encodedRootUrl = URLEncoder.encode(rootUrl, "UTF-8");
+        doReturn(rootUrl).when(action).getRootUrl();
+        return action;
     }
 
     /**
@@ -43,11 +43,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      */
     @Test
     public void testGetUrlNameAllView() throws IOException {
-	WallDisplayViewAction action = newAction("All");
-	assertEquals(
-		rootUrl
-			+ "/plugin/jenkinswalldisplay/walldisplay.html?viewName=All&jenkinsUrl="
-			+ encodedRootUrl, action.getUrlName());
+        WallDisplayViewAction action = newAction("All");
+        assertEquals(
+                rootUrl
+                        + "/plugin/jenkinswalldisplay/walldisplay.html?viewName=All&jenkinsUrl="
+                        + encodedRootUrl, action.getUrlName());
     }
 
     /**
@@ -58,11 +58,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      */
     @Test
     public void testGetUrlNameEncodedView() throws IOException {
-	WallDisplayViewAction action = newAction("+Dashboard");
-	assertEquals(
-		rootUrl
-			+ "/plugin/jenkinswalldisplay/walldisplay.html?viewName=%2BDashboard&jenkinsUrl="
-			+ encodedRootUrl, action.getUrlName());
+        WallDisplayViewAction action = newAction("+Dashboard");
+        assertEquals(
+                rootUrl
+                        + "/plugin/jenkinswalldisplay/walldisplay.html?viewName=%2BDashboard&jenkinsUrl="
+                        + encodedRootUrl, action.getUrlName());
     }
 
 }
