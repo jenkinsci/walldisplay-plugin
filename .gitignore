@@ -12,6 +12,4 @@ target
 .settings
 .project
 .classpath
-target
 pom.xml.releaseBackup
-release.properties
