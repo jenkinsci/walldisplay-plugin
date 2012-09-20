@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="jquery-ui-1.8.16.js"></script>
 	<script type="text/javascript" src='snowfall.jquery.js'></script>
 	<script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="md5.js"></script>
 
 	<script type="text/javascript">
 
@@ -672,6 +673,11 @@
 							showDetails = plugin.config.showDetails;
 						}
 
+                        if (plugin.config.showGravatar != null)
+                        {
+                            showGravatar = plugin.config.showGravatar;
+                        }
+
 						if (plugin.config.showBuildNumber != null)
 						{
 							showBuildNumber = plugin.config.showBuildNumber;
@@ -750,6 +756,7 @@
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
 		var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
+		var showGravatar = false;
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;

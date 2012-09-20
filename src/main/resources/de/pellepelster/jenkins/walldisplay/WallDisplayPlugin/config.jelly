@@ -41,7 +41,11 @@
 
         <f:entry title="${%Show Job Details}" name="jenkinsShowDetails" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDetails.html">
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
-        </f:entry> 
+        </f:entry>
+
+        <f:entry title="${%Show Job Details}" name="jenkinsShowGravatar" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowGravatar.html">
+            <f:checkbox name="jenkinsShowGravatar" checked="${it.config.showGravatar}" />
+        </f:entry>
 
         <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowBuildNumber.html">
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />

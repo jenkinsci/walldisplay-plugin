@@ -23,6 +23,7 @@ public class Configuration {
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
+    private Boolean showGravatar = false;
     private Boolean showBuildNumber = true;
     private Boolean showDisabledBuilds = true;
 
@@ -112,6 +113,15 @@ public class Configuration {
     }
 
     @Exported
+    public Boolean getShowGravatar() {
+        return showGravatar;
+    }
+
+    public void setShowGravatar(Boolean showGravatar) {
+        this.showGravatar = showGravatar;
+    }
+
+    @Exported
     public String getFontFamily() {
         if (fontFamily != null)
         {
@@ -132,6 +142,6 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("fontFamily", fontFamily).append("buildRange", buildRange).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).toString();
     }
 }
