@@ -268,6 +268,10 @@
 
 								var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
 
+                                //- create the gravatar img ------------------------
+                                var jobGravatar = $('<img />');
+                                jobGravatar.src(getGravatarUrl(job, showGravatar));
+
 								//- create the job content div ---------------------
 								var jobContent = $('<div />');
 								jobContent.css({
@@ -292,7 +296,6 @@
 									});
 								}
 
-
 								jobWrapper.css({
 									"font-size": (maxFontSize-1) + "px",
 									"background-color": themes[theme][jobColor]
@@ -303,6 +306,7 @@
 								jobWrapper.addClass("job_wrapper");
 
 								//- assemble job divs ------------------------------
+                                if(showGravatar) jobWrapper.append(jobGravatar);
 								jobWrapper.append(jobContent);
 								jobWrapper.append(percentageDiv);
 								$.each(queueDivs, function(index, queueDiv) {
