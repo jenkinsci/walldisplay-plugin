@@ -111,32 +111,32 @@ function getLongestJob(jobs, showBuildNumber, showDetails) {
 	return job;
 }
 
-function getJobTitle(job) {  
+function getJobTitle(job) {
 
 	var jobTitle = job.name;
 
 	if (job.property != null)
 	{
-		$.each(job.property, function(index, property) { 
+		$.each(job.property, function(index, property) {
 			if (property.wallDisplayName != null)
 			{
 				jobTitle = property.wallDisplayName;
 			}
 		});
 	}
-	
+
 	return jobTitle;
 }
 
-function getJobText(job, showBuildNumber, showDetails) {  
+function getJobText(job, showBuildNumber, showDetails) {
 
 	var jobText = getJobTitle(job);
-    
-      if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)    
-      {    
+
+      if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)
+      {
 	  jobText += ' #' + job.lastBuild.number;
       }
-    
+
 	var appendText = new Array();
 
 	if (showDetails == true) {
@@ -151,27 +151,49 @@ function getJobText(job, showBuildNumber, showDetails) {
 			if(appendText.length > 0)
 				jobText += " (" + appendText.join(", ") + ")";
 		}
-		
+
 		if (job.color == "red") {
 			if(culprit != "") {
 				jobText += " (" + culprit + ")";
 			}
-		}		
+		}
 	}
-	
+
 	return jobText;
+}
+
+function getGravatarUrl(job, showGravatar, size) {
+    if(showGravatar && getEmail(job) !== "") {
+        var hash = CryptoJS.MD5(getEmail(job).toLowerCase());
+
+        return "http://www.gravatar.com/avatar/" + hash + "?s=" + size;
+    }
+}
+function getEmail(job) {
+    var email = "";
+
+    if(job.lastBuild != null && job.lastBuild.culprits != "") {
+       for(i in job.lastBuild.culprits[0].property) {
+          email = job.lastBuild.culprits[0].property[i].address || email;
+       }
+    }
+
+    return email;
 }
 
 function getCulprit(job) {
 	var culprit = "";
-		
+
 	if(job.lastBuild != null && job.lastBuild.culprits != "") {
 		culprit = job.lastBuild.culprits[0].fullName
 	}
-	
+
 	return culprit;
 }
 
+function trim(str) {
+    return str.replace(/^\s+|\s+$/g,'');
+}
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
