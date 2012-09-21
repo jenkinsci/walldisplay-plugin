@@ -269,13 +269,20 @@
 								var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
 
                         //- create the gravatar img ------------------------
-                        var jobGravatar = $('<img />');
-                        jobGravatar.attr('src', getGravatarUrl(job, showGravatar, Math.round(jobDimensions.height * 0.80)));
-                        jobGravatar.css({
-                              "float": "left",
-                              "padding-top": Math.round((jobDimensions.height * 0.50) - (Math.round(jobDimensions.height * 0.40))),
-                              "padding-left": Math.round(jobDimensions.width * 0.05)
-                        });
+                        if(!jobGravatarCache[job.name] || gravatarCounter[job.name] >= 5) {
+                           var jobGravatar = $('<img />');
+                           jobGravatar.attr('src', getGravatarUrl(job, showGravatar, Math.round(jobDimensions.height * 0.80)));
+                           jobGravatar.css({
+                                 "float": "left",
+                                 "padding-top": Math.round((jobDimensions.height * 0.50) - (Math.round(jobDimensions.height * 0.40))),
+                                 "padding-left": Math.round(jobDimensions.width * 0.05)
+                           });
+
+                           jobGravatarCache[job.name] = jobGravatar;
+                           gravatarCounter[job.name] = 0;
+                        } else {
+                           gravatarCounter[job.name] = parseInt(gravatarCounter[job.name]) + 1;
+                        }
 
 								//- create the job content div ---------------------
 								var jobContent = $('<div />');
@@ -311,7 +318,7 @@
 								jobWrapper.addClass("job_wrapper");
 
 								//- assemble job divs ------------------------------
-                                if(showGravatar) jobWrapper.append(jobGravatar);
+                        if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
 								jobWrapper.append(jobContent);
 								jobWrapper.append(percentageDiv);
 								$.each(queueDivs, function(index, queueDiv) {
@@ -765,7 +772,9 @@
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
 		var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
-		var showGravatar = true;
+      var showGravatar = true;
+      var jobGravatarCache = {};
+      var gravatarCounter = {};
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;
