@@ -377,7 +377,7 @@
 						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
 						dataType: "json",
 						data: {
-							"tree": "property[wallDisplayName],name,color,lastBuild[number,timestamp,duration,actions[claimed,claimedBy,failCount,skipCount,totalCount],culprits[fullName]],lastSuccessfulBuild[duration]"
+							"tree": "property[wallDisplayName],name,color,lastBuild[number,timestamp,duration,actions[claimed,claimedBy,failCount,skipCount,totalCount],culprits[fullName,property[address]]],lastSuccessfulBuild[duration]"
 						},
 						success: function(job, textStatus, jqXHR) {
 							debug("finished getting api for job '" + jobName + "'");

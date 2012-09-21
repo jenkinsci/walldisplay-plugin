@@ -173,7 +173,9 @@ function getEmail(job) {
     var email = "";
 
     if(job.lastBuild != null && job.lastBuild.culprits != "") {
-        email = job.lastBuild.culprits[0].address
+       for(i in job.lastBuild.culprits[0].property) {
+          email = job.lastBuild.culprits[0].property[i].address || email;
+       }
     }
 
     return email;
