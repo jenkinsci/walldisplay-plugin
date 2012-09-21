@@ -163,7 +163,7 @@ function getJobText(job, showBuildNumber, showDetails) {
 }
 
 function getGravatarUrl(job, showGravatar, size) {
-    if(showGravatar) {
+    if(showGravatar && getEmail(job) !== "") {
         var hash = CryptoJS.MD5(getEmail(job).toLowerCase());
 
         return "http://www.gravatar.com/avatar/" + hash + "?s=" + size;
