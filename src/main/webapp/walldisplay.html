@@ -270,7 +270,7 @@
 
                                 //- create the gravatar img ------------------------
                                 var jobGravatar = $('<img />');
-                                jobGravatar.src(getGravatarUrl(job, showGravatar));
+                                jobGravatar.attr('src', getGravatarUrl(job, showGravatar, Math.round(jobDimensions.height * 0,80)));
 
 								//- create the job content div ---------------------
 								var jobContent = $('<div />');
@@ -754,13 +754,13 @@
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
 		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
 
-		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
+      var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
 		var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
-		var showGravatar = false;
+		var showGravatar = true;
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;
