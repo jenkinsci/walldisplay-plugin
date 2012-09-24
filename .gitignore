@@ -9,3 +9,7 @@ target
 
 *.iml
 /.idea
+.settings
+.project
+.classpath
+pom.xml.releaseBackup
