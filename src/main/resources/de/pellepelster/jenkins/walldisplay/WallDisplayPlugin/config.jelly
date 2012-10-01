@@ -31,6 +31,16 @@
             </select>
         </f:entry> 
 
+        <f:entry title="${%Sort Order}" name="sortOrder" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-sortOrder.html">
+            <select name="sortOrder">
+                <j:forEach  var="m" items="${it.sortOrder}">
+                    <f:option value="${m.toLowerCase()}" selected="${it.config.sortOrder.equals(m.toLowerCase())}">
+                    ${m}
+                    </f:option>
+                </j:forEach>
+            </select>
+        </f:entry> 
+
         <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsTimeOut.html">
             <f:textbox name="jenkinsTimeOut" value="${it.config.jenkinsTimeOut}" default="15" />
         </f:entry>

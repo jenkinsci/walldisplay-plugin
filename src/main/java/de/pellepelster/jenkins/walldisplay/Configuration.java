@@ -20,6 +20,7 @@ public class Configuration {
     private String theme = WallDisplayPlugin.themes[0];
     private String fontFamily = WallDisplayPlugin.fontFamilies[0];
     private String buildRange = WallDisplayPlugin.buildRange[0];
+    private String sortOrder = WallDisplayPlugin.sortOrder[0];
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
@@ -66,6 +67,22 @@ public class Configuration {
             this.jenkinsUpdateInterval = jenkinsUpdateInterval;
         }
     }
+
+    @Exported
+    public String getSortOrder() {
+        if (sortOrder != null)
+        {
+            return sortOrder.toLowerCase();
+        }
+        else
+        {
+            return sortOrder;
+        }
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }  
 
     @Exported
     public String getTheme() {
@@ -142,6 +159,6 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).toString();
     }
 }

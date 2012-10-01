@@ -438,7 +438,17 @@
 								}
 							}
 
-							jobsToDisplay.sort(function(job1, job2) { return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails)); });
+							jobsToDisplay.sort(function(job1, job2) { 
+								
+								if (sortOrder == "job status")
+								{
+									return sortOrder[job1.color] - sortOrder[job2.color];
+								}
+								else
+								{
+									return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails));
+								}
+							});
 
 							updateRunning[jobName] = false;
 						},
@@ -684,6 +694,11 @@
 							fontFamily = plugin.config.fontFamily.toLowerCase();
 						}
 
+						if (plugin.config.sortOrder && plugin.config.sortOrder != null)
+						{
+							sortOrder = plugin.config.sortOrder.toLowerCase();
+						}
+
 						if (plugin.config.showDetails != null)
 						{
 							showDetails = plugin.config.showDetails;
@@ -766,19 +781,40 @@
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
 		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
 
-      var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
+		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
 		var theme = getParameterByName("theme", "default");
 		var fontFamily = getParameterByName("fontFamily", "sans-serif");
+		var sortOrder = getParameterByName("sortOrder", "job name");
 		var buildRange = getParameterByName("buildRange", "all");
 		var showDetails = false;
-      var showGravatar = true;
-      var jobGravatarCache = {};
-      var gravatarCounter = {};
+		var showGravatar = true;
+		var jobGravatarCache = {};
+		var gravatarCounter = {};
 		var showBuildNumber = true;
 		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;
+		
+		var jobStatusOrder = new Array();
+		jobStatusOrder["blue"] = 0;
+		jobStatusOrder["blue_building"] = 1;
+		jobStatusOrder["red"] = 2;
+		jobStatusOrder["red_building"] = 3;
+		jobStatusOrder["yellow"] = 4;
+		jobStatusOrder["yellow_building"] = 5;
+		jobStatusOrder["aborted"] = 6;
+		jobStatusOrder["aborted_building"] = 7;
 
+		themes["default"]["blue"] = "#008800";
+		themes["default"]["blue_building"] = "#00C000";
+		themes["default"]["red"] = "#880000";
+		themes["default"]["red_building"] = "#C00000";
+		themes["default"]["yellow"] = "#888800";
+		themes["default"]["yellow_building"] = "#C0C000";
+		themes["default"]["aborted"] = "#ADADAD";
+		themes["default"]["aborted_building"] = "#E8E6E6";
+		
+		
 		var isDebug = false;
 		var debugString = getParameterByName("debug", null);
 		if (debugString != null)

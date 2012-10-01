@@ -26,12 +26,16 @@ import org.kohsuke.stapler.export.ExportedBean;
 public class WallDisplayPlugin extends Plugin {
 
     private static final Logger LOGGER = Logger.getLogger("hudson." + WallDisplayPlugin.class.getName());
+    
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
     public static final String[] themes = new String[] { "Default", "Christmas", "Boss", "Dark", "Colorblind" };
 
     public static final String[] fontFamilies = new String[] { "Sans-Serif", "Arial", "Helvetica", "Verdana" };
+    
     public static final String[] buildRange = new String[] { "All", "Active this month", "Active this week", "Active today" };
+
+    public static final String[] sortOrder = new String[] { "Job Name", "Job Status" };
 
     @Exported
     public Configuration config;
@@ -80,6 +84,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
         config.setShowGravatar(formData.optBoolean("jenkinsShowGravatar"));
         config.setShowDisabledBuilds(formData.optBoolean("jenkinsShowDisabledBuilds"));
+        config.setSortOrder(Util.fixEmptyAndTrim(formData.optString("jenkinsSortOrder")));
         
         getConfigXml().write(config);
     }
