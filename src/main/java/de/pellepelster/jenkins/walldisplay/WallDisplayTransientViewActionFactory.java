@@ -31,6 +31,7 @@ public class WallDisplayTransientViewActionFactory extends TransientViewActionFa
             ViewGroup owner = view.getOwner();
             while (owner instanceof hudson.plugins.nested_view.NestedView) {
                 viewNames.add(((hudson.plugins.nested_view.NestedView) owner).getViewName());
+                owner = ((hudson.plugins.nested_view.NestedView) owner).getOwner();
             }
             Collections.reverse(viewNames);
             viewName = StringUtils.join(viewNames, "/view/");
