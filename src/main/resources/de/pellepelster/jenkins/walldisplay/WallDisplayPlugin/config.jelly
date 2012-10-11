@@ -1,7 +1,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <f:section title="${%Walldisplay}">
 
-        <f:entry title="${%Theme}" name="theme">            
+        <f:entry title="${%Theme} ${rootURL}" name="theme" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-theme.html">
             <select name="theme">
                 <j:forEach  var="m" items="${it.themes}">
                     <f:option value="${m.toLowerCase()}" selected="${it.config.theme.equals(m.toLowerCase())}">
@@ -9,9 +9,19 @@
                     </f:option>
                 </j:forEach>
             </select>
-        </f:entry> 
+        </f:entry>
 
-        <f:entry title="${%Font Family}" name="fontFamily">            
+        <f:entry title="${%Builds to display}" name="buildRange" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-buildRange.html">
+            <select name="buildRange">
+                <j:forEach  var="m" items="${it.buildRange}">
+                    <f:option value="${m.toLowerCase()}" selected="${it.config.buildRange.equals(m.toLowerCase())}">
+                    ${m}
+                    </f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+
+        <f:entry title="${%Font Family}" name="fontFamily" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-fontFamily.html">
             <select name="fontFamily">
                 <j:forEach  var="m" items="${it.fontFamilies}">
                     <f:option value="${m.toLowerCase()}" selected="${it.config.fontFamily.equals(m.toLowerCase())}">
@@ -21,23 +31,37 @@
             </select>
         </f:entry> 
 
-        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut">            
-            <f:textbox name="jenkinsTimeOut" value="${it.config.jenkinsTimeOut}" default="15" />
+        <f:entry title="${%Sort Order}" name="sortOrder" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-sortOrder.html">
+            <select name="sortOrder">
+                <j:forEach  var="m" items="${it.sortOrder}">
+                    <f:option value="${m.toLowerCase()}" selected="${it.config.sortOrder.equals(m.toLowerCase())}">
+                    ${m}
+                    </f:option>
+                </j:forEach>
+            </select>
         </f:entry> 
+
+        <f:entry title="${%API Read Timeout}" name="jenkinsTimeOut" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsTimeOut.html">
+            <f:textbox name="jenkinsTimeOut" value="${it.config.jenkinsTimeOut}" default="15" />
+        </f:entry>
         
-        <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval">            
+        <f:entry title="${%Update Interval}" name="jenkinsUpdateInterval" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsUpdateInterval.html">
             <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" default="20" />
         </f:entry> 
 
-        <f:entry title="${%Show Job Details}" name="jenkinsShowDetails">            
+        <f:entry title="${%Show Job Details}" name="jenkinsShowDetails" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDetails.html">
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
-        </f:entry> 
+        </f:entry>
 
-        <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber">            
+        <f:entry title="${%Show Job Show Gravatar}" name="jenkinsShowGravatar" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowGravatar.html">
+            <f:checkbox name="jenkinsShowGravatar" checked="${it.config.showGravatar}" />
+        </f:entry>
+
+        <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowBuildNumber.html">
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
         </f:entry> 
 
-        <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds">
+        <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDisabledBuilds.html">
             <f:checkbox name="jenkinsShowDisabledBuilds" checked="${it.config.showDisabledBuilds}" />
         </f:entry>
 

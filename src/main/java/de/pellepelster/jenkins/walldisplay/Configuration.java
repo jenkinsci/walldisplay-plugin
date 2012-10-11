@@ -19,9 +19,12 @@ public class Configuration {
 
     private String theme = WallDisplayPlugin.themes[0];
     private String fontFamily = WallDisplayPlugin.fontFamilies[0];
+    private String buildRange = WallDisplayPlugin.buildRange[0];
+    private String sortOrder = WallDisplayPlugin.sortOrder[0];
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private Boolean showDetails = false;
+    private Boolean showGravatar = false;
     private Boolean showBuildNumber = true;
     private Boolean showDisabledBuilds = true;
 
@@ -66,6 +69,22 @@ public class Configuration {
     }
 
     @Exported
+    public String getSortOrder() {
+        if (sortOrder != null)
+        {
+            return sortOrder.toLowerCase();
+        }
+        else
+        {
+            return sortOrder;
+        }
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }  
+
+    @Exported
     public String getTheme() {
         if (theme != null)
         {
@@ -78,11 +97,27 @@ public class Configuration {
     }
 
     public Boolean isValid() {
-        return (theme != null);
+        return (theme != null && buildRange  != null);
     }
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    @Exported
+    public String getBuildRange() {
+        if (buildRange != null)
+        {
+            return buildRange.toLowerCase();
+        }
+        else
+        {
+            return buildRange;
+        }
+    }
+
+    public void setBuildRange(String buildRange) {
+        this.buildRange = buildRange;
     }
 
     @Exported
@@ -92,6 +127,15 @@ public class Configuration {
 
     public void setShowDetails(Boolean showDetails) {
         this.showDetails = showDetails;
+    }
+
+    @Exported
+    public Boolean getShowGravatar() {
+        return showGravatar;
+    }
+
+    public void setShowGravatar(Boolean showGravatar) {
+        this.showGravatar = showGravatar;
     }
 
     @Exported
@@ -115,6 +159,6 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("fontFamily", fontFamily).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).toString();
     }
 }
