@@ -440,14 +440,19 @@
 
 							jobsToDisplay.sort(function(job1, job2) { 
 								
+								var sort = 0;
+								
 								if (sortOrder == "job status")
 								{
-									return sortOrder[job1.color] - sortOrder[job2.color];
+									sort = jobStatusOrder[job1.color] - jobStatusOrder[job2.color];
 								}
-								else
+
+								if (sort == 0)
 								{
-									return getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails));
+									sort = getJobText(job1, showBuildNumber, showDetails).localeCompare(getJobText(job2, showBuildNumber, showDetails));
 								}
+								
+								return sort;
 							});
 
 							updateRunning[jobName] = false;
@@ -804,17 +809,9 @@
 		jobStatusOrder["yellow_building"] = 5;
 		jobStatusOrder["aborted"] = 6;
 		jobStatusOrder["aborted_building"] = 7;
+		jobStatusOrder["grey"] = 8;
+		jobStatusOrder["grey_building"] = 9;
 
-		themes["default"]["blue"] = "#008800";
-		themes["default"]["blue_building"] = "#00C000";
-		themes["default"]["red"] = "#880000";
-		themes["default"]["red_building"] = "#C00000";
-		themes["default"]["yellow"] = "#888800";
-		themes["default"]["yellow_building"] = "#C0C000";
-		themes["default"]["aborted"] = "#ADADAD";
-		themes["default"]["aborted_building"] = "#E8E6E6";
-		
-		
 		var isDebug = false;
 		var debugString = getParameterByName("debug", null);
 		if (debugString != null)

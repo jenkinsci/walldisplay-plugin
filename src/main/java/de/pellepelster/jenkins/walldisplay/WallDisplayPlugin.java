@@ -84,7 +84,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
         config.setShowGravatar(formData.optBoolean("jenkinsShowGravatar"));
         config.setShowDisabledBuilds(formData.optBoolean("jenkinsShowDisabledBuilds"));
-        config.setSortOrder(Util.fixEmptyAndTrim(formData.optString("jenkinsSortOrder")));
+        config.setSortOrder(Util.fixEmptyAndTrim(formData.optString("sortOrder")));
         
         getConfigXml().write(config);
     }
