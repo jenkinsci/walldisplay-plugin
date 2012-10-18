@@ -13,3 +13,5 @@ target
 .project
 .classpath
 pom.xml.releaseBackup
+
+.DS_Store
