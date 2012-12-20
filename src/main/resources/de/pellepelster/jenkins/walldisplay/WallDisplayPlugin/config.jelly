@@ -49,6 +49,10 @@
             <f:textbox name="jenkinsUpdateInterval" value="${it.config.jenkinsUpdateInterval}" default="20" />
         </f:entry> 
 
+        <f:entry title="${%Paint Interval}" name="paintInterval" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-paintInterval.html">
+            <f:textbox name="paintInterval" value="${it.config.paintInterval}" default="1" />
+        </f:entry> 
+
         <f:entry title="${%Show Job Details}" name="jenkinsShowDetails" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDetails.html">
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
         </f:entry>

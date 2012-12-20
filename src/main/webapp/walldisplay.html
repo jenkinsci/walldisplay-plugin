@@ -732,6 +732,11 @@
 							jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
 						}
 
+						if (isNumber(plugin.config.paintInterval))
+						{
+							paintInterval = plugin.config.paintInterval * 1000;
+						}
+
 						if (isNumber(plugin.config.jenkinsTimeOut))
 						{
 							jenkinsTimeOut = plugin.config.jenkinsTimeOut * 1000;
@@ -745,6 +750,14 @@
 
 						lastJenkinsUpdateInterval = jenkinsUpdateInterval;
 						lastJenkinsTimeOut = jenkinsTimeOut;
+					}
+
+					if (lastPaintInterval != paintInterval)
+					{
+						clearPaintInterval();
+						setPaintInterval();
+
+						lastPaintInterval = paintInterval;
 					}
 
 					if (theme != null)
@@ -934,8 +947,18 @@
 			document.title = "Jenkins Wall Display (" + viewName + ")";
 
 			setApiInterval();
+			setPaintInterval();
 
- 			setInterval(function() {
+
+		});
+
+		window.onresize = function(event) {
+			updateWindowSizes();
+		}
+
+		function setPaintInterval()
+		{
+ 			paintIntervalId = setInterval(function() {
 				serverTime += paintInterval;
 				if (!paintRunning)
 				{
@@ -944,18 +967,13 @@
 					paintRunning = false;
 				}
 
-			}, paintInterval);;
-
-		});
-
-		window.onresize = function(event) {
-			updateWindowSizes();
+			}, paintInterval);
 		}
-
- 		function clearApiInterval()
-	{
-	  clearInterval(jenkinsApiIntervalId);
-	}
+		
+		function clearPaintInterval()
+		{
+			clearInterval(paintIntervalId);
+		}
 
  		function setApiInterval()
 		{
@@ -979,6 +997,11 @@
 				}
 
 			}, jenkinsUpdateInterval);
+		}
+		
+ 		function clearApiInterval()
+		{
+			clearInterval(jenkinsApiIntervalId);
 		}
 
 </script>

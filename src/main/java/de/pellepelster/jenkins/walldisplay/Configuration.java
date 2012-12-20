@@ -23,6 +23,7 @@ public class Configuration {
     private String sortOrder = WallDisplayPlugin.sortOrder[0];
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
+    private int paintInterval = 1;
     private Boolean showDetails = false;
     private Boolean showGravatar = false;
     private Boolean showBuildNumber = true;
@@ -138,6 +139,16 @@ public class Configuration {
         this.showGravatar = showGravatar;
     }
 
+    @Exported
+    public int getPaintInterval() {
+        return paintInterval;
+    }
+
+    public void setPaintInterval(int paintInterval) {
+        this.paintInterval = paintInterval;
+    }
+
+    
     @Exported
     public String getFontFamily() {
         if (fontFamily != null)
