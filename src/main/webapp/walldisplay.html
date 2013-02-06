@@ -353,7 +353,7 @@
 
 			$.each(actions, function(actionIndex, action) {
 
-				if (action.claimed)
+				if (action && action.claimed)
 				{
 					claimed =  true;
 				}
