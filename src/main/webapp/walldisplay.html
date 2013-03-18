@@ -801,6 +801,9 @@
 
 		var jenkinsUpdateInterval = getParameterByName("jenkinsUpdateInterval", 20000);
 		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
+		
+		var paintInterval = getParameterByName("jenkinsPaintInterval", 100);
+		var lastPaintInterval = paintInterval;
 
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
 		var viewName = getParameterByName("viewName", "All");
