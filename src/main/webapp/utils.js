@@ -172,7 +172,7 @@ function getGravatarUrl(job, showGravatar, size) {
 function getEmail(job) {
     var email = "";
 
-    if(job.lastBuild != null && job.lastBuild.culprits != "") {
+    if(job.lastBuild != null && job.lastBuild.culprits != null && job.lastBuild.culprits != "") {
        for(i in job.lastBuild.culprits[0].property) {
           email = job.lastBuild.culprits[0].property[i].address || email;
        }
@@ -184,7 +184,7 @@ function getEmail(job) {
 function getCulprit(job) {
 	var culprit = "";
 
-	if(job.lastBuild != null && job.lastBuild.culprits != "") {
+	if(job.lastBuild != null && job.lastBuild.culprits != null && job.lastBuild.culprits != "") {
 		culprit = job.lastBuild.culprits[0].fullName
 	}
 
