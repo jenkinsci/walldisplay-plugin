@@ -145,9 +145,13 @@
 			{
 				displayMessage(updateError, "message_error");
 			}
+            else if (updateRunning[viewName])
+            {
+                displayMessage("loading jobs...", "message_info");
+            }
 			else if (jobsToDisplay.length == 0)
 			{
-				displayMessage("loading jobs...", "message_info");
+                displayMessage("No jobs to show...", "message_info");
 			}
 			else
 			{
