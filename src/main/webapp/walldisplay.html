@@ -396,11 +396,13 @@
 
 							});
 
+							var jobFilteredOut = false;
+
 							if(!showDisabledBuilds && job.color === 'disabled') {
 								add = false;
+								jobFilteredOut = true;
 							}
 
-							var jobFilteredOut = false;
 							// show all failed builds, but only show passing builds
 							// in the date range the user specifies
 							//
