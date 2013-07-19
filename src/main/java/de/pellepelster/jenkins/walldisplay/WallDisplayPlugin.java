@@ -80,6 +80,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setBuildRange(Util.fixEmptyAndTrim(formData.optString("buildRange")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
+        config.setShowLastStableTimeAgo (formData.optBoolean("jenkinsLastStableTimeAgo"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
         config.setShowGravatar(formData.optBoolean("jenkinsShowGravatar"));

@@ -97,12 +97,12 @@ function removeMessage()
 	$("#Message").remove()
 }
 
-function getLongestJob(jobs, showBuildNumber, showDetails) {
+function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails) {
 
 	var job = null;
 
 	$.each(jobs, function(index, currentJob) { 
-		if (job == null || getJobText(currentJob, showBuildNumber, showDetails).length > getJobText(job, showBuildNumber, showDetails).length)
+		if (job == null || getJobText(currentJob, showBuildNumber, showLastStableTimeAgo, showDetails).length > getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails).length)
 		{
 			job = currentJob;
 		}
@@ -128,7 +128,7 @@ function getJobTitle(job) {
 	return jobTitle;
 }
 
-function getJobText(job, showBuildNumber, showDetails) {
+function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
 
 	var jobText = getJobTitle(job);
 
@@ -136,12 +136,17 @@ function getJobText(job, showBuildNumber, showDetails) {
       {
 	  jobText += ' #' + job.lastBuild.number;
       }
+      
 
 	var appendText = new Array();
 
 	if (showDetails == true) {
 		var culprit = getCulprit(job);
-		if (job.color == "yellow") {
+	    if ((job.color == "green" || job.color == "blue") && showLastStableTimeAgo && job.lastStableBuild != null && job.lastStableBuild.timestamp != null) {
+		        jobText += ' (' + $.timeago(job.lastStableBuild.timestamp) + ')';
+	        }
+
+	    if (job.color == "yellow") {
 			if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
 				appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
 			}

@@ -27,6 +27,7 @@ public class Configuration {
     private Boolean showDetails = false;
     private Boolean showGravatar = false;
     private Boolean showBuildNumber = true;
+    private Boolean showLastStableTimeAgo = true;
     private Boolean showDisabledBuilds = true;
 
     @Exported
@@ -36,6 +37,15 @@ public class Configuration {
 
     public void setShowBuildNumber(Boolean showBuildNumber) {
         this.showBuildNumber = showBuildNumber;
+    }
+    
+    @Exported
+    public Boolean getShowLastStableTimeAgo() {
+        return showLastStableTimeAgo;
+    }
+
+    public void setShowLastStableTimeAgo(Boolean showLastStableTimeAgo) {
+        this.showLastStableTimeAgo = showLastStableTimeAgo;
     }
 
     @Exported
