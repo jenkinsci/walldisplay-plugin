@@ -64,7 +64,11 @@
         <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowBuildNumber.html">
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
         </f:entry> 
-
+        
+        <f:entry title="${%Show Last Stable Time Ago}" name="jenkinsLastStableTimeAgo" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsLastStableTimeAgo.html">
+            <f:checkbox name="jenkinsLastStableTimeAgo" checked="${it.config.showLastStableTimeAgo}" />
+        </f:entry> 
+        
         <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDisabledBuilds.html">
             <f:checkbox name="jenkinsShowDisabledBuilds" checked="${it.config.showDisabledBuilds}" />
         </f:entry>
