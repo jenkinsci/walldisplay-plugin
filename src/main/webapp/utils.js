@@ -125,8 +125,9 @@ function getJobTitle(job) {
 		});
 	}
 
-	if (job.lastBuild != null && job.lastBuild.actions != null &&
-	    job.lastBuild.actions.length > 0 && job.lastBuild.actions [0].parameters.length > 0){
+	if (job.lastBuild != null && job.lastBuild.actions != null &&	
+	    job.lastBuild.actions.length > 0 && job.lastBuild.actions [0].parameters != null &&
+	    job.lastBuild.actions [0].parameters.length > 0){
 		var params = job.lastBuild.actions [0].parameters;
 		$.each (params,  function(index, property) {
 			jobTitle = jobTitle.replace ("${"+property.name +"}", property.value);
