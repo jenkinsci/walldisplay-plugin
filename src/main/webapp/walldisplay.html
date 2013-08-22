@@ -316,13 +316,35 @@
 									"font-size": (maxFontSize-1) + "px",
 									"background-color": themes[theme][jobColor]
 								});
+
 								jobWrapper.css(jobPositionStyle);
 								jobWrapper.css(jobDimensionsStyle);
 								jobWrapper.addClass("job");
 								jobWrapper.addClass("job_wrapper");
 
 								//- assemble job divs ------------------------------
-                        if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
+		                        if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
+								$.each(job.property, function(index, property) {
+									if (property.wallDisplayBgPicture != null &&
+											property.wallDisplayBgPicture != "")
+									{
+										//- create the job bg div ---------------------
+										var jobBg = $('<div />');
+										jobBg.css({
+											"position": "absolute",
+											"transform":"rotate(-30deg)",
+											"top":claimedBorderWidth + 'px',
+											"left":Math.floor ((jobWidth - 2 * claimedBorderWidth)*2/6 + claimedBorderWidth) + 'px',
+											"background-image":"url('" + property.wallDisplayBgPicture + "')",
+											"opacity":"0.5",
+											"background-size":  Math.floor ((jobWidth - 2 * claimedBorderWidth)/6) + "px " + (jobHeight - 2 * claimedBorderWidth) + "px",
+											"background-repeat":"no-repeat",
+											"width":Math.floor ((jobWidth - 2 * claimedBorderWidth)/6) + "px",
+											"height":(jobHeight - 2 * claimedBorderWidth) + "px",
+										});
+										jobWrapper.append(jobBg);
+									}
+								});
 								jobWrapper.append(jobContent);
 								jobWrapper.append(percentageDiv);
 								$.each(queueDivs, function(index, queueDiv) {
@@ -381,7 +403,7 @@
 						url: jenkinsUrl +  "/job/" + jobName + "/api/json",
 						dataType: "json",
 						data: {
-							"tree": "property[wallDisplayName],name,color,lastStableBuild[timestamp],lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,failCount,skipCount,totalCount],culprits[fullName,property[address]]],lastSuccessfulBuild[duration]"
+							"tree": "property[wallDisplayName,wallDisplayBgPicture],name,color,lastStableBuild[timestamp],lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,failCount,skipCount,totalCount],culprits[fullName,property[address]]],lastSuccessfulBuild[duration]"
 						},
 						success: function(job, textStatus, jqXHR) {
 
