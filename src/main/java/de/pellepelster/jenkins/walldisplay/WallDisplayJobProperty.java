@@ -20,15 +20,22 @@ import org.kohsuke.stapler.export.ExportedBean;
 public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?, ?>> {
 
     private String wallDisplayName = null;
+    private String wallDisplayBgPicture = null;
 
     @DataBoundConstructor
-    public WallDisplayJobProperty(String wallDisplayName) {
+    public WallDisplayJobProperty(String wallDisplayName, String wallDisplayBgPicture) {
         this.wallDisplayName = wallDisplayName;
+        this.wallDisplayBgPicture = wallDisplayBgPicture;
     }
 
     @Exported
     public String getWallDisplayName() {
         return wallDisplayName;
+    }
+
+    @Exported
+    public String getWallDisplayBgPicture() {
+        return wallDisplayBgPicture;
     }
 
     @Extension
@@ -48,20 +55,34 @@ public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?,
             return "Walldisplay";
         }
 
+        public String getBgPicture() {
+            return "";
+        }
+
         @Override
         public JobProperty<?> newInstance(StaplerRequest req,
                 JSONObject formData) throws FormException {
 
+            String wallDisplayName = null;
+            String wallDisplayBgPicture = null;
             if (formData.has("wallDisplayNameDynamic"))
             {
                 JSONObject wallDisplayNameDynamic = formData.getJSONObject("wallDisplayNameDynamic");
 
                 if (wallDisplayNameDynamic != null && wallDisplayNameDynamic.has("wallDisplayName") && !wallDisplayNameDynamic.get("wallDisplayName").toString().trim().isEmpty()) {
-                    return req.bindJSON(WallDisplayJobProperty.class, wallDisplayNameDynamic);
+                    wallDisplayName = wallDisplayNameDynamic.get("wallDisplayName").toString();
                 }
             }
             
-            return new WallDisplayJobProperty(null);
+            if (formData.has("wallDisplayBgPictureDynamic"))
+            {
+                JSONObject wallDisplayBgPictureDynamic = formData.getJSONObject("wallDisplayBgPictureDynamic");
+
+                if (wallDisplayBgPictureDynamic != null && wallDisplayBgPictureDynamic.has("wallDisplayBgPicture") && !wallDisplayBgPictureDynamic.get("wallDisplayBgPicture").toString().trim().isEmpty()) {
+                    wallDisplayBgPicture = wallDisplayBgPictureDynamic.getString ("wallDisplayBgPicture").toString();
+                }
+            }
+            return new WallDisplayJobProperty (wallDisplayName, wallDisplayBgPicture);
         }
     }
 }
