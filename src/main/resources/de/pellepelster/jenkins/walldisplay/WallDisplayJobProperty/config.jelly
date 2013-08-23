@@ -14,6 +14,11 @@ xmlns:f="/lib/form">
                 <f:textbox name="wallDisplayName" value="${instance.wallDisplayName}" />
             </f:entry>
         </f:optionalBlock>
+        <f:optionalBlock name="wallDisplayBgPictureDynamic" title="${%walldisplay.bgpdynamic}" checked="${instance.wallDisplayBgPicture != null}">
+            <f:entry title="${%walldisplay.bgpicture}" field="wallDisplayBgPicture">
+                <f:textbox name="wallDisplayBgPicture" value="${instance.wallDisplayBgPicture}" />
+            </f:entry>
+        </f:optionalBlock>
     </table>
 </f:block>
 
