@@ -81,6 +81,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowLastStableTimeAgo (formData.optBoolean("jenkinsLastStableTimeAgo"));
+        config.setBlinkBgPicturesWhenBuilding (formData.optBoolean("blinkBgPicturesWhenBuilding"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
         config.setShowGravatar(formData.optBoolean("jenkinsShowGravatar"));
