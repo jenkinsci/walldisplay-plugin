@@ -29,6 +29,7 @@ public class Configuration {
     private Boolean showBuildNumber = true;
     private Boolean showLastStableTimeAgo = true;
     private Boolean showDisabledBuilds = true;
+    private Boolean blinkBgPicturesWhenBuilding = false;
 
     @Exported
     public Boolean getShowBuildNumber() {
@@ -174,7 +175,16 @@ public class Configuration {
     public void setFontFamily(String fontFamily) {
         this.fontFamily = fontFamily;
     }
-    
+
+    @Exported
+    public Boolean getBlinkBgPicturesWhenBuilding () {
+        return blinkBgPicturesWhenBuilding;
+    }
+
+    public void setBlinkBgPicturesWhenBuilding (Boolean blinkBgPicturesWhenBuilding) {
+        this.blinkBgPicturesWhenBuilding = blinkBgPicturesWhenBuilding;
+    }
+
     /**
      * {@inheritDoc}
      */
