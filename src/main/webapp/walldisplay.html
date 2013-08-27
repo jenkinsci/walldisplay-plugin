@@ -774,10 +774,10 @@
 							paintInterval = plugin.config.paintInterval * 1000;
 							//Blink interval is the time interval for fadingOut/fadingIn
 							//of background pictures of jobs
-							blinkInterval = paintInterval;
+							blinkInterval = (paintInterval == 0 ? 1000 : paintInterval);
 							do {
 								blinkInterval /= 2;
-							} while (blinkInterval > 1500);
+							} while (blinkInterval > 3000);
 						}
 
 						if (isNumber(plugin.config.jenkinsTimeOut))

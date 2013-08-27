@@ -79,6 +79,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setFontFamily(Util.fixEmptyAndTrim(formData.optString("fontFamily")));
         config.setBuildRange(Util.fixEmptyAndTrim(formData.optString("buildRange")));
         config.setJenkinsTimeOut(formData.optInt("jenkinsTimeOut"));
+        config.setPaintInterval (formData.optInt("paintInterval"));
         config.setJenkinsUpdateInterval(formData.optInt("jenkinsUpdateInterval"));
         config.setShowLastStableTimeAgo (formData.optBoolean("jenkinsLastStableTimeAgo"));
         config.setBlinkBgPicturesWhenBuilding (formData.optBoolean("blinkBgPicturesWhenBuilding"));
