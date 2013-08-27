@@ -139,7 +139,11 @@
 			}
 		}
 
-
+		function blink (objs){
+			objs.fadeTo(blinkInterval, 0.33)
+			.fadeTo(blinkInterval, 1, function(){blink(objs)});
+		}
+		
 		function repaint()
 		{
 			if (updateError != null)
@@ -342,6 +346,8 @@
 											"width":Math.floor ((jobWidth - 2 * claimedBorderWidth)/6) + "px",
 											"height":(jobHeight - 2 * claimedBorderWidth) + "px",
 										});
+										jobBg.addClass (
+												(!isBuilding ? "in" : "") + "activeJob");
 										jobWrapper.append(jobBg);
 									}
 								});
@@ -350,7 +356,7 @@
 								$.each(queueDivs, function(index, queueDiv) {
 									jobWrapper.append(queueDiv);
 								});
-
+								
 								jobWrapper.click({ "job": job },function(eventData) {
 									showJobinfo(eventData.data.job);
 								});
@@ -359,6 +365,14 @@
 
 								jobIndex++;
 							}
+						}
+						
+						if (!blinkBgPicturesWhenBuilding){
+						  $(".activeJob").clearQueue ();
+						}else{
+						  if (jQuery.queue ($(".activeJob"),"fx").length == 0){
+						    blink ($(".activeJob"));
+						  }
 						}
 					}
 				}
@@ -598,18 +612,6 @@
 
 
 				$("body").append(jobInfoDiv);
-
-				/*
-				jobInfoDiv.fadeTo(1500, 0.95, function() {
-
-					setInterval(function() {
-						jobInfoDiv.fadeTo(1500, 0.0, function() {
-							$("#JobInfo").remove();
-						}
-						);
-					}, jobInfoTimout);
-				});
-				*/
 			}
 		}
 
@@ -752,6 +754,11 @@
 							showLastStableTimeAgo = plugin.config.showLastStableTimeAgo;
 						}
 
+						if (plugin.config.blinkBgPicturesWhenBuilding != null)
+						{
+							blinkBgPicturesWhenBuilding = plugin.config.blinkBgPicturesWhenBuilding;
+						}
+
 						if (plugin.config.showDisabledBuilds != null)
 						{
 							showDisabledBuilds = plugin.config.showDisabledBuilds;
@@ -765,6 +772,12 @@
 						if (isNumber(plugin.config.paintInterval))
 						{
 							paintInterval = plugin.config.paintInterval * 1000;
+							//Blink interval is the time interval for fadingOut/fadingIn
+							//of background pictures of jobs
+							blinkInterval = (paintInterval == 0 ? 1000 : paintInterval);
+							do {
+								blinkInterval /= 2;
+							} while (blinkInterval > 3000);
 						}
 
 						if (isNumber(plugin.config.jenkinsTimeOut))
@@ -833,6 +846,7 @@
 		var lastJenkinsUpdateInterval = jenkinsUpdateInterval;
 		
 		var paintInterval = getParameterByName("jenkinsPaintInterval", 100);
+		var blinkInterval = 500;
 		var lastPaintInterval = paintInterval;
 
 		var jenkinsUrl = getParameterByName("jenkinsUrl",  window.location.protocol + "://" + window.location.host + "/" + window.location.pathname.replace("plugin/jenkinswalldisplay/walldisplay.html", ""));
@@ -847,6 +861,7 @@
 		var gravatarCounter = {};
 		var showBuildNumber = true;
 		var showLastStableTimeAgo = true;
+		var blinkBgPicturesWhenBuilding = false;
 		var showDisabledBuilds = true;
 		var maxQueuePositionToShow = 15;
 		

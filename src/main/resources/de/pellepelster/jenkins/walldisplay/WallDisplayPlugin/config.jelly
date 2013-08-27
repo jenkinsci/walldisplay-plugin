@@ -57,6 +57,10 @@
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />
         </f:entry>
 
+        <f:entry title="${%Blink Background Pictures When Building}" name="jenkinsBlinkBackgroundPicturesWhenBuilding" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsBlinkBgPicturesWhenBuilding.html">
+            <f:checkbox name="blinkBgPicturesWhenBuilding" checked="${it.config.blinkBgPicturesWhenBuilding}" />
+        </f:entry>
+        
         <f:entry title="${%Show Job Show Gravatar}" name="jenkinsShowGravatar" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowGravatar.html">
             <f:checkbox name="jenkinsShowGravatar" checked="${it.config.showGravatar}" />
         </f:entry>
