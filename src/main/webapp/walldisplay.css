@@ -36,13 +36,12 @@ html, body {
 	position: absolute;
 	-moz-opacity:.70;
 	filter:alpha(opacity=70);
-	opacity:.70;
+	opacity:.80;
 	border-radius: 20px;
 	-moz-border-radius: 20px;
 	background-color: #000000;
 	color: #ffffff;
-	overflow: auto;
-	display: none;
+	overflow: auto;	
 	text-align: center;
 }
 

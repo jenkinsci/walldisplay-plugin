@@ -357,7 +357,7 @@
 									jobWrapper.append(queueDiv);
 								});
 								
-								jobWrapper.click({ "job": job },function(eventData) {
+								jobContent.click({ "job": job },function(eventData) {
 									showJobinfo(eventData.data.job);
 								});
 
@@ -550,9 +550,76 @@
 
 			$("body").prepend(debugDiv);
 		}
+		
+		function addBuildDetails(jobInfoDiv, build, buildType)
+		{
+			var buildText = "";
+			if (build != null)
+			{
+    			buildText += buildType + " build started " + getUserFriendlyTimespan(serverTime -build.timestamp) + " ago and  took " + getUserFriendlyTimespan(build.duration);
 
+			    var jobLastBuild = $('<p />');
+			    jobLastBuild.css({
+				    "font-size": 12 + "px",
+		            "text-align": "left"					            
+			    });
+			    jobLastBuild.text(buildText);
+			    jobInfoDiv.append(jobLastBuild);		
+			    
+			    if (build.actions != null)
+			    {			    
+			        $.each(build.actions, function(actionIndex, action) {
+
+				        if (action && action.totalCount)
+				        {
+					        var jobClaim = $('<p />');
+				            jobClaim.css({
+					            "font-size": 12 + "px",		
+		                        "text-align": "left"		    			            
+				            });
+				            jobClaim.text("Tests: " + action.totalCount + " total ");
+				            if (action.skipCount > 0)
+				            {
+    				            var skip = $('<span />');
+    				            skip.text(action.skipCount + " skipped ");
+    				            skip.css({
+    				                "color": "yellow"
+    				                });
+    			                jobClaim.append(skip);
+			                }if (action.failCount > 0)
+				            {
+    				            var fail = $('<span />');
+    				            fail.text(action.failCount + " failed ");
+    				            fail.css({
+    				                "color": "red"
+    				                });
+    			                jobClaim.append(fail);
+			                }
+				            jobInfoDiv.append(jobClaim);
+				        }
+			        });
+				
+			        $.each(build.actions, function(actionIndex, action) {
+
+				        if (action && action.claimed)
+				        {
+					        var jobClaim = $('<p />');
+				            jobClaim.css({
+					            "font-size": 12 + "px",		
+		                        "text-align": "left"	
+				            });
+				            jobClaim.text("Claimed by "+action.claimedBy);
+				            jobInfoDiv.append(jobClaim);
+				        }
+			        });
+			    }
+			
+			    // possibly also add job.LastBuild.culprits ?
+			}
+		}
 		function showJobinfo(job)
 		{
+		    $("#JobInfo").remove()
 			if (!$("#JobInfo").length)
 			{
 				var jobInfoPadding = 10;
@@ -584,31 +651,30 @@
 				jobInfoDiv.css({
 					"height": jobInfoHeight + "px",
 					"width": jobInfoWidth + "px",
-					"padding": jobInfoPadding + "px"
+					"padding": jobInfoPadding + "px",
+					"z-index":99
 				});
 				jobInfoDiv.addClass("job_info");
-				jobInfoDiv.center();
+				jobInfoDiv.center();				
 
-				var jobInfoTitle = $('<span />');
+				var jobInfoTitle = $('<a />');
+				jobInfoTitle.attr('href', jenkinsUrl + "/view/" + viewName + "/job/" + job.name);
 				jobInfoTitle.css({
-					"font-size": maxFontSize + "px"
+					"font-size": maxFontSize + "px",
+					"color": "white"
 				});
 				jobInfoTitle.text(getJobTitle(job));
 				jobInfoDiv.append(jobInfoTitle);
 
-				var lastBuildText = "";
-				if (job.lastBuild != null)
-				{
-					lastBuildText += "Last build started " + getUserFriendlyTimespan(serverTime -job.lastBuild.timestamp) + " ago and  took " + getUserFriendlyTimespan(job.lastBuild.duration);
-				}
-				jobInfoDiv.append("<br/><br/>");
-
-				var jobLastBuild = $('<span />');
-				jobLastBuild.css({
-					"font-size": 12 + "px"
-				});
-				jobLastBuild.text(lastBuildText);
-				jobInfoDiv.append(jobLastBuild);
+			    jobInfoDiv.append("<br/><br/>");
+                addBuildDetails(jobInfoDiv, job.lastBuild, "Last");
+                addBuildDetails(jobInfoDiv, job.lastSuccessfulBuild, "Last Successful");
+                addBuildDetails(jobInfoDiv, job.lastStableBuild, "Last Stable");				
+				
+				
+				jobInfoDiv.click(function()	{
+				    $("#JobInfo").remove()
+				})
 
 
 				$("body").append(jobInfoDiv);
