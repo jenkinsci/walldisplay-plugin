@@ -996,6 +996,7 @@
 
 			document.title = "Jenkins Wall Display (" + viewName + ")";
 
+            update();
 			setApiInterval();
 			setPaintInterval();
 
@@ -1023,13 +1024,9 @@
 		{
 			clearInterval(paintIntervalId);
 		}
-
- 		function setApiInterval()
-		{
- 			debug("timeOut: " + jenkinsTimeOut + "ms");
-			debug("update interval: " + jenkinsUpdateInterval + "ms");
-
-			jenkinsApiIntervalId = setInterval(function() {
+		
+		function update()
+		{		
 				if (!updateRunning[viewName])
 				{
 					getJenkinsApi(jenkinsUrl);
@@ -1044,7 +1041,15 @@
 				{
 					getPluginConfiguration(jenkinsUrl);
 				}
+		}
 
+ 		function setApiInterval()
+		{
+ 			debug("timeOut: " + jenkinsTimeOut + "ms");
+			debug("update interval: " + jenkinsUpdateInterval + "ms");
+
+			jenkinsApiIntervalId = setInterval(function() {
+			    update();
 			}, jenkinsUpdateInterval);
 		}
 		
