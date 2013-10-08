@@ -88,23 +88,25 @@ html, body {
 .job {
 	border-radius: 20px;
 	-moz-border-radius: 20px;
-    
-    /*text-shadow: 0px -2px black;
+} 
+
+.theme_default, .theme_christmas .theme_boss .theme_dark .theme_colorblind {
+    text-shadow: 0px -2px black;
     
     background-image: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    color-stop(0, rgba(163,163,163,0.5)),
-    color-stop(0.5, rgba(113,113,113,0.5)),
-    color-stop(0.5, rgba(68,68,68,0.5)),
-    color-stop(1, rgba(110,110,110,0.5))
+      linear,
+      left top,
+      left bottom,
+      color-stop(0, rgba(163,163,163,0.5)),
+      color-stop(0.5, rgba(113,113,113,0.5)),
+      color-stop(0.5, rgba(68,68,68,0.5)),
+      color-stop(1, rgba(110,110,110,0.5))
     );
     background-image: -moz-linear-gradient(
-    center top,
-    rgba(163,163,163,0.5) 0%,
-    rgba(113,113,113,0.5) 50%,
-    rgba(68,68,68,0.5) 50%,
-    rgba(110,110,110,0.5) 100%
-    );*/
+      center top,
+      rgba(163,163,163,0.5) 0%,
+      rgba(113,113,113,0.5) 50%,
+      rgba(68,68,68,0.5) 50%,
+      rgba(110,110,110,0.5) 100%
+    );
 }

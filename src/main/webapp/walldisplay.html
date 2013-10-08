@@ -325,9 +325,11 @@
 								jobWrapper.css(jobDimensionsStyle);
 								jobWrapper.addClass("job");
 								jobWrapper.addClass("job_wrapper");
+								jobWrapper.addClass('theme_' + theme);
 
 								//- assemble job divs ------------------------------
-		                        if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
+								if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
+								
 								$.each(job.property, function(index, property) {
 									if (property.wallDisplayBgPicture != null &&
 											property.wallDisplayBgPicture != "")
@@ -805,10 +807,10 @@
 							showDetails = plugin.config.showDetails;
 						}
 
-                        if (plugin.config.showGravatar != null)
-                        {
-                            showGravatar = plugin.config.showGravatar;
-                        }
+						if (plugin.config.showGravatar != null)
+						{
+						    showGravatar = plugin.config.showGravatar;
+						}
 
 						if (plugin.config.showBuildNumber != null)
 						{
@@ -990,6 +992,17 @@
 		themes["default"]["aborted_building"] = "#E8E6E6";
 		themes["default"]["claimed_border"] = "#F5B800";
 
+		themes["plain"] = new Array();
+		themes["plain"].backgroundColor = "#ffffff";
+		themes["plain"]["blue"] = "#006600";
+		themes["plain"]["blue_building"] = "#00CC00";
+		themes["plain"]["red"] = "#660000";
+		themes["plain"]["red_building"] = "#C00000";
+		themes["plain"]["yellow"] = "#666600";
+		themes["plain"]["yellow_building"] = "#C0C000";
+		themes["plain"]["aborted"] = "#ADADAD";
+		themes["plain"]["aborted_building"] = "#E8E6E6";
+		themes["plain"]["claimed_border"] = "#F5B800";
 
 		themes["colorblind"] = new Array();
 		themes["colorblind"].backgroundColor = "#ffffff";

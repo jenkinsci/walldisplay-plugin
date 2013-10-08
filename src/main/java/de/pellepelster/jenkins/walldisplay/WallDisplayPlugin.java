@@ -29,7 +29,7 @@ public class WallDisplayPlugin extends Plugin {
     
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
-    public static final String[] themes = new String[] { "Default", "Christmas", "Boss", "Dark", "Colorblind" };
+    public static final String[] themes = new String[] { "Default", "Plain", "Christmas", "Boss", "Dark", "Colorblind" };
 
     public static final String[] fontFamilies = new String[] { "Sans-Serif", "Arial", "Helvetica", "Verdana" };
     
