@@ -36,13 +36,12 @@ html, body {
 	position: absolute;
 	-moz-opacity:.70;
 	filter:alpha(opacity=70);
-	opacity:.70;
+	opacity:.80;
 	border-radius: 20px;
 	-moz-border-radius: 20px;
 	background-color: #000000;
 	color: #ffffff;
-	overflow: auto;
-	display: none;
+	overflow: auto;	
 	text-align: center;
 }
 
@@ -90,7 +89,7 @@ html, body {
 	border-radius: 20px;
 	-moz-border-radius: 20px;
     
-    text-shadow: 0px -2px black;
+    /*text-shadow: 0px -2px black;
     
     background-image: -webkit-gradient(
     linear,
@@ -107,5 +106,5 @@ html, body {
     rgba(113,113,113,0.5) 50%,
     rgba(68,68,68,0.5) 50%,
     rgba(110,110,110,0.5) 100%
-    );
+    );*/
 }
