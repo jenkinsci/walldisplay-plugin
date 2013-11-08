@@ -240,14 +240,10 @@
 								}
 
 								var jobDimensions = getJobDimensions(job, maxFontSize);
-								var claimedBorderWidth = 0;
 
-								if (job.lastBuild && job.lastBuild.actions && isBuildClaimed(job.lastBuild.actions))
-								{
-									claimedBorderWidth = jobMargin;
-								}
+							    var jobClaimed = job.lastBuild && job.lastBuild.actions && isBuildClaimed(job.lastBuild.actions);
 
-								var jobDimensionsStyle = { "width": jobWidth - 2 * claimedBorderWidth, "height": jobHeight - 2 * claimedBorderWidth };
+								var jobDimensionsStyle = { "width": jobWidth, "height": jobHeight};
 								var jobPositionStyle = { "position": "absolute", "top": top, "left": left };
 
 								var percentageDiv = $('<div />');;
@@ -272,6 +268,10 @@
 										"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
 									});
 									percentageDiv.addClass("job");
+									if (jobClaimed)
+    								{
+    									percentageDiv.addClass("claimed");
+    								}
 								}
 
 								var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
@@ -307,13 +307,10 @@
 									"id": job.name
 								});
 
-								if (claimedBorderWidth > 0)
+								
+								if (jobClaimed)
 								{
-									jobWrapper.css({
-										"border": Math.round(jobMargin) +"px",
-										"border-style": "solid",
-										"border-color": themes[theme]["claimed_border"]
-									});
+    								jobWrapper.addClass("claimed")
 								}
 
 								jobWrapper.css({
@@ -339,14 +336,14 @@
 										jobBg.css({
 											"position": "absolute",
 											"transform":"rotate(-30deg)",
-											"top":claimedBorderWidth + 'px',
-											"left":Math.floor ((jobWidth - 2 * claimedBorderWidth)*2/6 + claimedBorderWidth) + 'px',
+											"top": '0px',
+											"left":Math.floor ((jobWidth)*2/6) + 'px',
 											"background-image":"url('" + property.wallDisplayBgPicture + "')",
 											"opacity":"0.5",
-											"background-size":  Math.floor ((jobWidth - 2 * claimedBorderWidth)/6) + "px " + (jobHeight - 2 * claimedBorderWidth) + "px",
+											"background-size":  Math.floor ((jobWidth)/6) + "px " + jobHeight + "px",
 											"background-repeat":"no-repeat",
-											"width":Math.floor ((jobWidth - 2 * claimedBorderWidth)/6) + "px",
-											"height":(jobHeight - 2 * claimedBorderWidth) + "px",
+											"width":Math.floor ((jobWidth)/6) + "px",
+											"height":(jobHeight) + "px",
 										});
 										jobBg.addClass (
 												(!isBuilding ? "in" : "") + "activeJob");
@@ -990,7 +987,6 @@
 		themes["default"]["yellow_building"] = "#C0C000";
 		themes["default"]["aborted"] = "#ADADAD";
 		themes["default"]["aborted_building"] = "#E8E6E6";
-		themes["default"]["claimed_border"] = "#F5B800";
 
 		themes["plain"] = new Array();
 		themes["plain"].backgroundColor = "#ffffff";
@@ -1002,7 +998,6 @@
 		themes["plain"]["yellow_building"] = "#C0C000";
 		themes["plain"]["aborted"] = "#ADADAD";
 		themes["plain"]["aborted_building"] = "#E8E6E6";
-		themes["plain"]["claimed_border"] = "#F5B800";
 
 		themes["colorblind"] = new Array();
 		themes["colorblind"].backgroundColor = "#ffffff";
@@ -1014,7 +1009,6 @@
 		themes["colorblind"]["yellow_building"] = "#FFF780";
 		themes["colorblind"]["aborted"] = "#777777";
 		themes["colorblind"]["aborted_building"] = "#EEEEEE";
-		themes["colorblind"]["claimed_border"] = "#F5B800";
 
 		themes["dark"] = new Array();
 		themes["dark"].backgroundColor = "#000000";
@@ -1026,7 +1020,6 @@
 		themes["dark"]["yellow_building"] = "#C0C000";
 		themes["dark"]["aborted"] = "#ADADAD";
 		themes["dark"]["aborted_building"] = "#E8E6E6";
-		themes["dark"]["claimed_border"] = "#F5B800";
 
 		themes["christmas"] = new Array();
 		themes["christmas"].backgroundColor = "#000000";
@@ -1038,7 +1031,6 @@
 		themes["christmas"]["yellow_building"] = "#C0C000";
 		themes["christmas"]["aborted"] = "#ADADAD";
 		themes["christmas"]["aborted_building"] = "#E8E6E6";
-		themes["christmas"]["claimed_border"] = "#F5B800";
 		themes["christmas"].start = function() {
 			$(document).snowfall('clear');
 			$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded

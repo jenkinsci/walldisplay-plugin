@@ -90,6 +90,21 @@ html, body {
 	-moz-border-radius: 20px;
 } 
 
+/* C icon for claimed builds thanks to  http://www.patternify.com/ */
+.claimed {
+   background:url(
+'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQANfdzD85/ZgYEQXRxGAKcKmGK4QXRKdD1aIyzpkcUZcimBuhMljOBrdEzAbiVIIUky0QgDrqB21CNHz3AAAAABJRU5ErkJggg=='
+   ) repeat;
+}
+.claimed {
+   background:url(
+'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAIElEQVQYV2NkYGCYCcTIIB2Zw0gfBWhOQHUTyA00VgAAy4MGbQYjA+kAAAAASUVORK5CYII='
+   ) repeat;
+}
+
+
+
+
 .theme_default, .theme_christmas .theme_boss .theme_dark .theme_colorblind {
     text-shadow: 0px -2px black;
     
