@@ -105,7 +105,7 @@ html, body {
 
 
 
-.theme_default, .theme_christmas .theme_boss .theme_dark .theme_colorblind {
+.default, .christmas .boss .dark .colorblind {
     text-shadow: 0px -2px black;
     
     background-image: -webkit-gradient(
@@ -124,4 +124,139 @@ html, body {
       rgba(68,68,68,0.5) 50%,
       rgba(110,110,110,0.5) 100%
     );
+}
+
+.default {
+	background-color: #ffffff;
+}
+.default.blue {
+	background-color: #00CC00;	
+}
+.default.red {
+	background-color: #C00000;	
+}
+.default.yellow {
+	background-color: #C0C000;	
+}
+.default.aborted {
+	background-color: #E8E6E6;	
+}
+
+.plain {
+	background-color: #ffffff;
+}
+.plain.blue {
+	background-color: #00CC00;	
+}
+.plain.red {
+	background-color: #C00000;	
+}
+.plain.yellow {
+	background-color: #C0C000;	
+}
+.plain.aborted {
+	background-color: #E8E6E6;	
+}
+
+.colorblind {
+	background-color: #ffffff;
+}
+.colorblind.blue {
+	background-color: #BFD4FF;	
+}
+.colorblind.red {
+	background-color: #FF9180;	
+}
+.colorblind.yellow {
+	background-color: #FFF780;	
+}
+.colorblind.aborted {
+	background-color: #EEEEEE;	
+}
+
+.dark {
+	background-color: #000000;
+}
+.dark.blue {
+	background-color: #00CC00;	
+}
+.dark.red {
+	background-color: #C00000;	
+}
+.dark.yellow {
+	background-color: #C0C000;	
+}
+.dark.aborted {
+	background-color: #E8E6E6;	
+}
+
+.christmas {
+	background-color: #000000;
+}
+.christmas.blue {
+	background-color: #00CC00;	
+}
+.christmas.red {
+	background-color: #C00000;	
+}
+.christmas.yellow {
+	background-color: #C0C000;	
+}
+.christmas.aborted {
+	background-color: #E8E6E6;	
+}
+		
+.boss {
+	background-color: #ffffff;
+}
+.boss.blue {
+	background-color: #00C000;	
+}
+.boss.red {
+	background-color: #00C000;	
+}
+.boss.yellow {
+	background-color: #00C000;	
+}
+.boss.aborted {
+	background-color: #E8E6E6;	
+}
+	
+		
+.building {
+	/* stripes in progress bars */
+	-webkit-background-size: 30px 30px;
+	-moz-background-size: 30px 30px;
+	background-size: 30px 30px;			
+	background-image: -webkit-gradient(linear, left top, right bottom,
+						color-stop(.50, rgba(255, 255, 255, .50)), color-stop(.50, transparent),
+						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .50)),
+						color-stop(.75, rgba(255, 255, 255, .50)), color-stop(.75, transparent),
+						to(transparent));
+	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+						transparent 75%, transparent);
+	background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+						transparent 75%, transparent);
+	background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+						transparent 75%, transparent);
+	background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+						transparent 75%, transparent);
+	background-image: linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+						transparent 75%, transparent);            
+	
+	-webkit-animation: animate-stripes 3s linear infinite;
+	-moz-animation: animate-stripes 3s linear infinite;       		
+}
+
+@-webkit-keyframes animate-stripes { 
+	0% {background-position: 0 0;} 100% {background-position: 60px 0;}
+}
+
+@-moz-keyframes animate-stripes {
+	0% {background-position: 0 0;} 100% {background-position: 60px 0;}
 }

@@ -264,9 +264,11 @@
 										"height": jobHeight + "px",
 										"width": percentageWidth + "px",
 										"left": "0px",
-										"background-color": themes[theme][jobColor + "_building"],
 										"top": Math.round((jobHeight - textDimensions.height) / 2) + "px"
 									});
+									percentageDiv.addClass("theme");
+									percentageDiv.addClass(jobColor);
+									percentageDiv.addClass("building");
 									percentageDiv.addClass("job");
 									if (jobClaimed)
     								{
@@ -315,14 +317,14 @@
 
 								jobWrapper.css({
 									"font-size": (maxFontSize-1) + "px",
-									"background-color": themes[theme][jobColor]
 								});
 
 								jobWrapper.css(jobPositionStyle);
 								jobWrapper.css(jobDimensionsStyle);
 								jobWrapper.addClass("job");
 								jobWrapper.addClass("job_wrapper");
-								jobWrapper.addClass('theme_' + theme);
+								jobWrapper.addClass(theme);
+								jobWrapper.addClass(jobColor);
 
 								//- assemble job divs ------------------------------
 								if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
@@ -872,15 +874,14 @@
 					{
 						if (lastTheme != theme)
 						{
-							$("body").css({'backgroundColor': themes[theme].backgroundColor});
+							$("body").addClass(theme);
 
-							if(typeof themes[lastTheme].stop === 'function')
+							if(themes[lastTheme] && typeof themes[lastTheme].stop === 'function')
 							{
 								themes[lastTheme].stop();
 							}
 
-
-							if(typeof themes[theme].start === 'function')
+							if(themes[theme] && typeof themes[theme].start === 'function')
 							{
 								themes[theme].start();
 							}
@@ -976,79 +977,17 @@
 		//---------------------------------------------------------------------
 		// themes
 		//---------------------------------------------------------------------
-		var themes = new Array();
-		themes["default"] = new Array();
-		themes["default"].backgroundColor = "#ffffff";
-		themes["default"]["blue"] = "#006600";
-		themes["default"]["blue_building"] = "#00CC00";
-		themes["default"]["red"] = "#660000";
-		themes["default"]["red_building"] = "#C00000";
-		themes["default"]["yellow"] = "#666600";
-		themes["default"]["yellow_building"] = "#C0C000";
-		themes["default"]["aborted"] = "#ADADAD";
-		themes["default"]["aborted_building"] = "#E8E6E6";
-
-		themes["plain"] = new Array();
-		themes["plain"].backgroundColor = "#ffffff";
-		themes["plain"]["blue"] = "#006600";
-		themes["plain"]["blue_building"] = "#00CC00";
-		themes["plain"]["red"] = "#660000";
-		themes["plain"]["red_building"] = "#C00000";
-		themes["plain"]["yellow"] = "#666600";
-		themes["plain"]["yellow_building"] = "#C0C000";
-		themes["plain"]["aborted"] = "#ADADAD";
-		themes["plain"]["aborted_building"] = "#E8E6E6";
-
-		themes["colorblind"] = new Array();
-		themes["colorblind"].backgroundColor = "#ffffff";
-		themes["colorblind"]["blue"] = "#0041C4";
-		themes["colorblind"]["blue_building"] = "#BFD4FF";
-		themes["colorblind"]["red"] = "#B30700";
-		themes["colorblind"]["red_building"] = "#FF9180";
-		themes["colorblind"]["yellow"] = "#B3B000";
-		themes["colorblind"]["yellow_building"] = "#FFF780";
-		themes["colorblind"]["aborted"] = "#777777";
-		themes["colorblind"]["aborted_building"] = "#EEEEEE";
-
-		themes["dark"] = new Array();
-		themes["dark"].backgroundColor = "#000000";
-		themes["dark"]["blue"] = "#006600";
-		themes["dark"]["blue_building"] = "#00CC00";
-		themes["dark"]["red"] = "#660000";
-		themes["dark"]["red_building"] = "#C00000";
-		themes["dark"]["yellow"] = "#666600";
-		themes["dark"]["yellow_building"] = "#C0C000";
-		themes["dark"]["aborted"] = "#ADADAD";
-		themes["dark"]["aborted_building"] = "#E8E6E6";
-
-		themes["christmas"] = new Array();
-		themes["christmas"].backgroundColor = "#000000";
-		themes["christmas"]["blue"] = "#006600";
-		themes["christmas"]["blue_building"] = "#00CC00";
-		themes["christmas"]["red"] = "#660000";
-		themes["christmas"]["red_building"] = "#C00000";
-		themes["christmas"]["yellow"] = "#666600";
-		themes["christmas"]["yellow_building"] = "#C0C000";
-		themes["christmas"]["aborted"] = "#ADADAD";
-		themes["christmas"]["aborted_building"] = "#E8E6E6";
-		themes["christmas"].start = function() {
+		var themes = {};
+		themes.christmas = {};
+		themes["default"] = {}
+		
+		themes.christmas.start = function() {
 			$(document).snowfall('clear');
 			$(document).snowfall({round : true, minSize: 8, maxSize: 12 }); // add rounded
 		}
-		themes["christmas"].stop = function() {
+		themes.christmas.stop = function() {
 			$(document).snowfall('clear');
 		}
-
-		themes["boss"] = new Array();
-		themes["boss"].backgroundColor = "#ffffff";
-		themes["boss"]["blue"] = "#008800";
-		themes["boss"]["blue_building"] = "#00C000";
-		themes["boss"]["red"] = "#008800";
-		themes["boss"]["red_building"] = "#00C000";
-		themes["boss"]["yellow"] = "#008800";
-		themes["boss"]["yellow_building"] = "#00C000";
-		themes["boss"]["aborted"] = "#ADADAD";
-		themes["boss"]["aborted_building"] = "#E8E6E6";
 
 
 		$(document).ready(function() {
