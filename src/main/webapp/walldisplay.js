@@ -621,6 +621,25 @@ function showJobinfo(job){
     }
 }
 
+function updateShutdownMessage(quietingDown){
+    if(!quietingDown){
+        $("#ShuttingDown").remove();
+        
+    }else if(!$("#ShuttingDown").length){
+
+        var shuttingDownDiv = $('<div />').attr({
+            "id": "ShuttingDown"
+        });
+        shuttingDownDiv.addClass("shuttingdown");
+
+        var title = $('<p />');
+        title.text("Jenkins is going to shut down");
+        shuttingDownDiv.append(title);      
+
+        $("body").append(shuttingDownDiv);
+    }
+}
+
 function getJenkinsApi(jenkinsUrl){
 
     debug("starting getting jenkins api");
@@ -643,6 +662,7 @@ function getJenkinsApi(jenkinsUrl){
             var jobNames = getJobNamesToDisplay(viewApi);
             getJobs(jobNames);
 
+            updateShutdownMessage(true);
             updateRunning[viewName] = false;
             updateError = null;
         },

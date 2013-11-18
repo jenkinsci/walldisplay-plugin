@@ -71,6 +71,25 @@ html, body {
 	background-color: #888888;
 }
 
+.shuttingdown {
+	border-radius: 60px;
+	-moz-border-radius: 60px;
+	color: black;
+	text-shadow: none;
+	font-size: 300%;
+	text-align: center;
+	z-index: 99;
+	background-color: #ffff00;
+	position: absolute;
+	left: 20%;
+	right: 20%;
+	top: 20%;	
+	padding: 50px;
+	-moz-opacity: 0.9;
+	opacity: 0.9;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=90);
+}
+
 .job_wrapper 
 {
 	text-align: center;
