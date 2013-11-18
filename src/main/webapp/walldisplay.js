@@ -115,6 +115,10 @@ function blink(objs){
     });
 }
 
+function isJobBuilding(job) {
+    return job.color.substr(-6) === "_anime";    
+}
+
 function repaint(){
     if(updateError != null){
         displayMessage(updateError, "message_error");
@@ -183,7 +187,7 @@ function repaint(){
 
                     if(jobIndex < jobsToDisplay.length){
                         var job = jobsToDisplay[jobIndex];
-                        var isBuilding = (job.color.substr(-6) === "_anime");
+                        var isBuilding = isJobBuilding(job);
                         var jobColor = job.color;
 
                         if(job.color.substr(-6) === "_anime"){
@@ -192,8 +196,7 @@ function repaint(){
 
                         var jobDimensions = getJobDimensions(job, maxFontSize);
 
-                        var jobClaimed = job.lastBuild && job.lastBuild.actions
-                            && isBuildClaimed(job.lastBuild.actions);
+                        var jobClaimed = isBuildClaimed(job);
 
                         var jobDimensionsStyle = {
                             "width": jobWidth,
@@ -340,15 +343,17 @@ function removeAllJobs(){
     $(".job").remove();
 }
 
-function isBuildClaimed(actions){
-    claimed = false;
-
-    $.each(actions, function(actionIndex, action){
-
-        if(action && action.claimed){
-            claimed = true;
-        }
-    });
+function isBuildClaimed(job){
+    var claimed = false;
+    var build = isJobBuilding(job) ? job.lastCompletedBuild : job.lastBuild;
+    
+    if (build && build.actions)     
+        $.each(build.actions, function(actionIndex, action){
+    
+            if(action && action.claimed){
+                claimed = true;
+            }
+        });
 
     return claimed;
 }
@@ -373,7 +378,10 @@ function getJobs(jobNames){
                             url: jenkinsUrl + "/job/" + jobName + "/api/json",
                             dataType: "json",
                             data: {
-                                "tree": "property[wallDisplayName,wallDisplayBgPicture],name,color,lastStableBuild[timestamp],lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,failCount,skipCount,totalCount],culprits[fullName,property[address]]],lastSuccessfulBuild[duration]"
+                                "tree": "property[wallDisplayName,wallDisplayBgPicture],name,color,lastStableBuild[timestamp]," +
+                                "lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason,failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +     
+                                "lastCompletedBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason, failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +                               
+                                		"lastSuccessfulBuild[duration]"
                             },
                             success: function(job, textStatus, jqXHR){
 
@@ -497,127 +505,86 @@ function debug(logMessage){
 function showDebug(){
     var debugDiv = $('<div />').attr({
         "id": "debug"
-    });
-    debugDiv.addClass("debug");
+    }).addClass("debug");
 
     $("body").prepend(debugDiv);
-}
-
-function addBuildDetails(jobInfoDiv, build, buildType){
-    var buildText = "";
-    if(build != null){
-        buildText += buildType + " build started " + getUserFriendlyTimespan(serverTime - build.timestamp)
-            + " ago and  took " + getUserFriendlyTimespan(build.duration);
-
-        var jobLastBuild = $('<p />');
-        jobLastBuild.css({
-            "font-size": 12 + "px",
-            "text-align": "left"
-        });
-        jobLastBuild.text(buildText);
-        jobInfoDiv.append(jobLastBuild);
-
-        if(build.actions != null){
-            $.each(build.actions, function(actionIndex, action){
-
-                if(action && action.totalCount){
-                    var jobClaim = $('<p />');
-                    jobClaim.css({
-                        "font-size": 12 + "px",
-                        "text-align": "left"
-                    });
-                    jobClaim.text("Tests: " + action.totalCount + " total ");
-                    if(action.skipCount > 0){
-                        var skip = $('<span />');
-                        skip.text(action.skipCount + " skipped ");
-                        skip.css({
-                            "color": "yellow"
-                        });
-                        jobClaim.append(skip);
-                    }
-                    if(action.failCount > 0){
-                        var fail = $('<span />');
-                        fail.text(action.failCount + " failed ");
-                        fail.css({
-                            "color": "red"
-                        });
-                        jobClaim.append(fail);
-                    }
-                    jobInfoDiv.append(jobClaim);
-                }
-            });
-
-            $.each(build.actions, function(actionIndex, action){
-
-                if(action && action.claimed){
-                    var jobClaim = $('<p />');
-                    jobClaim.css({
-                        "font-size": 12 + "px",
-                        "text-align": "left"
-                    });
-                    jobClaim.text("Claimed by " + action.claimedBy);
-                    jobInfoDiv.append(jobClaim);
-                }
-            });
-        }
-
-        // possibly also add job.LastBuild.culprits ?
-    }
 }
 function showJobinfo(job){
     $("#JobInfo").remove();
     if(!$("#JobInfo").length){
-        var jobInfoPadding = 10;
-        var maxFontSize = 0;
-        var jobInfoWidth = Math.ceil(clientWidth / 2);
-        var jobInfoHeight = Math.ceil(clientHeight / 2);
-
-        for(var fontSize = 10; fontSize <= 302; fontSize++){
-
-            var textDimensions = getTextDimensions(
-                getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails), fontSize);
-
-            if(textDimensions.width <= (jobInfoWidth - jobInfoPadding)
-                && textDimensions.height <= (jobInfoHeight - jobInfoPadding)){
-                if(fontSize > maxFontSize){
-                    maxFontSize = fontSize;
-                }
-            }else{
-                break;
-            }
-        }
-
         var jobInfoDiv = $('<div />').attr({
             "id": "JobInfo"
-        });
-        jobInfoDiv.css({
-            "height": jobInfoHeight + "px",
-            "width": jobInfoWidth + "px",
-            "padding": jobInfoPadding + "px",
-            "z-index": 99
-        });
-        jobInfoDiv.addClass("job_info");
-        jobInfoDiv.center();
+        }).addClass("job_info");
+        
+        var url = jenkinsUrl + "/view/" + viewName + "/job/" + job.name;
 
-        var jobInfoTitle = $('<a />');
-        jobInfoTitle.attr('href', jenkinsUrl + "/view/" + viewName + "/job/" + job.name);
-        jobInfoTitle.css({
-            "font-size": maxFontSize + "px",
-            "color": "white"
-        });
-        jobInfoTitle.text(getJobTitle(job));
-        jobInfoDiv.append(jobInfoTitle);
-
-        jobInfoDiv.append("<br/><br/>");
-        addBuildDetails(jobInfoDiv, job.lastBuild, "Last");
-        addBuildDetails(jobInfoDiv, job.lastSuccessfulBuild, "Last Successful");
-        addBuildDetails(jobInfoDiv, job.lastStableBuild, "Last Stable");
-
+        jobInfoDiv.append($('<h1 />').append($('<a />', {href: url, text: getJobTitle(job) })));
+        
+        if (job.lastStableBuild && job.lastBuild.color != "blue"){   
+            jobInfoDiv.append($('<p />').text("Broken For  " + getUserFriendlyTimespan(serverTime - job.lastStableBuild.timestamp)));
+        }        
+        
+        if (isJobBuilding(job)){
+            if (job.lastSuccessful)
+                jobInfoDiv.append($('<p />').text("Last successful build took " + getUserFriendlyTimespan(serverTime - job.lastSuccessful.duration)));
+            // last and last completed will be the same if not building. 
+            addBuildDetails(jobInfoDiv, job.lastBuild, "Currently Building ", url);    
+            addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build", url);        
+        } 
+        else{
+            addBuildDetails(jobInfoDiv, job.lastBuild, "Last Build", url);    
+        }        
         jobInfoDiv.click(function(){
             $("#JobInfo").remove();
         });
 
         $("body").append(jobInfoDiv);
+    }
+}
+
+function addBuildDetails(jobInfoDiv, build, buildType, url){
+    if(build != null){
+        jobInfoDiv.append($('<h2 />').append($('<a />', {href: url + "/" +build.number, text: buildType })));
+
+        if (build.culprits && build.culprits.length) {
+            var culprits =  "Culprits: ";
+            $.each(build.culprits, function(index, culprit){
+                culprits += culprit.fullName + ", ";
+            });
+            jobInfoDiv.append($('<p />').text(culprits));
+        }
+        
+        if(build.actions != null){
+            $.each(build.actions, function(actionIndex, action){
+                if(action && action.claimed){
+                    jobInfoDiv.append($('<p />').append("Claimed by " + action.claimedBy + ': "').append($('<span />', {text: action.reason}).addClass("claim")).append('"'));
+                }
+            });
+            $.each(build.actions, function(actionIndex, action){
+                if(action && action.totalCount){
+                    var jobClaim = $('<p />');
+                    jobClaim.append($('<a />', {href: url + "/" +build.number + "/testReport", text: "Tests" }));
+                    jobClaim.append(": " + action.totalCount + " total ");
+                    if(action.skipCount){
+                        jobClaim.append($('<span />').text(action.skipCount + " skipped ").css({
+                            "color": "yellow"
+                        }));
+                    }
+                    if(action.failCount){
+                        jobClaim.append($('<span />').text(action.failCount + " failed ").css({
+                            "color": "red"
+                        }));
+                    }
+                    jobInfoDiv.append(jobClaim);
+                }
+            });
+        }       
+        
+        var buildText =  "Started " + getUserFriendlyTimespan(serverTime - build.timestamp)
+            + " ago";
+        if (build.duration) 
+            buildText += " and  took " + getUserFriendlyTimespan(build.duration);
+        jobInfoDiv.append($('<p />').text(buildText));
     }
 }
 
