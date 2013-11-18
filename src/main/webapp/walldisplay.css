@@ -90,20 +90,6 @@ html, body {
 	-moz-border-radius: 20px;
 } 
 
-/* C icon for claimed builds thanks to  http://www.patternify.com/ */
-.claimed {
-   background:url(
-'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQANfdzD85/ZgYEQXRxGAKcKmGK4QXRKdD1aIyzpkcUZcimBuhMljOBrdEzAbiVIIUky0QgDrqB21CNHz3AAAAABJRU5ErkJggg=='
-   ) repeat;
-}
-.claimed {
-   background:url(
-'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAIElEQVQYV2NkYGCYCcTIIB2Zw0gfBWhOQHUTyA00VgAAy4MGbQYjA+kAAAAASUVORK5CYII='
-   ) repeat;
-}
-
-
-
 
 .default, .christmas, .boss, .dark, .colorblind {
     text-shadow: 0px -2px black;
@@ -245,8 +231,9 @@ html, body {
 						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
 						transparent 75%, transparent);            
 	
-	-webkit-animation: animate-stripes 3s linear infinite;
-	-moz-animation: animate-stripes 3s linear infinite;       		
+	/* time here needs to match paint interval to give a reasonable result */
+	-webkit-animation: animate-stripes 1s linear infinite;
+	-moz-animation: animate-stripes 1s linear infinite;       		
 }
 
 @-webkit-keyframes animate-stripes { 
@@ -255,4 +242,27 @@ html, body {
 
 @-moz-keyframes animate-stripes {
 	0% {background-position: 0 0;} 100% {background-position: 60px 0;}
+} 
+
+
+/* background image for claimed builds thanks to  http://www.patternify.com/ */
+.claimed {
+    background-image: url(
+'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkwARngEIm6MKMaAIwRRiKkRWiS6LwYQqxWge0DS4OUohLEcxVYHl0N2LxG1joDLEKGYhWCADiSQnVzU6+awAAAABJRU5ErkJggg=='
+   ), -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0, rgba(163,163,163,0.5)),
+      color-stop(1, rgba(113,113,113,0.5))
+    );
+    background-image: url(
+'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkwARngEIm6MKMaAIwRRiKkRWiS6LwYQqxWge0DS4OUohLEcxVYHl0N2LxG1joDLEKGYhWCADiSQnVzU6+awAAAABJRU5ErkJggg=='
+   ), -moz-linear-gradient(
+      center top,
+      rgba(163,163,163,0.5) 0%,
+      rgba(113,113,113,0.5) 100%
+    );
 }
+
+
