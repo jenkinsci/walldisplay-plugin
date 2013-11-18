@@ -100,7 +100,7 @@ function displayMessage(messageText, colorClass){
     var positionStyle = 'position: absolute; padding: ' + messageMargin + 'px; left: ' + messageMargin + 'px; top: '
         + messageMargin + 'px; width:' + (clientWidth - 4 * messageMargin) + ';';
     var divContent = '<div class="' + colorClass + '" style="' + positionStyle + '" id="Message">' + messageText
-        + '</div>'
+        + '</div>';
 
     if($("#Message").length){
         $("#Message").replaceWith(divContent);
@@ -111,7 +111,7 @@ function displayMessage(messageText, colorClass){
 
 function blink(objs){
     objs.fadeTo(blinkInterval, 0.33).fadeTo(blinkInterval, 1, function(){
-        blink(objs)
+        blink(objs);
     });
 }
 
@@ -269,7 +269,7 @@ function repaint(){
                         });
 
                         if(jobClaimed){
-                            jobWrapper.addClass("claimed")
+                            jobWrapper.addClass("claimed");
                         }
 
                         jobWrapper.css({
@@ -565,7 +565,7 @@ function addBuildDetails(jobInfoDiv, build, buildType){
     }
 }
 function showJobinfo(job){
-    $("#JobInfo").remove()
+    $("#JobInfo").remove();
     if(!$("#JobInfo").length){
         var jobInfoPadding = 10;
         var maxFontSize = 0;
@@ -614,8 +614,8 @@ function showJobinfo(job){
         addBuildDetails(jobInfoDiv, job.lastStableBuild, "Last Stable");
 
         jobInfoDiv.click(function(){
-            $("#JobInfo").remove()
-        })
+            $("#JobInfo").remove();
+        });
 
         $("body").append(jobInfoDiv);
     }
@@ -881,7 +881,7 @@ var jobInfoTimout = 5000;
 
 // ---------------------------------------------------------------------
 var rows = 0;
-var columns = 0
+var columns = 0;
 var jobIndex = 0;
 var jobsToDisplay = new Array();
 var serverTime = 0;
@@ -899,7 +899,7 @@ var paintRunning = false;
 // ---------------------------------------------------------------------
 var themes = {};
 themes.christmas = {};
-themes["default"] = {}
+themes["default"] = {};
 
 themes.christmas.start = function(){
     $(document).snowfall('clear');
@@ -908,10 +908,10 @@ themes.christmas.start = function(){
         minSize: 8,
         maxSize: 12
     }); // add rounded
-}
+};
 themes.christmas.stop = function(){
     $(document).snowfall('clear');
-}
+};
 
 $(document).ready(function(){
 
@@ -936,7 +936,7 @@ $(document).ready(function(){
 
 window.onresize = function(event){
     updateWindowSizes();
-}
+};
 
 function setPaintInterval(){
     paintIntervalId = setInterval(function(){
