@@ -38,7 +38,7 @@ html, body {
 	left: 10%;
 	padding: 20px;
 	border: 1px solid black;
-	max-width: 30%;
+	max-width: 50%;
 	-moz-opacity:.70;
 	filter:alpha(opacity=90);
 	opacity:.90;

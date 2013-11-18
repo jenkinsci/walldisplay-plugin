@@ -518,15 +518,19 @@ function showJobinfo(job){
         jobInfoDiv.append($('<h1 />').append($('<a />', {href: url, text: getJobTitle(job) })));
         
         if (job.lastStableBuild && job.lastBuild.color != "blue"){   
-            jobInfoDiv.append($('<p />').text("Broken For  " + getUserFriendlyTimespan(serverTime - job.lastStableBuild.timestamp)));
+            jobInfoDiv.append($('<p />')
+                .append("Broken For  " + getUserFriendlyTimespan(serverTime - job.lastStableBuild.timestamp)));
+                // .append(" since ").append($('<a />', {href: url + "/" + job.lastStableBuild.number, text: "build #" + job.lastStableBuild.number })));
         }        
+
+        jobInfoDiv.append($('<p />').append($('<a />', {href: url + "/changes", text: "Recent Changes" })));
         
         if (isJobBuilding(job)){
             if (job.lastSuccessful)
                 jobInfoDiv.append($('<p />').text("Last successful build took " + getUserFriendlyTimespan(serverTime - job.lastSuccessful.duration)));
             // last and last completed will be the same if not building. 
-            addBuildDetails(jobInfoDiv, job.lastBuild, "Currently Building ", url);    
-            addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build", url);        
+            addBuildDetails(jobInfoDiv, job.lastBuild, "Currently Building #" + job.lastBuild.number, url);    
+            addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build #" + job.lastCompletedBuild.number, url);        
         } 
         else{
             addBuildDetails(jobInfoDiv, job.lastBuild, "Last Build", url);    
@@ -582,6 +586,7 @@ function addBuildDetails(jobInfoDiv, build, buildType, url){
         if (build.duration) 
             buildText += " and  took " + getUserFriendlyTimespan(build.duration);
         jobInfoDiv.append($('<p />').text(buildText));
+        jobInfoDiv.append($('<p />').append($('<a />', {href: url + "/" +build.number+"/console", text: "Console Output" })));
     }
 }
 
