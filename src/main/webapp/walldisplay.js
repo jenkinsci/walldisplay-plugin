@@ -231,9 +231,6 @@ function repaint(){
                             percentageDiv.addClass(jobColor);
                             percentageDiv.addClass("building");
                             percentageDiv.addClass("job");
-                            if(jobClaimed){
-                                percentageDiv.addClass("claimed");
-                            }
                         }
 
                         var queueDivs = getQueueDivs(jobWidth, jobHeight, getBuildQueuePosition(job.name));
