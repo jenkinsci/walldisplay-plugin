@@ -662,7 +662,7 @@ function getJenkinsApi(jenkinsUrl){
             var jobNames = getJobNamesToDisplay(viewApi);
             getJobs(jobNames);
 
-            updateShutdownMessage(true);
+            updateShutdownMessage(viewApi.quietingDown);
             updateRunning[viewName] = false;
             updateError = null;
         },
