@@ -120,6 +120,8 @@ html, body {
 	text-align: center;
 	background-color: #ADADAD;
 	color: #FFFFFF;
+	/* Shouldn't be needed, but culprits seem to escape the job occasionally */
+	overflow: hidden;
 }
 
 .queued { 
