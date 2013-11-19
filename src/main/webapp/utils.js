@@ -18,20 +18,20 @@ function getJobByName(jobs, jobName)
 
 function getUserFriendlyTimespan(milliseconds) {
 
-	var time = milliseconds / 1000
-	var seconds = Math.floor(time % 60)
+	var time = milliseconds / 1000;
+	var seconds = Math.floor(time % 60);
 
-	time /= 60	
-	var minutes = Math.floor(time % 60)
+	time /= 60;	
+	var minutes = Math.floor(time % 60);
 	
-	time /= 60
-	var hours = Math.floor(time % 24)
+	time /= 60;
+	var hours = Math.floor(time % 24);
 	
-	time /= 24
-	var days = Math.floor(time)
+	time /= 24;
+	var days = Math.floor(time);
 
-	time /= 30
-	var months = Math.floor(time)
+	time /= 30;
+	var months = Math.floor(time);
 
 	if (months > 0)
 	{
@@ -63,7 +63,7 @@ jQuery.fn.center = function () {
 	this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 
 	return this;
-}
+};
 
 function getParameterByName(name, defaultValue)
 {
@@ -90,12 +90,12 @@ Array.prototype.remove = function (value)
 			++i;
 		}
 	}
-}
+};
 
 function removeMessage()
 {
-	$("#Message").remove()
-}
+	$("#Message").remove();
+};
 
 function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails) {
 
@@ -199,7 +199,7 @@ function getCulprit(job) {
 	var culprit = "";
 
 	if(job.lastBuild != null && job.lastBuild.culprits != null && job.lastBuild.culprits != "") {
-		culprit = job.lastBuild.culprits[0].fullName
+		culprit = job.lastBuild.culprits[0].fullName;
 	}
 
 	return culprit;
