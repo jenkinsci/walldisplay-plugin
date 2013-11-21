@@ -569,7 +569,7 @@ function addBuildDetails(jobInfoDiv, build, buildType, url){
         if (build.duration) 
             buildText += " and  took " + getUserFriendlyTimespan(build.duration);
         jobInfoDiv.append($('<p />').text(buildText));
-        jobInfoDiv.append($('<p />').append($('<img />', {src: '../../images/24x24/terminal.png'})).append($('<a />', {href: url + "/" +build.number+"/console", text: "Console Output" })));
+        jobInfoDiv.append($('<p />').append($('<a />', {href: url + "/" +build.number+"/console", text: "Console Output" })));
     }
 }
 
