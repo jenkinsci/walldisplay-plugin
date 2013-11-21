@@ -196,8 +196,6 @@ function repaint(){
 
                         var jobDimensions = getJobDimensions(job, maxFontSize);
 
-                        var jobClaimed = isBuildClaimed(job);
-
                         var jobDimensionsStyle = {
                             "width": jobWidth,
                             "height": jobHeight
@@ -268,7 +266,7 @@ function repaint(){
                             "id": job.name
                         });
 
-                        if(jobClaimed){
+                        if(isBuildClaimed(job)){
                             jobWrapper.addClass("claimed");
                         }
 
@@ -338,21 +336,6 @@ function repaint(){
 
 function removeAllJobs(){
     $(".job").remove();
-}
-
-function isBuildClaimed(job){
-    var claimed = false;
-    var build = isJobBuilding(job) ? job.lastCompletedBuild : job.lastBuild;
-    
-    if (build && build.actions)     
-        $.each(build.actions, function(actionIndex, action){
-    
-            if(action && action.claimed){
-                claimed = true;
-            }
-        });
-
-    return claimed;
 }
 
 function getJobs(jobNames){
@@ -586,7 +569,7 @@ function addBuildDetails(jobInfoDiv, build, buildType, url){
         if (build.duration) 
             buildText += " and  took " + getUserFriendlyTimespan(build.duration);
         jobInfoDiv.append($('<p />').text(buildText));
-        jobInfoDiv.append($('<p />').append($('<a />', {href: url + "/" +build.number+"/console", text: "Console Output" })));
+        jobInfoDiv.append($('<p />').append($('<img />', {src: '../../images/24x24/terminal.png'})).append($('<a />', {href: url + "/" +build.number+"/console", text: "Console Output" })));
     }
 }
 
@@ -704,49 +687,49 @@ function getPluginConfiguration(jenkinsUrl){
             lastPluginVersion = plugin.version;
 
             if(plugin.config && plugin.config != null){
-
+                // parameters specified in URL should override any set in plugin config. 
                 if(plugin.config.theme && plugin.config.theme != null){
-                    theme = plugin.config.theme.toLowerCase();
+                    theme = getParameterByName('theme', plugin.config.theme.toLowerCase());
                 }
 
                 if(plugin.config.buildRange && plugin.config.buildRange != null){
-                    buildRange = plugin.config.buildRange.toLowerCase();
+                    buildRange = getParameterByName('buildRange', plugin.config.buildRange.toLowerCase());
                 }
 
                 if(plugin.config.fontFamily && plugin.config.fontFamily != null){
-                    fontFamily = plugin.config.fontFamily.toLowerCase();
+                    fontFamily = getParameterByName('fontFamily', plugin.config.fontFamily.toLowerCase());
                 }
 
                 if(plugin.config.sortOrder && plugin.config.sortOrder != null){
-                    sortOrder = plugin.config.sortOrder.toLowerCase();
+                    sortOrder = getParameterByName('sortOrder', plugin.config.sortOrder.toLowerCase());
                 }
 
                 if(plugin.config.showDetails != null){
-                    showDetails = plugin.config.showDetails;
+                    showDetails = getParameterByName('showDetails', plugin.config.showDetails);
                 }
 
                 if(plugin.config.showGravatar != null){
-                    showGravatar = plugin.config.showGravatar;
+                    showGravatar = getParameterByName('showGravatar', plugin.config.showGravatar);
                 }
 
                 if(plugin.config.showBuildNumber != null){
-                    showBuildNumber = plugin.config.showBuildNumber;
+                    showBuildNumber = getParameterByName('showBuildNumber', plugin.config.showBuildNumber);
                 }
 
                 if(plugin.config.showLastStableTimeAgo != null){
-                    showLastStableTimeAgo = plugin.config.showLastStableTimeAgo;
+                    showLastStableTimeAgo = getParameterByName('showLastStableTimeAgo', plugin.config.showLastStableTimeAgo);
                 }
 
                 if(plugin.config.blinkBgPicturesWhenBuilding != null){
-                    blinkBgPicturesWhenBuilding = plugin.config.blinkBgPicturesWhenBuilding;
+                    blinkBgPicturesWhenBuilding = getParameterByName('blinkBgPicturesWhenBuilding', plugin.config.blinkBgPicturesWhenBuilding);
                 }
 
                 if(plugin.config.showDisabledBuilds != null){
-                    showDisabledBuilds = plugin.config.showDisabledBuilds;
+                    showDisabledBuilds = getParameterByName('showDisabledBuilds', plugin.config.showDisabledBuilds);
                 }
 
                 if(isNumber(plugin.config.jenkinsUpdateInterval)){
-                    jenkinsUpdateInterval = plugin.config.jenkinsUpdateInterval * 1000;
+                    jenkinsUpdateInterval = getParameterByName('jenkinsUpdateInterval', plugin.config.jenkinsUpdateInterval) * 1000;
                 }
 
                 if(isNumber(plugin.config.paintInterval)){

@@ -143,35 +143,36 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
 
       if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)
       {
-	  jobText += ' #' + job.lastBuild.number;
-      }
-      
+          jobText += ' #' + job.lastBuild.number;
+      }      
 
 	var appendText = new Array();
 
 	if (showDetails == true) {
-		var culprit = getCulprit(job);
-	    if ((job.color == "green" || job.color == "blue") && showLastStableTimeAgo && job.lastStableBuild != null && job.lastStableBuild.timestamp != null) {
-		        jobText += ' (' + $.timeago(job.lastStableBuild.timestamp) + ')';
-	        }
+        var culprit = getCulprit(job);
+        var claimer = getClaimer(job);
+        if ((job.color == "green" || job.color == "green_anime" || job.color == "blue" || job.color == "blue_anime") && showLastStableTimeAgo && job.lastStableBuild != null && job.lastStableBuild.timestamp != null) {
+            appendText.push($.timeago(job.lastStableBuild.timestamp));
+            }
 
-	    if (job.color == "yellow") {
-			if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
-				appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
-			}
-			if(culprit != "") {
-				appendText.push(culprit);
-			}
-			if(appendText.length > 0)
-				jobText += " (" + appendText.join(", ") + ")";
-		}
+        if (job.color == "yellow" || job.color == "yellow_anime") {
+            if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
+                appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
+            };
+        }
+        
+        if (job.color == "red" || job.color == "red_anime" || job.color == "yellow" || job.color == "yellow_anime") {
+            if (claimer != "") {
+                appendText.push(claimer);
+            } else if(culprit != "") {
+                appendText.push(culprit);
+            };
+        }
 
-		if (job.color == "red") {
-			if(culprit != "") {
-				jobText += " (" + culprit + ")";
-			}
-		}
-	}
+        if(appendText.length > 0) {
+            jobText += " (" + appendText.join(", ") + ")";
+        };
+    }
 
 	return jobText;
 }
@@ -203,6 +204,25 @@ function getCulprit(job) {
 	}
 
 	return culprit;
+}
+
+function getClaimer(job) {
+    var claimer = "";
+
+    var build = isJobBuilding(job) ? job.lastCompletedBuild : job.lastBuild;
+    
+    if (build && build.actions)     
+        $.each(build.actions, function(actionIndex, action){
+    
+            if(action && action.claimed){
+                claimer = action.claimedBy;
+            }
+        });
+    return claimer;
+}
+
+function isBuildClaimed(job) {
+    return getClaimer(job) != "";
 }
 
 function trim(str) {
