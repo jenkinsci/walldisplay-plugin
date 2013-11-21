@@ -120,6 +120,8 @@ html, body {
 	text-align: center;
 	background-color: #ADADAD;
 	color: #FFFFFF;
+	/* Shouldn't be needed, but culprits seem to escape the job occasionally */
+	overflow: hidden;
 }
 
 .queued { 
@@ -255,25 +257,33 @@ html, body {
 	-moz-background-size: 30px 30px;
 	background-size: 30px 30px;			
 	background-image: -webkit-gradient(linear, left top, right bottom,
-						color-stop(.50, rgba(255, 255, 255, .50)), color-stop(.50, transparent),
-						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .50)),
-						color-stop(.75, rgba(255, 255, 255, .50)), color-stop(.75, transparent),
+						color-stop(.25, rgba(255, 255, 255, .25)), color-stop(.25, transparent),
+						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .25)),
+						color-stop(.75, rgba(255, 255, 255, .25)), color-stop(.75, transparent),
 						to(transparent));
-	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .25) 55%, transparent 55%,
+						transparent 80%, rgba(255, 255, 255, .80) 80%, rgba(255, 255, 255, .80) 95%,
+						transparent 95%, transparent);
+	background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
 						transparent 75%, transparent);
-	background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+	background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
 						transparent 75%, transparent);
-	background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);
-	background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);
-	background-image: linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);            
+	background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
+						transparent 75%, transparent); 
+	background-image: linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
+						transparent 75%, transparent); 
+						        
+	border: 1px solid rgba(255, 255, 255, .5);
+	border-right-width: 10px;
+	
+	-moz-border-radius-topright: 1px;
+	-moz-border-radius-bottomright: 1px;
+	border-top-right-radius: 1px;
+	border-bottom-right-radius: 1px;
 	
 	/* time here needs to match paint interval to give a reasonable result */
 	-webkit-animation: animate-stripes 1s linear infinite;
@@ -292,7 +302,7 @@ html, body {
 /* background image for claimed builds thanks to  http://www.patternify.com/ */
 .claimed {
     background-image: url(
-'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkwARngEIm6MKMaAIwRRiKkRWiS6LwYQqxWge0DS4OUohLEcxVYHl0N2LxG1joDLEKGYhWCADiSQnVzU6+awAAAABJRU5ErkJggg=='
+'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQANa/+X/X2N8yIgujiIAU4RNMVwhuiQ6H6wQl3XI4oy4FMHcCJPHcDS6J2A2EqUQpJhohQBAeSZQhEoaOgAAAABJRU5ErkJggg=='
    ), -webkit-gradient(
       linear,
       left top,
@@ -307,6 +317,8 @@ html, body {
       rgba(163,163,163,0.5) 0%,
       rgba(113,113,113,0.5) 100%
     );
+    /* Change text colour for claimed builds */
+    color: #00cc00;
 }
 
 
