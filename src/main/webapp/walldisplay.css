@@ -257,25 +257,33 @@ html, body {
 	-moz-background-size: 30px 30px;
 	background-size: 30px 30px;			
 	background-image: -webkit-gradient(linear, left top, right bottom,
-						color-stop(.50, rgba(255, 255, 255, .50)), color-stop(.50, transparent),
-						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .50)),
-						color-stop(.75, rgba(255, 255, 255, .50)), color-stop(.75, transparent),
+						color-stop(.25, rgba(255, 255, 255, .25)), color-stop(.25, transparent),
+						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .25)),
+						color-stop(.75, rgba(255, 255, 255, .25)), color-stop(.75, transparent),
 						to(transparent));
-	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+	background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .25) 55%, transparent 55%,
+						transparent 80%, rgba(255, 255, 255, .80) 80%, rgba(255, 255, 255, .80) 95%,
+						transparent 95%, transparent);
+	background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
 						transparent 75%, transparent);
-	background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
+	background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
 						transparent 75%, transparent);
-	background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);
-	background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);
-	background-image: linear-gradient(135deg, rgba(255, 255, 255, .50) 25%, transparent 25%,
-						transparent 50%, rgba(255, 255, 255, .50) 50%, rgba(255, 255, 255, .50) 75%,
-						transparent 75%, transparent);            
+	background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
+						transparent 75%, transparent); 
+	background-image: linear-gradient(135deg, rgba(255, 255, 255, .25) 25%, transparent 25%,
+						transparent 50%, rgba(255, 255, 255, .25) 50%, rgba(255, 255, 255, .25) 75%,
+						transparent 75%, transparent); 
+						        
+	border: 1px solid rgba(255, 255, 255, .5);
+	border-right-width: 10px;
+	
+	-moz-border-radius-topright: 1px;
+	-moz-border-radius-bottomright: 1px;
+	border-top-right-radius: 1px;
+	border-bottom-right-radius: 1px;
 	
 	/* time here needs to match paint interval to give a reasonable result */
 	-webkit-animation: animate-stripes 1s linear infinite;
