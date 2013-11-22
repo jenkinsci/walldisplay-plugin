@@ -516,7 +516,7 @@ function showJobinfo(job){
             addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build #" + job.lastCompletedBuild.number, url);        
         } 
         else{
-            addBuildDetails(jobInfoDiv, job.lastBuild, "Last Build", url);    
+            addBuildDetails(jobInfoDiv, job.lastBuild, "Last Build #" + job.lastBuild.number, url);    
         }        
         jobInfoDiv.click(function(){
             $("#JobInfo").remove();
