@@ -134,6 +134,8 @@ html, body {
 
 .queued { 
 	background-color: #DFC500;
+	background-image: radial-gradient(circle at 30% 40%, #ffff00, #DFC500);
+	border: 1px solid #DFC500;
 }
 
 .job_content { 
