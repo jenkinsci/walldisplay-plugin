@@ -151,17 +151,12 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
 	if (showDetails == true) {
         var culprit = getCulprit(job);
         var claimer = getClaimer(job);
-        if ((job.color == "green" || job.color == "green_anime" || job.color == "blue" || job.color == "blue_anime") && showLastStableTimeAgo && job.lastStableBuild != null && job.lastStableBuild.timestamp != null) {
-            appendText.push($.timeago(job.lastStableBuild.timestamp));
+        if (job.color == "green" || job.color == "green_anime" || job.color == "blue" || job.color == "blue_anime") {
+            if (showLastStableTimeAgo && job.lastStableBuild != null && job.lastStableBuild.timestamp != null) {
+                appendText.push($.timeago(job.lastStableBuild.timestamp));
             }
-
-        if (job.color == "yellow" || job.color == "yellow_anime") {
-            if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
-                appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
-            };
         }
-        
-        if (job.color == "red" || job.color == "red_anime" || job.color == "yellow" || job.color == "yellow_anime") {
+        else {
             if (claimer != "") {
                 appendText.push(claimer);
             } else if(culprit != "") {
@@ -169,6 +164,12 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
             };
         }
 
+        if (job.color == "yellow" || job.color == "yellow_anime") {
+            if(job.lastBuild.actions[4] != undefined && job.lastBuild.actions[4].failCount != undefined && job.lastBuild.actions[4].totalCount != undefined) {
+                appendText.push(job.lastBuild.actions[4].failCount + "/" + job.lastBuild.actions[4].totalCount);
+            };
+        }
+        
         if(appendText.length > 0) {
             jobText += " (" + appendText.join(", ") + ")";
         };
