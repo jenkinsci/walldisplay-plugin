@@ -130,6 +130,7 @@ html, body {
 	color: #FFFFFF;
 	/* Shouldn't be needed, but culprits seem to escape the job occasionally */
 	overflow: hidden;
+	white-space: nowrap;
 }
 
 .queued { 
