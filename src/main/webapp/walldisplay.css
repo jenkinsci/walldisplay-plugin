@@ -149,7 +149,7 @@ html, body {
 
 
 .default, .christmas, .boss, .dark, .colorblind {
-    text-shadow: 0px -2px black;
+    text-shadow: 0px 0px 10px black;
     
     background-image: -webkit-gradient(
       linear,
@@ -226,7 +226,7 @@ html, body {
 	background-color: #CCCC00;	
 }
 .dark.aborted {
-	background-color: #E8E6E6;	
+	background-color: #A8A6A6;	
 }
 
 .christmas {
@@ -264,9 +264,9 @@ html, body {
 		
 .building {
 	/* stripes in progress bars */
-	-webkit-background-size: 30px 30px;
-	-moz-background-size: 30px 30px;
-	background-size: 30px 30px;			
+	-webkit-background-size: 60px 60px;
+	-moz-background-size: 60px 60px;
+	background-size: 60px 60px;			
 	background-image: -webkit-gradient(linear, left top, right bottom,
 						color-stop(.25, rgba(255, 255, 255, .25)), color-stop(.25, transparent),
 						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .25)),
@@ -300,22 +300,27 @@ html, body {
 
 /* background image for claimed builds thanks to  http://www.patternify.com/ */
 .claimed {
-    background-image:
-    -webkit-gradient(
+    background-image: -webkit-gradient(
       linear,
       left top,
       left bottom,
       color-stop(0, rgba(163,163,163,0.5)),
       color-stop(1, rgba(113,113,113,0.5))
+    ), -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.3, rgba(163,163,163,0.0)),
+      color-stop(0.5, rgba(0,255,0,1.0)),
+      color-stop(0.8, rgba(163,163,163,0.0))
     );
-    background-image: 
-    -moz-linear-gradient(
+    background-image: -moz-linear-gradient(
       center top,
       rgba(163,163,163,0.5) 0%,
       rgba(113,113,113,0.5) 100%
     );
     /* Change text colour for claimed builds */
-    color: #88ff88;
+    color: #fff; 
 }
 
 
