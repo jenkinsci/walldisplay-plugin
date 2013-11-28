@@ -550,14 +550,10 @@ function addBuildDetails(jobInfoDiv, build, buildType, url){
                     jobClaim.append($('<a />', {href: url + "/" +build.number + "/testReport", text: "Tests" }));
                     jobClaim.append(": " + action.totalCount + " total ");
                     if(action.skipCount){
-                        jobClaim.append($('<span />').text(action.skipCount + " skipped ").css({
-                            "color": "yellow"
-                        }));
+                        jobClaim.append($('<span />').text(action.skipCount + " skipped ").addClass('skipped'));
                     }
                     if(action.failCount){
-                        jobClaim.append($('<span />').text(action.failCount + " failed ").css({
-                            "color": "red"
-                        }));
+                        jobClaim.append($('<span />').text(action.failCount + " failed ").addClass('failed'));
                     }
                     jobInfoDiv.append(jobClaim);
                 }
