@@ -687,6 +687,10 @@ function getPluginConfiguration(jenkinsUrl){
                 if(plugin.config.theme && plugin.config.theme != null){
                     theme = getParameterByName('theme', plugin.config.theme.toLowerCase());
                 }
+                
+                if(plugin.config.customTheme && plugin.config.customTheme != null){
+                    customTheme = getParameterByName('customTheme', plugin.config.customTheme);
+                }
 
                 if(plugin.config.buildRange && plugin.config.buildRange != null){
                     buildRange = getParameterByName('buildRange', plugin.config.buildRange.toLowerCase());
@@ -774,6 +778,12 @@ function getPluginConfiguration(jenkinsUrl){
 
                 lastTheme = theme;
             }
+            
+            if (customTheme != null)
+            {
+                $("head").append("<style type=\"text/css\">" + customTheme + "</style>");
+            }
+            
 
             if(fontFamily != null && lastFontFamily != fontFamily){
                 $("body").css({

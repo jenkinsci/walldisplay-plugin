@@ -21,6 +21,16 @@ public class Configuration {
     private String fontFamily = WallDisplayPlugin.fontFamilies[0];
     private String buildRange = WallDisplayPlugin.buildRange[0];
     private String sortOrder = WallDisplayPlugin.sortOrder[0];
+    private String customTheme = ".custom {\r\n"
+	    + "        background-color: #000000;\r\n"
+	    + "}\r\n"
+	    + ".custom.blue {\r\n"
+	    + "        background-color: #00CC00;\r\n"
+	    + "}\r\n"
+	    + ".custom.red, .custom.yellow, .custom.aborted, .custom.grey {\r\n"
+	    + "        background-color: #CC0000;\r\n" + "}\r\n"
+	    + ".custom.claimed {\r\n"
+	    + "        background-color: #0000CC;\r\n" + "}\r\n" + "";
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private int paintInterval = 1;
@@ -33,156 +43,153 @@ public class Configuration {
 
     @Exported
     public Boolean getShowBuildNumber() {
-        return showBuildNumber;
+	return showBuildNumber;
     }
 
     public void setShowBuildNumber(Boolean showBuildNumber) {
-        this.showBuildNumber = showBuildNumber;
+	this.showBuildNumber = showBuildNumber;
     }
-    
+
     @Exported
     public Boolean getShowLastStableTimeAgo() {
-        return showLastStableTimeAgo;
+	return showLastStableTimeAgo;
     }
 
     public void setShowLastStableTimeAgo(Boolean showLastStableTimeAgo) {
-        this.showLastStableTimeAgo = showLastStableTimeAgo;
+	this.showLastStableTimeAgo = showLastStableTimeAgo;
     }
 
     @Exported
     public Boolean getShowDisabledBuilds() {
-        return showDisabledBuilds;
+	return showDisabledBuilds;
     }
 
     public void setShowDisabledBuilds(Boolean showDisabledBuilds) {
-        this.showDisabledBuilds = showDisabledBuilds;
+	this.showDisabledBuilds = showDisabledBuilds;
     }
 
     @Exported
     public int getJenkinsTimeOut() {
-        return jenkinsTimeOut;
+	return jenkinsTimeOut;
     }
 
     public void setJenkinsTimeOut(int jenkinsTimeOut) {
-        if (jenkinsTimeOut > 0) {
-            this.jenkinsTimeOut = jenkinsTimeOut;
-        }
+	if (jenkinsTimeOut > 0) {
+	    this.jenkinsTimeOut = jenkinsTimeOut;
+	}
     }
 
     @Exported
     public int getJenkinsUpdateInterval() {
-        return jenkinsUpdateInterval;
+	return jenkinsUpdateInterval;
     }
 
     public void setJenkinsUpdateInterval(int jenkinsUpdateInterval) {
-        if (jenkinsUpdateInterval > 0) {
-            this.jenkinsUpdateInterval = jenkinsUpdateInterval;
-        }
+	if (jenkinsUpdateInterval > 0) {
+	    this.jenkinsUpdateInterval = jenkinsUpdateInterval;
+	}
     }
 
     @Exported
     public String getSortOrder() {
-        if (sortOrder != null)
-        {
-            return sortOrder.toLowerCase();
-        }
-        else
-        {
-            return sortOrder;
-        }
+	if (sortOrder != null) {
+	    return sortOrder.toLowerCase();
+	} else {
+	    return sortOrder;
+	}
     }
 
     public void setSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder;
-    }  
+	this.sortOrder = sortOrder;
+    }
 
     @Exported
     public String getTheme() {
-        if (theme != null)
-        {
-            return theme.toLowerCase();
-        }
-        else
-        {
-            return theme;
-        }
+	if (theme != null) {
+	    return theme.toLowerCase();
+	} else {
+	    return theme;
+	}
     }
 
     public Boolean isValid() {
-        return (theme != null && buildRange  != null);
+	return (theme != null && buildRange != null);
     }
 
     public void setTheme(String theme) {
-        this.theme = theme;
+	this.theme = theme;
     }
 
     @Exported
     public String getBuildRange() {
-        if (buildRange != null)
-        {
-            return buildRange.toLowerCase();
-        }
-        else
-        {
-            return buildRange;
-        }
+	if (buildRange != null) {
+	    return buildRange.toLowerCase();
+	} else {
+	    return buildRange;
+	}
     }
 
     public void setBuildRange(String buildRange) {
-        this.buildRange = buildRange;
+	this.buildRange = buildRange;
     }
 
     @Exported
     public boolean getShowDetails() {
-        return showDetails;
+	return showDetails;
     }
 
     public void setShowDetails(Boolean showDetails) {
-        this.showDetails = showDetails;
+	this.showDetails = showDetails;
     }
 
     @Exported
     public Boolean getShowGravatar() {
-        return showGravatar;
+	return showGravatar;
     }
 
     public void setShowGravatar(Boolean showGravatar) {
-        this.showGravatar = showGravatar;
+	this.showGravatar = showGravatar;
     }
 
     @Exported
     public int getPaintInterval() {
-        return paintInterval;
+	return paintInterval;
     }
 
     public void setPaintInterval(int paintInterval) {
-        this.paintInterval = paintInterval;
+	this.paintInterval = paintInterval;
     }
 
-    
     @Exported
     public String getFontFamily() {
-        if (fontFamily != null)
-        {
-            return fontFamily.toLowerCase();
-        }
-        else
-        {
-            return fontFamily;
-        }
+	if (fontFamily != null) {
+	    return fontFamily.toLowerCase();
+	} else {
+	    return fontFamily;
+	}
     }
 
     public void setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
+	this.fontFamily = fontFamily;
     }
 
     @Exported
-    public Boolean getBlinkBgPicturesWhenBuilding () {
-        return blinkBgPicturesWhenBuilding;
+    public Boolean getBlinkBgPicturesWhenBuilding() {
+	return blinkBgPicturesWhenBuilding;
     }
 
-    public void setBlinkBgPicturesWhenBuilding (Boolean blinkBgPicturesWhenBuilding) {
-        this.blinkBgPicturesWhenBuilding = blinkBgPicturesWhenBuilding;
+    public void setBlinkBgPicturesWhenBuilding(
+	    Boolean blinkBgPicturesWhenBuilding) {
+	this.blinkBgPicturesWhenBuilding = blinkBgPicturesWhenBuilding;
+    }
+
+    @Exported
+    public String getCustomTheme() {
+	return customTheme;
+    }
+
+    public void setCustomTheme(String customTheme) {
+	this.customTheme = customTheme;
     }
 
     /**
@@ -190,6 +197,14 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).toString();
+	return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+		.append("theme", theme)
+		.append("jenkinsTimeOut", jenkinsTimeOut)
+		.append("jenkinsUpdateInterval", jenkinsUpdateInterval)
+		.append("showDetails", showDetails)
+		.append("showGravatar", showGravatar)
+		.append("fontFamily", fontFamily)
+		.append("buildRange", buildRange)
+		.append("sortOrder", sortOrder).toString();
     }
 }

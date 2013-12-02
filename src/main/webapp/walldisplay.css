@@ -148,7 +148,7 @@ html, body {
 } 
 
 
-.default, .christmas, .boss, .dark, .colorblind {
+.default, .christmas, .boss, .dark, .colorblind, .simple {
     text-shadow: 0px 0px 10px black;
     
     background-image: -webkit-gradient(
@@ -213,6 +213,7 @@ html, body {
 	background-color: #EEEEEE;	
 }
 
+
 .dark {
 	background-color: #000000;
 }
@@ -227,6 +228,19 @@ html, body {
 }
 .dark.aborted {
 	background-color: #A8A6A6;	
+}
+
+.simple {
+        background-color: #000000;
+}
+.simple.blue {
+        background-color: #00CC00;
+}
+.simple.red, .simple.yellow, .simple.aborted {
+        background-color: #CC0000;
+}
+.simple.claimed {
+        background-color: #0000CC;
 }
 
 .christmas {
@@ -300,19 +314,16 @@ html, body {
 
 /* background image for claimed builds thanks to  http://www.patternify.com/ */
 .claimed {
-    background-image: -webkit-gradient(
+   background-image: 
+     -webkit-gradient(
       linear,
       left top,
       left bottom,
       color-stop(0, rgba(163,163,163,0.5)),
-      color-stop(1, rgba(113,113,113,0.5))
-    ), -webkit-gradient(
-      linear,
-      left top,
-      left bottom,
       color-stop(0.3, rgba(163,163,163,0.0)),
       color-stop(0.5, rgba(0,255,0,1.0)),
       color-stop(0.8, rgba(163,163,163,0.0))
+      color-stop(1, rgba(113,113,113,0.5))
     );
     background-image: -moz-linear-gradient(
       center top,
@@ -320,7 +331,5 @@ html, body {
       rgba(113,113,113,0.5) 100%
     );
     /* Change text colour for claimed builds */
-    color: #fff; 
+/*    color: #0000ff;  */
 }
-
-

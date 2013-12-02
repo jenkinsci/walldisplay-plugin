@@ -11,6 +11,10 @@
             </select>
         </f:entry>
 
+        <f:entry title="${%Custom Theme CSS} ${rootURL}" name="customTheme" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-customTheme.html">
+            <f:textarea name="customTheme" value="${it.config.customTheme}" />
+        </f:entry>
+
         <f:entry title="${%Builds to display}" name="buildRange" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-buildRange.html">
             <select name="buildRange">
                 <j:forEach  var="m" items="${it.buildRange}">
