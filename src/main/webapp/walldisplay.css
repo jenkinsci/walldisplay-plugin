@@ -50,7 +50,7 @@ html, body {
 	text-align: center;
 	z-index: 50;
 	font-weight: normal;
-    text-shadow: 0px 0px;
+    text-shadow: none;
     font-size: larger;
     text-align: left;
 }
@@ -63,6 +63,14 @@ html, body {
 
 .job_info p {
 	padding-left: 30px;
+}
+
+.job_info .skipped {
+	color: #aaaa00;
+}
+
+.job_info .failed {
+	color: #ff0000;
 }
 
 .claim {
@@ -122,10 +130,13 @@ html, body {
 	color: #FFFFFF;
 	/* Shouldn't be needed, but culprits seem to escape the job occasionally */
 	overflow: hidden;
+	white-space: nowrap;
 }
 
 .queued { 
 	background-color: #DFC500;
+	background-image: radial-gradient(circle at 30% 40%, #ffff00, #DFC500);
+	border: 1px solid #DFC500;
 }
 
 .job_content { 
@@ -137,8 +148,8 @@ html, body {
 } 
 
 
-.default, .christmas, .boss, .dark, .colorblind {
-    text-shadow: 0px -2px black;
+.default, .christmas, .boss, .dark, .colorblind, .simple {
+    text-shadow: 0px 0px 10px black;
     
     background-image: -webkit-gradient(
       linear,
@@ -202,6 +213,7 @@ html, body {
 	background-color: #EEEEEE;	
 }
 
+
 .dark {
 	background-color: #000000;
 }
@@ -209,13 +221,26 @@ html, body {
 	background-color: #00CC00;	
 }
 .dark.red {
-	background-color: #C00000;	
+	background-color: #CC0000;	
 }
 .dark.yellow {
-	background-color: #C0C000;	
+	background-color: #CCCC00;	
 }
 .dark.aborted {
-	background-color: #E8E6E6;	
+	background-color: #A8A6A6;	
+}
+
+.simple {
+        background-color: #000000;
+}
+.simple.blue {
+        background-color: #00CC00;
+}
+.simple.red, .simple.yellow, .simple.aborted {
+        background-color: #CC0000;
+}
+.simple.claimed {
+        background-color: #0000CC;
 }
 
 .christmas {
@@ -253,9 +278,9 @@ html, body {
 		
 .building {
 	/* stripes in progress bars */
-	-webkit-background-size: 30px 30px;
-	-moz-background-size: 30px 30px;
-	background-size: 30px 30px;			
+	-webkit-background-size: 60px 60px;
+	-moz-background-size: 60px 60px;
+	background-size: 60px 60px;			
 	background-image: -webkit-gradient(linear, left top, right bottom,
 						color-stop(.25, rgba(255, 255, 255, .25)), color-stop(.25, transparent),
 						color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .25)),
@@ -284,41 +309,27 @@ html, body {
 	-moz-border-radius-bottomright: 1px;
 	border-top-right-radius: 1px;
 	border-bottom-right-radius: 1px;
-	
-	/* time here needs to match paint interval to give a reasonable result */
-	-webkit-animation: animate-stripes 1s linear infinite;
-	-moz-animation: animate-stripes 1s linear infinite;       		
-}
-
-@-webkit-keyframes animate-stripes { 
-	0% {background-position: 0 0;} 100% {background-position: 60px 0;}
-}
-
-@-moz-keyframes animate-stripes {
-	0% {background-position: 0 0;} 100% {background-position: 60px 0;}
 } 
 
 
 /* background image for claimed builds thanks to  http://www.patternify.com/ */
 .claimed {
-    background-image: url(
-'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQANa/+X/X2N8yIgujiIAU4RNMVwhuiQ6H6wQl3XI4oy4FMHcCJPHcDS6J2A2EqUQpJhohQBAeSZQhEoaOgAAAABJRU5ErkJggg=='
-   ), -webkit-gradient(
+   background-image: 
+     -webkit-gradient(
       linear,
       left top,
       left bottom,
       color-stop(0, rgba(163,163,163,0.5)),
+      color-stop(0.3, rgba(163,163,163,0.0)),
+      color-stop(0.5, rgba(0,255,0,1.0)),
+      color-stop(0.8, rgba(163,163,163,0.0))
       color-stop(1, rgba(113,113,113,0.5))
     );
-    background-image: url(
-'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkwARngEIm6MKMaAIwRRiKkRWiS6LwYQqxWge0DS4OUohLEcxVYHl0N2LxG1joDLEKGYhWCADiSQnVzU6+awAAAABJRU5ErkJggg=='
-   ), -moz-linear-gradient(
+    background-image: -moz-linear-gradient(
       center top,
       rgba(163,163,163,0.5) 0%,
       rgba(113,113,113,0.5) 100%
     );
     /* Change text colour for claimed builds */
-    color: #00cc00;
+/*    color: #0000ff;  */
 }
-
-
