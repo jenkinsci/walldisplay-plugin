@@ -13,7 +13,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * Job property allowing to override the name of the job that is displayed on the walldisplay
- * 
+ *
  * @author Christian Pelster
  */
 @ExportedBean
@@ -61,28 +61,26 @@ public final class WallDisplayJobProperty extends JobProperty<AbstractProject<?,
 
         @Override
         public JobProperty<?> newInstance(StaplerRequest req,
-                JSONObject formData) throws FormException {
+                                          JSONObject formData) throws FormException {
 
             String wallDisplayName = null;
             String wallDisplayBgPicture = null;
-            if (formData.has("wallDisplayNameDynamic"))
-            {
+            if (formData.has("wallDisplayNameDynamic")) {
                 JSONObject wallDisplayNameDynamic = formData.getJSONObject("wallDisplayNameDynamic");
 
                 if (wallDisplayNameDynamic != null && wallDisplayNameDynamic.has("wallDisplayName") && !wallDisplayNameDynamic.get("wallDisplayName").toString().trim().isEmpty()) {
                     wallDisplayName = wallDisplayNameDynamic.get("wallDisplayName").toString();
                 }
             }
-            
-            if (formData.has("wallDisplayBgPictureDynamic"))
-            {
+
+            if (formData.has("wallDisplayBgPictureDynamic")) {
                 JSONObject wallDisplayBgPictureDynamic = formData.getJSONObject("wallDisplayBgPictureDynamic");
 
                 if (wallDisplayBgPictureDynamic != null && wallDisplayBgPictureDynamic.has("wallDisplayBgPicture") && !wallDisplayBgPictureDynamic.get("wallDisplayBgPicture").toString().trim().isEmpty()) {
-                    wallDisplayBgPicture = wallDisplayBgPictureDynamic.getString ("wallDisplayBgPicture").toString();
+                    wallDisplayBgPicture = wallDisplayBgPictureDynamic.getString("wallDisplayBgPicture").toString();
                 }
             }
-            return new WallDisplayJobProperty (wallDisplayName, wallDisplayBgPicture);
+            return new WallDisplayJobProperty(wallDisplayName, wallDisplayBgPicture);
         }
     }
 }

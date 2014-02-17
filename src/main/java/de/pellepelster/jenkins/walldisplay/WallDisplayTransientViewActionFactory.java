@@ -1,20 +1,15 @@
 package de.pellepelster.jenkins.walldisplay;
 
-import hudson.model.Action;
-import hudson.model.TransientViewActionFactory;
-import hudson.model.ViewGroup;
-import hudson.model.Hudson;
-import hudson.model.View;
+import hudson.model.*;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Adds the walldisplay link action to all views
- * 
+ *
  * @author Christian Pelster
  */
 public class WallDisplayTransientViewActionFactory extends TransientViewActionFactory {

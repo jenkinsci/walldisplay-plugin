@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 
 /**
  * Action providing the link to the actual walldisplay page
- * 
+ *
  * @author Christian Pelster
  */
 public class WallDisplayViewAction implements Action {

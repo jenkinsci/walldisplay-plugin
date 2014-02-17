@@ -11,7 +11,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * Configuration holder for the walldisplay plugin
- * 
+ *
  * @author Christian Pelster
  */
 @ExportedBean
@@ -21,6 +21,16 @@ public class Configuration {
     private String fontFamily = WallDisplayPlugin.fontFamilies[0];
     private String buildRange = WallDisplayPlugin.buildRange[0];
     private String sortOrder = WallDisplayPlugin.sortOrder[0];
+    private String customTheme = ".custom {\r\n"
+            + "        background-color: #000000;\r\n"
+            + "}\r\n"
+            + ".custom.blue {\r\n"
+            + "        background-color: #00CC00;\r\n"
+            + "}\r\n"
+            + ".custom.red, .custom.yellow, .custom.aborted, .custom.grey {\r\n"
+            + "        background-color: #CC0000;\r\n" + "}\r\n"
+            + ".custom.claimed {\r\n"
+            + "        background-color: #0000CC;\r\n" + "}\r\n" + "";
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private int paintInterval = 1;
@@ -40,7 +50,7 @@ public class Configuration {
     public void setShowBuildNumber(Boolean showBuildNumber) {
         this.showBuildNumber = showBuildNumber;
     }
-    
+
     @Exported
     public Boolean getShowLastStableTimeAgo() {
         return showLastStableTimeAgo;
@@ -83,34 +93,28 @@ public class Configuration {
 
     @Exported
     public String getSortOrder() {
-        if (sortOrder != null)
-        {
+        if (sortOrder != null) {
             return sortOrder.toLowerCase();
-        }
-        else
-        {
+        } else {
             return sortOrder;
         }
     }
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
-    }  
+    }
 
     @Exported
     public String getTheme() {
-        if (theme != null)
-        {
+        if (theme != null) {
             return theme.toLowerCase();
-        }
-        else
-        {
+        } else {
             return theme;
         }
     }
 
     public Boolean isValid() {
-        return (theme != null && buildRange  != null);
+        return (theme != null && buildRange != null);
     }
 
     public void setTheme(String theme) {
@@ -119,12 +123,9 @@ public class Configuration {
 
     @Exported
     public String getBuildRange() {
-        if (buildRange != null)
-        {
+        if (buildRange != null) {
             return buildRange.toLowerCase();
-        }
-        else
-        {
+        } else {
             return buildRange;
         }
     }
@@ -160,15 +161,12 @@ public class Configuration {
         this.paintInterval = paintInterval;
     }
 
-    
+
     @Exported
     public String getFontFamily() {
-        if (fontFamily != null)
-        {
+        if (fontFamily != null) {
             return fontFamily.toLowerCase();
-        }
-        else
-        {
+        } else {
             return fontFamily;
         }
     }
@@ -178,12 +176,21 @@ public class Configuration {
     }
 
     @Exported
-    public Boolean getBlinkBgPicturesWhenBuilding () {
+    public Boolean getBlinkBgPicturesWhenBuilding() {
         return blinkBgPicturesWhenBuilding;
     }
 
-    public void setBlinkBgPicturesWhenBuilding (Boolean blinkBgPicturesWhenBuilding) {
+    public void setBlinkBgPicturesWhenBuilding(Boolean blinkBgPicturesWhenBuilding) {
         this.blinkBgPicturesWhenBuilding = blinkBgPicturesWhenBuilding;
+    }
+
+    @Exported
+    public String getCustomTheme() {
+        return customTheme;
+    }
+
+    public void setCustomTheme(String customTheme) {
+        this.customTheme = customTheme;
     }
 
     /**
