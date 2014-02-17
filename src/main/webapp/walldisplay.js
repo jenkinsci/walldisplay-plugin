@@ -281,6 +281,30 @@ function repaint(){
                         jobWrapper.addClass(theme);
                         jobWrapper.addClass(jobColor);
 
+                        if (showWeatherReport)
+                        {
+                            var jobWeatherReport = $('<div />');
+
+                            var healthImageIndex = Math.ceil((job.healthReport[0].score) / 20);
+                            healthImageIndex = Math.max(healthImageIndex, 1);
+                            healthImageIndex = Math.min(healthImageIndex, 5);
+
+                            var healthImageSize = Math.pow(2, Math.floor(Math.logBase(jobHeight, 2)));
+                            healthImageSize = Math.max(healthImageSize, 16);
+                            healthImageSize = Math.min(healthImageSize, 512);
+
+                            jobWeatherReport.css({
+                                "background-image": "url('images/health_images/health_" + healthImageIndex + "_" + healthImageSize + "x" + healthImageSize +".png')",
+                                "background-position": "center center",
+                                "background-repeat": "no-repeat",
+                                "width": (healthImageSize*1.4) + "px",
+                                "height": (jobHeight) + "px"
+                            });
+
+                            jobWeatherReport.addClass("job_weather_report");
+                            jobWrapper.append(jobWeatherReport);
+                        }
+
                         // - assemble job divs ------------------------------
                         if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
 
@@ -298,7 +322,7 @@ function repaint(){
                                     "background-size": Math.floor((jobWidth) / 6) + "px " + jobHeight + "px",
                                     "background-repeat": "no-repeat",
                                     "width": Math.floor((jobWidth) / 6) + "px",
-                                    "height": (jobHeight) + "px",
+                                    "height": (jobHeight) + "px"
                                 });
                                 jobBg.addClass((!isBuilding ? "in" : "") + "activeJob");
                                 jobWrapper.append(jobBg);
@@ -358,7 +382,7 @@ function getJobs(jobNames){
                             url: jenkinsUrl + "/job/" + jobName + "/api/json",
                             dataType: "json",
                             data: {
-                                "tree": "property[wallDisplayName,wallDisplayBgPicture],name,color,lastStableBuild[timestamp]," +
+                                "tree": "healthReport[score],property[wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
                                 "lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason,failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +     
                                 "lastCompletedBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason, failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +                               
                                 		"lastSuccessfulBuild[duration]"
@@ -430,7 +454,10 @@ function getJobs(jobNames){
 
                                     if(sortOrder == "job status"){
                                         sort = jobStatusOrder[job1.color] - jobStatusOrder[job2.color];
-                                    }
+                                    } else if (sortOrder == "job priority")
+									{
+                                        sort = job1.priority - job2.priority;
+									}
 
                                     if(sort == 0){
                                         sort = getJobText(job1, showBuildNumber, showLastStableTimeAgo, showDetails)
@@ -716,6 +743,10 @@ function getPluginConfiguration(jenkinsUrl){
                     showBuildNumber = getParameterByName('showBuildNumber', plugin.config.showBuildNumber);
                 }
 
+                if(plugin.config.showWeatherReport != null){
+                    showWeatherReport = getParameterByName('showWeatherReport', plugin.config.showWeatherReport);
+                }
+
                 if(plugin.config.showLastStableTimeAgo != null){
                     showLastStableTimeAgo = getParameterByName('showLastStableTimeAgo', plugin.config.showLastStableTimeAgo);
                 }
@@ -817,6 +848,7 @@ var showGravatar = false;
 var jobGravatarCache = {};
 var gravatarCounter = {};
 var showBuildNumber = true;
+var showWeatherReport = false;
 var showLastStableTimeAgo = true;
 var blinkBgPicturesWhenBuilding = false;
 var showDisabledBuilds = true;
@@ -948,6 +980,10 @@ function setApiInterval(){
         update();
     }, jenkinsUpdateInterval);
 }
+
+Math.logBase = function(n, base) {
+    return Math.log(n) / Math.log(base);
+};
 
 function clearApiInterval(){
     clearInterval(jenkinsApiIntervalId);

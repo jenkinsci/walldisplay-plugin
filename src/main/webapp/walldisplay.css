@@ -124,6 +124,11 @@ html, body {
 	overflow: hidden;
 }
 
+.job_weather_report {
+    clear:both;
+    float:right;
+}
+
 .queued { 
 	background-color: #DFC500;
 }

@@ -35,7 +35,7 @@ public class WallDisplayPlugin extends Plugin {
     
     public static final String[] buildRange = new String[] { "All", "Active this month", "Active this week", "Active today" };
 
-    public static final String[] sortOrder = new String[] { "Job Name", "Job Status" };
+    public static final String[] sortOrder = new String[] { "Job Name", "Job Status", "Job Priority" };
 
     @Exported
     public Configuration config;
@@ -85,6 +85,7 @@ public class WallDisplayPlugin extends Plugin {
         config.setBlinkBgPicturesWhenBuilding (formData.optBoolean("blinkBgPicturesWhenBuilding"));
         config.setShowBuildNumber(formData.optBoolean("jenkinsShowBuildNumber"));
         config.setShowDetails(formData.optBoolean("jenkinsShowDetails"));
+        config.setShowWeatherReport(formData.optBoolean("jenkinsShowWeatherReport"));
         config.setShowGravatar(formData.optBoolean("jenkinsShowGravatar"));
         config.setShowDisabledBuilds(formData.optBoolean("jenkinsShowDisabledBuilds"));
         config.setSortOrder(Util.fixEmptyAndTrim(formData.optString("sortOrder")));
