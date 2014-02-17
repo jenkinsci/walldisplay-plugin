@@ -29,6 +29,7 @@ public class Configuration {
     private Boolean showBuildNumber = true;
     private Boolean showLastStableTimeAgo = true;
     private Boolean showDisabledBuilds = true;
+    private Boolean showWeatherReport = false;
     private Boolean blinkBgPicturesWhenBuilding = false;
 
     @Exported
@@ -190,6 +191,15 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).toString();
+    }
+
+    @Exported
+    public Boolean getShowWeatherReport() {
+        return showWeatherReport;
+    }
+
+    public void setShowWeatherReport(Boolean showWeatherReport) {
+        this.showWeatherReport = showWeatherReport;
     }
 }
