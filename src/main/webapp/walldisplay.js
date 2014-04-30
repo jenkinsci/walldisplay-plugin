@@ -119,6 +119,12 @@ function isJobBuilding(job) {
     return job.color.substr(-6) === "_anime";    
 }
 
+function jobHasHealthReport(job) {
+    var healthReport = job.healthReport;
+
+    return healthReport[0] !== undefined;
+}
+
 function repaint(){
     if(updateError != null){
         displayMessage(updateError, "message_error");
@@ -281,7 +287,7 @@ function repaint(){
                         jobWrapper.addClass(theme);
                         jobWrapper.addClass(jobColor);
 
-                        if (showWeatherReport)
+                        if (showWeatherReport && jobHasHealthReport(job))
                         {
                             var jobWeatherReport = $('<div />');
 
