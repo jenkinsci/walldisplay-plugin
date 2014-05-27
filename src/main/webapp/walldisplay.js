@@ -128,8 +128,10 @@ function jobHasHealthReport(job) {
 function repaint(){
     if(updateError != null){
         displayMessage(updateError, "message_error");
-    }else if(jobsToDisplay.length == 0){
+    }else if(updateRunning[viewName]){
         displayMessage("Loading jobs...", "message_info");
+    }else if(jobsToDisplay.length == 0){
+        displayMessage("No jobs to display...", "message_info");
     }else{
         removeMessage();
 
