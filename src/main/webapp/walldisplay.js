@@ -818,7 +818,7 @@ function getPluginConfiguration(jenkinsUrl){
                 lastTheme = theme;
             }
             
-            if (customTheme != null)
+            if (customTheme)
             {
                 $("head").append("<style type=\"text/css\">" + customTheme + "</style>");
             }
@@ -857,6 +857,7 @@ var theme = getParameterByName("theme", "default");
 var fontFamily = getParameterByName("fontFamily", "sans-serif");
 var sortOrder = getParameterByName("sortOrder", "job name");
 var buildRange = getParameterByName("buildRange", "all");
+var customTheme = getParameterByName("customTheme", null);
 var showDetails = false;
 var showGravatar = false;
 var jobGravatarCache = {};
