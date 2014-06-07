@@ -820,7 +820,8 @@ function getPluginConfiguration(jenkinsUrl){
             
             if (customTheme)
             {
-                $("head").append("<style type=\"text/css\">" + customTheme + "</style>");
+				$("#customThemeStyling").remove();
+                $("head").append("<style id='customThemeStyling' type=\"text/css\">" + customTheme + "</style>");
             }
             
 
