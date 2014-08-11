@@ -638,10 +638,6 @@ function getJenkinsApi(jenkinsUrl){
         success: function(viewApi, textStatus, jqXHR){
             debug("finished getting jenkins api");
 
-            var dateHeader = jqXHR.getResponseHeader("Date");
-            var date = new Date(dateHeader);
-            serverTime = date.getTime();
-
             var jobNames = getJobNamesToDisplay(viewApi);
             getJobs(jobNames);
 
@@ -714,6 +710,9 @@ function getPluginConfiguration(jenkinsUrl){
             if(lastPluginVersion != null && lastPluginVersion != plugin.version){
                 window.location.reload();
             }
+
+            var date = new Date(plugin.date);
+            serverTime = date.getTime();
 
             lastPluginVersion = plugin.version;
 

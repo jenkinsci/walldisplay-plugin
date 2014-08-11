@@ -13,6 +13,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -47,6 +48,11 @@ public class WallDisplayPlugin extends Plugin {
         return new Api(this);
     }
 
+    @Exported
+    public Date getDate() {
+        return new Date();
+    }
+    
     @Exported
     public String getVersion() {
         return Hudson.getInstance().getPluginManager().getPlugin(WallDisplayPlugin.class).getVersion();
