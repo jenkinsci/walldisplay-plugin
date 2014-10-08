@@ -128,7 +128,7 @@ function jobHasHealthReport(job) {
 function repaint(){
     if(updateError != null){
         displayMessage(updateError, "message_error");
-    }else if(updateRunning[viewName]){
+    }else if(updateRunningViews[viewName]){
         displayMessage("Loading jobs...", "message_info");
     }else if(jobsToDisplay.length == 0){
         displayMessage("No jobs to display...", "message_info");
@@ -140,7 +140,7 @@ function repaint(){
 
             $.each(jobsToDisplay, function(index, oldJob){
                 if(typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited
-                    && !updateRunning[oldJob.name]){
+                    && !updateRunningJobs[oldJob.name]){
                     jobsToDisplay.remove(oldJob);
                 }
             });
@@ -381,9 +381,9 @@ function getJobs(jobNames){
         .each(
             jobNames,
             function(index, jobName){
-                if(!updateRunning[jobName]){
+                if(!updateRunningJobs[jobName]){
                     debug("starting getting api for job '" + jobName + "'");
-                    updateRunning[jobName] = true;
+                    updateRunningJobs[jobName] = true;
 
                     $
                         .ajax({
@@ -476,11 +476,11 @@ function getJobs(jobNames){
                                     return sort;
                                 });
 
-                                updateRunning[jobName] = false;
+                                updateRunningJobs[jobName] = false;
                             },
                             error: function(e, xhr){
                                 debug("error getting api for job '" + jobName + "': '" + e.statusText + "'");
-                                updateRunning[jobName] = false;
+                                updateRunningJobs[jobName] = false;
                             },
                             timeout: jenkinsTimeOut
                         });
@@ -626,7 +626,7 @@ function updateShutdownMessage(quietingDown){
 function getJenkinsApi(jenkinsUrl){
 
     debug("starting getting jenkins api");
-    updateRunning[viewName] = true;
+    updateRunningViews[viewName] = true;
 
     // - get jenkins api ------------------------------------------------
     $.ajax({
@@ -642,12 +642,12 @@ function getJenkinsApi(jenkinsUrl){
             getJobs(jobNames);
 
             updateShutdownMessage(viewApi.quietingDown);
-            updateRunning[viewName] = false;
+            updateRunningViews[viewName] = false;
             updateError = null;
         },
         error: function(e, xhr){
             debug("error getting jenkins api: '" + e.statusText + "'");
-            updateRunning[viewName] = false;
+            updateRunningViews[viewName] = false;
             updateError = e.statusText;
             jobsToDisplay = new Array();
         },
@@ -905,6 +905,8 @@ var jobIndex = 0;
 var jobsToDisplay = new Array();
 var serverTime = 0;
 var updateRunning = new Array();
+var updateRunningJobs = new Array();
+var updateRunningViews = new Array();
 var updateError = null;
 var clientWidth;
 var clientHeight;
