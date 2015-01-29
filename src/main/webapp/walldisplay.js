@@ -138,7 +138,7 @@ function repaint(){
         removeMessage();
 
         if(!updateRunning["repaint"]){
-            removeAllJobs();
+            removeAllContainerJobs();
 
             $.each(jobsToDisplay, function(index, oldJob){
                 if(typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited
@@ -362,11 +362,16 @@ function repaint(){
                             showJobinfo(eventData.data.job);
                         });
 
-                        $("body").prepend(jobWrapper);
+                        $("#jobContainer").prepend(jobWrapper);
 
                         jobIndex++;
                     }
                 }
+
+                // Keeping cleanup and creation of jobs together to avoid screen flicker 
+                removeAllJobs();
+                $("body").prepend($("#jobContainer").html())
+                removeAllContainerJobs();
 
                 if(!blinkBgPicturesWhenBuilding){
                     $(".activeJob").clearQueue();
@@ -381,7 +386,11 @@ function repaint(){
 }
 
 function removeAllJobs(){
-    $(".job").remove();
+    $("body > .job").remove();
+}
+
+function removeAllContainerJobs(){
+    $("#jobContainer > .job").remove();
 }
 
 function getJobs(jobNames){

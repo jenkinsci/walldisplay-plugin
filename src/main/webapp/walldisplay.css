@@ -86,6 +86,11 @@ html, body {
 	width: auto;
 }
 
+#jobContainer
+{
+   visibility: hidden;
+}
+
 #Message
 {
 	border-radius: 60px;
