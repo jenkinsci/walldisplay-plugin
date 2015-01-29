@@ -261,13 +261,25 @@ function repaint(){
 
                         // - create the job content div ---------------------
                         var jobContent = $('<div />');
-                        jobContent.css({
-                            "position": "absolute",
-                            "top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
-                        });
+                        var cssArray = {"position":"absolute"};
+                        if(job.lastBuild != null && job.lastBuild.actions)
+                        {
+                          isJunitInUse = false;
+                          $.each(jobActions, function(actionIndex, action){
+                            if(action && action.totalCount){
+                              isJunitInUse = true;
+                            }
+                          });
+                          // if Junit is not in use we want to center the name into the wall
+                          // otherwise we don't center so that the 2 lines can be properly displayed
+                          if(!isJunitInUse)
+                          {
+                             cssArray["top"] = Math.round((jobHeight - textDimensions.height) / 2) + 'px';
+                          }
+                        }
                         jobContent.addClass("job_content");
                         jobContent.css(jobDimensionsStyle);
-                        jobContent.text(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails));
+                        jobContent.html(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails));
 
                         // - create the job wrapper div ---------------------
                         var jobWrapper = $('<div />').attr({

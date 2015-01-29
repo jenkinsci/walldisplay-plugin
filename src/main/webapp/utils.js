@@ -137,6 +137,38 @@ function getJobTitle(job) {
 	return jobTitle;
 }
 
+//String format from: http://jsfiddle.net/joquery/9KYaQ/
+String.format = function() {
+    // The string containing the format items (e.g. "{0}")
+    // will and always has to be the first argument.
+    var theString = arguments[0];
+    // start with the second argument (i = 1)
+    for (var i = 1; i < arguments.length; i++) {
+        // "gm" = RegEx options for Global search (more than one instance)
+        // and for Multiline search
+        var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+        theString = theString.replace(regEx, arguments[i]);
+    }
+    return theString;
+}
+
+function getJunitResults(job)
+{
+  lastBuild = job.lastBuild
+  jobActions = lastBuild.actions
+  appendText=""
+  $.each(jobActions, function(actionIndex, action){
+    if(action && action.totalCount){
+      template = "<br/><small>{0} test{1} runned. {2} test{3} failed.</small>"
+      formatedLine = String.format(template,action.totalCount, (action.totalCount > 1) ? "s" : "", action.failCount, (action.failCount > 1) ? "s" : "")
+      appendText += formatedLine
+    }
+  });
+
+  //junitResults = jobActions.hudson.tasks.junit.TestResultAction
+  return appendText 
+}
+
 function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
 
 	var jobText = getJobTitle(job);
@@ -144,7 +176,9 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
       if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)
       {
           jobText += ' #' + job.lastBuild.number;
-      }      
+          //Get Junit results in case of there is a build number
+          jobText += getJunitResults(job)
+      }
 
 	var appendText = new Array();
 
