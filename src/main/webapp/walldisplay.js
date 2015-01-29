@@ -129,7 +129,9 @@ function repaint(){
     if(updateError != null){
         displayMessage(updateError, "message_error");
     }else if(updateRunningViews[viewName]){
-        displayMessage("Loading jobs...", "message_info");
+        if(isDebug){
+            displayMessage("Loading jobs...", "message_info");
+        }
     }else if(jobsToDisplay.length == 0){
         displayMessage("No jobs to display...", "message_info");
     }else{
