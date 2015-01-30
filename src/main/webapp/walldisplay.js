@@ -263,7 +263,6 @@ function repaint(){
 
                         // - create the job content div ---------------------
                         var jobContent = $('<div />');
-                        var cssArray = {"position":"absolute"};
                         if(job.lastBuild != null && job.lastBuild.actions)
                         {
                           isJunitInUse = false;
@@ -276,7 +275,10 @@ function repaint(){
                           // otherwise we don't center so that the 2 lines can be properly displayed
                           if(!isJunitInUse)
                           {
-                             cssArray["top"] = Math.round((jobHeight - textDimensions.height) / 2) + 'px';
+								jobContent.css({
+									"position": "absolute",
+									"top": Math.round((jobHeight - textDimensions.height) / 2) + 'px'
+								});
                           }
                         }
                         jobContent.addClass("job_content");
