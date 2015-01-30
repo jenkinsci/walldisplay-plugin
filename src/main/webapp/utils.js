@@ -159,7 +159,7 @@ function getJunitResults(job)
   appendText=""
   $.each(jobActions, function(actionIndex, action){
     if(action && action.totalCount){
-      template = "<br/><small>{0} test{1} runned. {2} test{3} failed.</small>"
+      template = "<br/><small>{0} test{1} run, {2} test{3} failed</small>"
       formatedLine = String.format(template,action.totalCount, (action.totalCount > 1) ? "s" : "", action.failCount, (action.failCount > 1) ? "s" : "")
       appendText += formatedLine
     }
