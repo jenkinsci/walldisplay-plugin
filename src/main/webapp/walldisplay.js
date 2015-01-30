@@ -368,10 +368,6 @@ function repaint(){
                     }
                 }
 
-                // Keeping cleanup and creation of jobs together to avoid screen flicker 
-                removeAllJobs();
-                $("body").prepend($("#jobContainer").html())
-                removeAllContainerJobs();
 
                 if(!blinkBgPicturesWhenBuilding){
                     $(".activeJob").clearQueue();
@@ -381,6 +377,11 @@ function repaint(){
                     }
                 }
             }
+
+            // Keeping cleanup and creation of jobs together to avoid screen flicker 
+            removeAllJobs();
+            $("body").prepend($("#jobContainer").html())
+            removeAllContainerJobs();
         }
     }
 }
