@@ -37,6 +37,7 @@ public class Configuration {
     private int paintInterval = 1;
     private Boolean showDetails = false;
     private Boolean showGravatar = false;
+    private Boolean showJunitResults = false;
     private Boolean showBuildNumber = true;
     private Boolean showLastStableTimeAgo = true;
     private Boolean showDisabledBuilds = true;
@@ -48,6 +49,11 @@ public class Configuration {
         return showBuildNumber;
     }
 
+    @Exported
+    public Boolean getShowJunitResults() {
+        return showJunitResults;
+    }
+    
     public void setShowBuildNumber(Boolean showBuildNumber) {
         this.showBuildNumber = showBuildNumber;
     }
@@ -144,6 +150,10 @@ public class Configuration {
         this.showDetails = showDetails;
     }
 
+    public void setShowJunitResults(Boolean showJunitResults) {
+        this.showJunitResults = showJunitResults;
+    }
+
     @Exported
     public Boolean getShowGravatar() {
         return showGravatar;
@@ -199,7 +209,7 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).append("showJunitResults", showJunitResults).toString();
     }
 
     @Exported

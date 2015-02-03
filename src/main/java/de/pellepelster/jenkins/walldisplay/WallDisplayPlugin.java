@@ -104,6 +104,7 @@ public class WallDisplayPlugin extends Plugin {
                 .optString("sortOrder")));
         config.setCustomTheme(formData.optString("customTheme"));
         config.setShowWeatherReport(formData.optBoolean("jenkinsShowWeatherReport"));
+        config.setShowJunitResults(formData.optBoolean("jenkinsShowJunitResults"));
 
         getConfigXml().write(config);
     }

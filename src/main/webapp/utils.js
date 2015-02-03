@@ -97,12 +97,12 @@ function removeMessage()
 	$("#Message").remove();
 };
 
-function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails) {
+function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults) {
 
 	var job = null;
 
 	$.each(jobs, function(index, currentJob) { 
-		if (job == null || getJobText(currentJob, showBuildNumber, showLastStableTimeAgo, showDetails).length > getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails).length)
+		if (job == null || getJobText(currentJob, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults).length > getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults).length)
 		{
 			job = currentJob;
 		}
@@ -169,7 +169,7 @@ function getJunitResults(job)
   return appendText 
 }
 
-function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
+function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults) {
 
 	var jobText = getJobTitle(job);
 
@@ -177,12 +177,15 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
       {
           jobText += ' #' + job.lastBuild.number;
           //Get Junit results in case of there is a build number
-          jobText += getJunitResults(job)
+		  
+		  if (showJunitResults) {
+			jobText += getJunitResults(job)
+		  }
       }
 
 	var appendText = new Array();
 
-	if (showDetails == true) {
+	if (showDetails) {
         var culprit = getCulprit(job);
         var claimer = getClaimer(job);
         if (job.color == "green" || job.color == "green_anime" || job.color == "blue" || job.color == "blue_anime") {

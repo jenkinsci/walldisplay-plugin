@@ -80,7 +80,7 @@ function getTextDimensions(text, fontSize){
 
 function getJobDimensions(job, fontSize){
 
-    var textDimensions = getTextDimensions(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails),
+    var textDimensions = getTextDimensions(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults),
         fontSize);
 
     var dimension = {};
@@ -147,7 +147,7 @@ function repaint(){
                 }
             });
 
-            var longestJob = getLongestJob(jobsToDisplay, showBuildNumber, showLastStableTimeAgo, showDetails);
+            var longestJob = getLongestJob(jobsToDisplay, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults);
             var maxFontSize = 0;
 
             for(var columnCount = 1; columnCount <= jobsToDisplay.length; columnCount++){
@@ -266,14 +266,14 @@ function repaint(){
                         if(job.lastBuild != null && job.lastBuild.actions)
                         {
                           isJunitInUse = false;
-                          $.each(jobActions, function(actionIndex, action){
+                          $.each(job.lastBuild.actions, function(actionIndex, action){
                             if(action && action.totalCount){
                               isJunitInUse = true;
                             }
                           });
                           // if Junit is not in use we want to center the name into the wall
                           // otherwise we don't center so that the 2 lines can be properly displayed
-                          if(!isJunitInUse)
+                          if(!isJunitInUse || !showJunitResults)
                           {
 								jobContent.css({
 									"position": "absolute",
@@ -283,7 +283,7 @@ function repaint(){
                         }
                         jobContent.addClass("job_content");
                         jobContent.css(jobDimensionsStyle);
-                        jobContent.html(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails));
+                        jobContent.html(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults));
 
                         // - create the job wrapper div ---------------------
                         var jobWrapper = $('<div />').attr({
@@ -494,9 +494,9 @@ function getJobs(jobNames){
 									}
 
                                     if(sort == 0){
-                                        sort = getJobText(job1, showBuildNumber, showLastStableTimeAgo, showDetails)
+                                        sort = getJobText(job1, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults)
                                             .localeCompare(
-                                                getJobText(job2, showBuildNumber, showLastStableTimeAgo, showDetails));
+                                                getJobText(job2, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults));
                                     }
 
                                     return sort;
@@ -776,6 +776,10 @@ function getPluginConfiguration(jenkinsUrl){
                     showBuildNumber = getParameterByName('showBuildNumber', plugin.config.showBuildNumber);
                 }
 
+				if(plugin.config.showJunitResults != null){
+                    showJunitResults = getParameterByName('showJunitResults', plugin.config.showJunitResults);
+                }
+
                 if(plugin.config.showWeatherReport != null){
                     showWeatherReport = getParameterByName('showWeatherReport', plugin.config.showWeatherReport);
                 }
@@ -889,6 +893,7 @@ var showGravatar = false;
 var jobGravatarCache = {};
 var gravatarCounter = {};
 var showBuildNumber = true;
+var showJunitResults = false;
 var showWeatherReport = false;
 var showLastStableTimeAgo = true;
 var blinkBgPicturesWhenBuilding = false;

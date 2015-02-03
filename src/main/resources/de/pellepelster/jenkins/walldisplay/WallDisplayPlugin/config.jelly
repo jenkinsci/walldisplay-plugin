@@ -80,6 +80,10 @@
         <f:entry title="${%Show Last Stable Time Ago}" name="jenkinsLastStableTimeAgo" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsLastStableTimeAgo.html">
             <f:checkbox name="jenkinsLastStableTimeAgo" checked="${it.config.showLastStableTimeAgo}" />
         </f:entry> 
+
+        <f:entry title="${%Show JUnit Results}" name="jenkinsShowJunitResults" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowJunitResults.html">
+            <f:checkbox name="jenkinsShowJunitResults" checked="${it.config.showJunitResults}" />
+        </f:entry> 
         
         <f:entry title="${%Show Disabled Builds}" name="jenkinsShowDisabledBuilds" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDisabledBuilds.html">
             <f:checkbox name="jenkinsShowDisabledBuilds" checked="${it.config.showDisabledBuilds}" />
