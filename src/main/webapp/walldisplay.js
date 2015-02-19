@@ -266,7 +266,7 @@ function repaint(){
                         if(job.lastBuild != null && job.lastBuild.actions)
                         {
                           isJunitInUse = false;
-                          $.each(jobActions, function(actionIndex, action){
+                          $.each(job.lastBuild.actions, function(actionIndex, action){
                             if(action && action.totalCount){
                               isJunitInUse = true;
                             }
