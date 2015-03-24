@@ -416,7 +416,7 @@ function getJobs(jobNames){
                             url: jenkinsUrl + "/job/" + jobName + "/api/json",
                             dataType: "json",
                             data: {
-                                "tree": "healthReport[score],property[wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
+                                "tree": "displayName,healthReport[score],property[wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
                                 "lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason,failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +     
                                 "lastCompletedBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason, failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +                               
                                 		"lastSuccessfulBuild[duration]"
