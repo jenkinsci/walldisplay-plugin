@@ -56,6 +56,10 @@
         <f:entry title="${%Paint Interval}" name="paintInterval" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-paintInterval.html">
             <f:textbox name="paintInterval" value="${it.config.paintInterval}" default="1" />
         </f:entry> 
+        
+        <f:entry title="${%Maximum queue positions to show}" name="maxQueuePositionToShow" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-maxQueuePositionToShow.html">
+            <f:textbox name="maxQueuePositionToShow" value="${it.config.maxQueuePositionToShow}" default="15" />
+        </f:entry> 
 
         <f:entry title="${%Show Job Details}" name="jenkinsShowDetails" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowDetails.html">
             <f:checkbox name="jenkinsShowDetails" checked="${it.config.showDetails}" />

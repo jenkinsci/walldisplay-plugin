@@ -35,6 +35,7 @@ public class Configuration {
     private int jenkinsTimeOut = 15;
     private int jenkinsUpdateInterval = 20;
     private int paintInterval = 1;
+    private int maxQueuePositionToShow = 15;
     private Boolean showDetails = false;
     private Boolean showGravatar = false;
     private Boolean showJunitResults = false;
@@ -57,6 +58,15 @@ public class Configuration {
     public void setShowBuildNumber(Boolean showBuildNumber) {
         this.showBuildNumber = showBuildNumber;
     }
+
+    public void setMaxQueuePositionToShow(int maxQueuePositionToShow) {
+        this.maxQueuePositionToShow = maxQueuePositionToShow;
+    }
+
+    @Exported
+    public int getMaxQueuePositionToShow() {
+        return maxQueuePositionToShow;
+    }    
 
     @Exported
     public Boolean getShowLastStableTimeAgo() {
@@ -209,7 +219,7 @@ public class Configuration {
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).append("showJunitResults", showJunitResults).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).append("showJunitResults", showJunitResults).append("maxQueuePositionToShow", maxQueuePositionToShow).toString();
     }
 
     @Exported

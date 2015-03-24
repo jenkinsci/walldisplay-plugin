@@ -10,6 +10,11 @@ function getQueueDivs(jobWidth, jobHeight, queuePosition){
     var queueColumns = Math.ceil(queuePosition / perColumn);
 
     var maxQueueItems = maxQueuePositionToShow;
+	
+	if (maxQueuePositionToShow <= 0) {
+		maxQueueItems = maxQueuePositionToShowDefault;
+	}
+	
     if(queuePosition > maxQueueItems){
         queuePosition = maxQueueItems;
     }
@@ -779,6 +784,11 @@ function getPluginConfiguration(jenkinsUrl){
 				if(plugin.config.showJunitResults != null){
                     showJunitResults = getParameterByName('showJunitResults', plugin.config.showJunitResults);
                 }
+                
+				if(plugin.config.maxQueuePositionToShow != null){
+                    maxQueuePositionToShow = getParameterByName('maxQueuePositionToShow', plugin.config.maxQueuePositionToShow);
+                }
+
 
                 if(plugin.config.showWeatherReport != null){
                     showWeatherReport = getParameterByName('showWeatherReport', plugin.config.showWeatherReport);
@@ -898,7 +908,8 @@ var showWeatherReport = false;
 var showLastStableTimeAgo = true;
 var blinkBgPicturesWhenBuilding = false;
 var showDisabledBuilds = true;
-var maxQueuePositionToShow = 15;
+var maxQueuePositionToShowDefault = 15;
+var maxQueuePositionToShow = maxQueuePositionToShowDefault;
 
 var jobStatusOrder = new Array();
 jobStatusOrder["blue"] = 0;
