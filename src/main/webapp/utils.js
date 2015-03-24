@@ -212,11 +212,11 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails) {
 	return jobText;
 }
 
-function getGravatarUrl(job, showGravatar, size) {
+function getGravatarUrl(job, showGravatar, size, gravatarUrl) {
     if(showGravatar && getEmail(job) !== "") {
         var hash = CryptoJS.MD5(getEmail(job).toLowerCase());
 
-        return "http://www.gravatar.com/avatar/" + hash + "?s=" + size;
+        return (gravatarUrl != null && gravatarUrl != "" ? gravatarUrl : "http://www.gravatar.com/avatar/") + hash + "?s=" + size;
     }
 }
 function getEmail(job) {

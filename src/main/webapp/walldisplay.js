@@ -247,7 +247,8 @@ function repaint(){
                         if(!jobGravatarCache[job.name] || gravatarCounter[job.name] >= 5){
                             var jobGravatar = $('<img />');
                             jobGravatar.attr('src', getGravatarUrl(job, showGravatar, Math
-                                .round(jobDimensions.height * 0.80)));
+                                .round(jobDimensions.height * 0.80), gravatarUrl));
+                            jobGravatar.attr('alt', getEmail(job));
                             jobGravatar.css({
                                 "float": "left",
                                 "padding-top": Math.round((jobDimensions.height * 0.50)
@@ -772,6 +773,10 @@ function getPluginConfiguration(jenkinsUrl){
                     showGravatar = getParameterByName('showGravatar', plugin.config.showGravatar);
                 }
 
+                if(plugin.config.gravatarUrl != null){
+                    gravatarUrl = getParameterByName('gravatarUrl', plugin.config.gravatarUrl);
+                }
+
                 if(plugin.config.showBuildNumber != null){
                     showBuildNumber = getParameterByName('showBuildNumber', plugin.config.showBuildNumber);
                 }
@@ -886,6 +891,7 @@ var buildRange = getParameterByName("buildRange", "all");
 var customTheme = getParameterByName("customTheme", null);
 var showDetails = false;
 var showGravatar = false;
+var gravatarUrl = "http://www.gravatar.com/avatar/";
 var jobGravatarCache = {};
 var gravatarCounter = {};
 var showBuildNumber = true;
