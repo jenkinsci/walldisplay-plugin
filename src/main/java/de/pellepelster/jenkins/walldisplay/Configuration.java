@@ -44,6 +44,7 @@ public class Configuration {
     private Boolean showDisabledBuilds = true;
     private Boolean showWeatherReport = false;
     private Boolean blinkBgPicturesWhenBuilding = false;
+	private String gravatarUrl = "http://www.gravatar.com/avatar/";
 
     @Exported
     public Boolean getShowBuildNumber() {
@@ -214,12 +215,21 @@ public class Configuration {
         this.customTheme = customTheme;
     }
 
+	@Exported
+	public String getGravatarUrl() {
+		return gravatarUrl;
+	}
+
+	public void setGravatarUrl(String gravatarUrl) {
+		this.gravatarUrl = gravatarUrl;
+	}
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).append("showJunitResults", showJunitResults).append("maxQueuePositionToShow", maxQueuePositionToShow).toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("theme", theme).append("jenkinsTimeOut", jenkinsTimeOut).append("jenkinsUpdateInterval", jenkinsUpdateInterval).append("showDetails", showDetails).append("showGravatar", showGravatar).append("fontFamily", fontFamily).append("buildRange", buildRange).append("sortOrder", sortOrder).append("showWeatherReport", showWeatherReport).append("showJunitResults", showJunitResults).append("maxQueuePositionToShow", maxQueuePositionToShow).append("gravatarUrl", gravatarUrl).toString();
     }
 
     @Exported

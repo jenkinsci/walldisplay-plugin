@@ -76,6 +76,10 @@
         <f:entry title="${%Show Job Show Gravatar}" name="jenkinsShowGravatar" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowGravatar.html">
             <f:checkbox name="jenkinsShowGravatar" checked="${it.config.showGravatar}" />
         </f:entry>
+        
+        <f:entry title="${%Custom Gravatar URL}" name="jenkinsGravatarUrl" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsGravatarUrl.html">
+            <f:textbox name="jenkinsGravatarUrl" value="${it.config.gravatarUrl}" default="http://www.gravatar.com/avatar/" />
+        </f:entry>
 
         <f:entry title="${%Show Build Number}" name="jenkinsShowBuildNumber" help="${rootURL}/../plugin/jenkinswalldisplay/help-globalConfig-jenkinsShowBuildNumber.html">
             <f:checkbox name="jenkinsShowBuildNumber" checked="${it.config.showBuildNumber}" />
