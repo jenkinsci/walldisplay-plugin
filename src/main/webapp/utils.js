@@ -113,12 +113,8 @@ function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails
 
 function getJobTitle(job) {
 
-	var jobTitle = job.name;
+	var jobTitle = job.displayName;
 
-	if (job.displayName) {
-		jobTitle = job.displayName;
-	}
-	
 	if (job.property != null)
 	{
 		$.each(job.property, function(index, property) {
