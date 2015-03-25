@@ -928,6 +928,7 @@ jobStatusOrder["aborted"] = 6;
 jobStatusOrder["aborted_building"] = 7;
 jobStatusOrder["grey"] = 8;
 jobStatusOrder["grey_building"] = 9;
+jobStatusOrder["disabled"] = 10;
 
 var isDebug = false;
 var debugString = getParameterByName("debug", null);
