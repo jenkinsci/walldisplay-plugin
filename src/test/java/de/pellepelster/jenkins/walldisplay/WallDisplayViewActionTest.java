@@ -19,6 +19,7 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
 
     private String rootUrl;
     private String encodedRootUrl;
+    private String viewOwnerUrl;
 
     /**
      * Instantiates a new WallDisplayViewAction with a stubbed root URL
@@ -28,10 +29,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      * @return a new WallDisplayViewAction instance
      * @throws IOException
      */
-    public WallDisplayViewAction newAction(String viewName) throws IOException {
-        WallDisplayViewAction action = spy(new WallDisplayViewAction(viewName));
-        rootUrl = getURL().toExternalForm();
-        encodedRootUrl = URLEncoder.encode(rootUrl, "UTF-8");
+    public WallDisplayViewAction newAction(String viewName, String viewOwnerUrl) throws IOException {
+        WallDisplayViewAction action = spy(new WallDisplayViewAction(viewName, viewOwnerUrl));
+        this.rootUrl = getURL().toExternalForm();
+        this.encodedRootUrl = URLEncoder.encode(rootUrl, "UTF-8");
+        this.viewOwnerUrl = viewOwnerUrl;
         doReturn(rootUrl).when(action).getRootUrl();
         return action;
     }
@@ -43,11 +45,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      */
     @Test
     public void testGetUrlNameAllView() throws IOException {
-        WallDisplayViewAction action = newAction("All");
-        assertEquals(
-                rootUrl
-                        + "/plugin/jenkinswalldisplay/walldisplay.html?viewName=All&jenkinsUrl="
-                        + encodedRootUrl, action.getUrlName());
+        WallDisplayViewAction action = newAction("All", "/job/abc");
+        String urlName = rootUrl
+                + "plugin/jenkinswalldisplay/walldisplay.html?viewName=All&jenkinsUrl="
+                + encodedRootUrl + viewOwnerUrl;
+        assertEquals(urlName, action.getUrlName());
     }
 
     /**
@@ -58,11 +60,11 @@ public class WallDisplayViewActionTest extends HudsonTestCase {
      */
     @Test
     public void testGetUrlNameEncodedView() throws IOException {
-        WallDisplayViewAction action = newAction("+Dashboard");
-        assertEquals(
-                rootUrl
-                        + "/plugin/jenkinswalldisplay/walldisplay.html?viewName=%2BDashboard&jenkinsUrl="
-                        + encodedRootUrl, action.getUrlName());
+        WallDisplayViewAction action = newAction("+Dashboard", "");
+        String urlName = rootUrl
+                + "plugin/jenkinswalldisplay/walldisplay.html?viewName=%2BDashboard&jenkinsUrl="
+                + encodedRootUrl + viewOwnerUrl;
+        assertEquals(urlName, action.getUrlName());
     }
 
 }

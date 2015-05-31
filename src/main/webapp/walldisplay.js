@@ -120,8 +120,12 @@ function blink(objs){
     });
 }
 
+function jobHasColor(job) {
+    return typeof job.color !== "undefined"
+}
+
 function isJobBuilding(job) {
-    return job.color.substr(-6) === "_anime";    
+    return jobHasColor(job) && job.color.substr(-6) === "_anime";
 }
 
 function jobHasHealthReport(job) {
@@ -205,7 +209,7 @@ function repaint(){
                         var isBuilding = isJobBuilding(job);
                         var jobColor = job.color;
 
-                        if(job.color.substr(-6) === "_anime"){
+                        if(isBuilding){
                             jobColor = job.color.substr(0, job.color.length - 6);
                         }
 
@@ -441,7 +445,7 @@ function getJobs(jobNames){
 
                                 var jobFilteredOut = false;
 
-                                if(!showDisabledBuilds && job.color === 'disabled'){
+                                if(!jobHasColor(job) || (!showDisabledBuilds && job.color === 'disabled')){
                                     add = false;
                                     jobFilteredOut = true;
                                 }
