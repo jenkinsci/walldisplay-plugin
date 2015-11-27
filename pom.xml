@@ -20,7 +20,6 @@
         <connection>scm:git:git://github.com/jenkinsci/walldisplay-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/walldisplay-plugin.git</developerConnection>
         <url>scm:git:git@github.com:jenkinsci/walldisplay-plugin.git</url>
-      <tag>jenkinswalldisplay-0.6.32</tag>
   </scm>
 
     <distributionManagement>
