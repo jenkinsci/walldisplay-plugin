@@ -173,11 +173,13 @@ function getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, sh
 
 	var jobText = getJobTitle(job);
 
-      if (showBuildNumber && job.lastBuild != null && job.lastBuild.number != null)
+      if (job.lastBuild != null && job.lastBuild.number != null)
       {
-          jobText += ' #' + job.lastBuild.number;
+		  if (showBuildNumber) {
+			  jobText += '<span class="build_number"> #' + job.lastBuild.number + '</span>';
+		  }
+
           //Get Junit results in case of there is a build number
-		  
 		  if (showJunitResults) {
 			jobText += getJunitResults(job)
 		  }
