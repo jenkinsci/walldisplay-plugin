@@ -281,8 +281,10 @@ function repaint(){
                               isJunitInUse = true;
                             }
                           });
-                          // if Junit is not in use we want to center the name into the wall
-                          // otherwise we don't center so that the 2 lines can be properly displayed
+                          // if Junit is not in use we want to center the name
+							// into the wall
+                          // otherwise we don't center so that the 2 lines can
+							// be properly displayed
                           if(!isJunitInUse || !showJunitResults)
                           {
 								jobContent.css({
@@ -390,7 +392,8 @@ function repaint(){
                 }
             }
 
-            // Keeping cleanup and creation of jobs together to avoid screen flicker 
+            // Keeping cleanup and creation of jobs together to avoid screen
+			// flicker
             removeAllJobs();
             $("body").prepend($("#jobContainer").html())
             removeAllContainerJobs();
@@ -406,7 +409,7 @@ function removeAllContainerJobs(){
     $("#jobContainer > .job").remove();
 }
 
-function getJobs(jobNames){
+function getJobs(jobList){
     updateRunning["repaint"] = true;
     $.each(jobsToDisplay, function(index, job){
         job.visited = false;
@@ -415,15 +418,15 @@ function getJobs(jobNames){
 
     $
         .each(
-            jobNames,
-            function(index, jobName){
-                if(!updateRunningJobs[jobName]){
-                    debug("starting getting api for job '" + jobName + "'");
-                    updateRunningJobs[jobName] = true;
+        		jobList,
+            function(index, jobInfo){
+                if(!updateRunningJobs[jobInfo.name]){
+                    debug("starting getting api for job '" + jobInfo.name + "'");
+                    updateRunningJobs[jobInfo.name] = true;
 
                     $
                         .ajax({
-                            url: jenkinsUrl + "/job/" + jobName + "/api/json",
+                            url: jobInfo.url + "/api/json",
                             dataType: "json",
                             data: {
                                 "tree": "displayName,healthReport[score],property[wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
@@ -512,11 +515,11 @@ function getJobs(jobNames){
                                     return sort;
                                 });
 
-                                updateRunningJobs[jobName] = false;
+                                updateRunningJobs[jobInfo.name] = false;
                             },
                             error: function(e, xhr){
                                 debug("error getting api for job '" + jobName + "': '" + e.statusText + "'");
-                                updateRunningJobs[jobName] = false;
+                                updateRunningJobs[jobInfo.name] = false;
                             },
                             timeout: jenkinsTimeOut
                         });
@@ -525,22 +528,28 @@ function getJobs(jobNames){
             });
 }
 
-function getJobNamesToDisplay(viewApi){
-    var jobNames = new Array();;
+function getJobToDisplay(viewApi){
+	var jobList = new Array();; 
+	
+	 $.each(viewApi.jobs, function(index, job){
+	        var jobInfo = new Array();;
+	        jobInfo['name']=job.name;
+	        jobInfo['url']=job.url;
+	        jobList.push(jobInfo);
+	 });
 
-    $.each(viewApi.jobs, function(index, job){
-        jobNames.push(job.name);
-    });
+	 if(viewApi.views != null && viewApi.views.length){
+		 $.each(viewApi.views, function(index, nestedView){
+			 $.each(nestedView.jobs, function(index, job){
+				 var jobInfo = new Array();;
+	             jobInfo['name']=job.name;
+	             jobInfo['name']=job.url;
+	             jobList.push();
+	         });
+	     });
+	 }
 
-    if(viewApi.views != null && viewApi.views.length){
-        $.each(viewApi.views, function(index, nestedView){
-            $.each(nestedView.jobs, function(index, job){
-                jobNames.push(job.name);
-            });
-        });
-    }
-
-    return jobNames;
+	 return jobList;
 }
 
 function debug(logMessage){
@@ -574,7 +583,9 @@ function showJobinfo(job){
         if (job.lastStableBuild && job.lastBuild.color != "blue"){   
             jobInfoDiv.append($('<p />')
                 .append("Broken For  " + getUserFriendlyTimespan(serverTime - job.lastStableBuild.timestamp)));
-                // .append(" since ").append($('<a />', {href: url + "/" + job.lastStableBuild.number, text: "build #" + job.lastStableBuild.number })));
+                // .append(" since ").append($('<a />', {href: url + "/" +
+				// job.lastStableBuild.number, text: "build #" +
+				// job.lastStableBuild.number })));
         }        
 
         jobInfoDiv.append($('<p />').append($('<a />', {href: url + "/changes", text: "Recent Changes" })));
@@ -582,7 +593,7 @@ function showJobinfo(job){
         if (isJobBuilding(job)){
             if (job.lastSuccessful)
                 jobInfoDiv.append($('<p />').text("Last successful build took " + getUserFriendlyTimespan(serverTime - job.lastSuccessful.duration)));
-            // last and last completed will be the same if not building. 
+            // last and last completed will be the same if not building.
             addBuildDetails(jobInfoDiv, job.lastBuild, "Currently Building #" + job.lastBuild.number, url);    
             addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build #" + job.lastCompletedBuild.number, url);        
         } 
@@ -674,8 +685,8 @@ function getJenkinsApi(jenkinsUrl){
         success: function(viewApi, textStatus, jqXHR){
             debug("finished getting jenkins api");
 
-            var jobNames = getJobNamesToDisplay(viewApi);
-            getJobs(jobNames);
+            var jobList = getJobToDisplay(viewApi);
+            getJobs(jobList);
 
             updateShutdownMessage(viewApi.quietingDown);
             updateRunningViews[viewName] = false;
@@ -753,7 +764,8 @@ function getPluginConfiguration(jenkinsUrl){
             lastPluginVersion = plugin.version;
 
             if(plugin.config && plugin.config != null){
-                // parameters specified in URL should override any set in plugin config. 
+                // parameters specified in URL should override any set in plugin
+				// config.
                 if(plugin.config.theme && plugin.config.theme != null){
                     theme = getParameterByName('theme', plugin.config.theme.toLowerCase());
                 }
