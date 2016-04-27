@@ -111,6 +111,19 @@ function getLongestJob(jobs, showBuildNumber, showLastStableTimeAgo, showDetails
 	return job;
 }
 
+function getJobOrder(job) {
+
+    var jobOrder = "";
+
+    $.each(job.property, function(index, property){
+        if(property.wallDisplayOrder != null && property.wallDisplayOrder != ""){
+            jobOrder = property.wallDisplayOrder;
+        }
+    });
+
+    return jobOrder;
+}
+
 function getJobTitle(job) {
 
 	var jobTitle = job.displayName;

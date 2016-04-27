@@ -19,6 +19,11 @@ xmlns:f="/lib/form">
                 <f:textbox name="wallDisplayBgPicture" value="${instance.wallDisplayBgPicture}" />
             </f:entry>
         </f:optionalBlock>
+        <f:optionalBlock name="wallDisplayOrderDynamic" title="${%walldisplay.orderdynamic}" checked="${instance.wallDisplayOrder != null}">
+            <f:entry title="${%walldisplay.order}" field="wallDisplayOrder">
+                <f:textbox name="wallDisplayOrder" value="${instance.wallDisplayOrder}" />
+            </f:entry>
+        </f:optionalBlock>
     </table>
 </f:block>
 

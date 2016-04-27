@@ -429,7 +429,7 @@ function getJobs(jobList){
                             url: jobInfo.url + "/api/json",
                             dataType: "json",
                             data: {
-                                "tree": "displayName,healthReport[score],property[wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
+                                "tree": "displayName,healthReport[score],property[wallDisplayOrder,wallDisplayName,wallDisplayBgPicture],name,color,priority,lastStableBuild[timestamp]," +
                                 "lastBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason,failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +     
                                 "lastCompletedBuild[number,timestamp,duration,actions[parameters[name,value],claimed,claimedBy,reason, failCount,skipCount,totalCount],culprits[fullName,property[address]]]," +                               
                                 		"lastSuccessfulBuild[duration]"
@@ -504,7 +504,18 @@ function getJobs(jobList){
                                     } else if (sortOrder == "job priority")
 									{
                                         sort = job1.priority - job2.priority;
-									}
+									} else if (sortOrder == "job order")
+                                    {
+
+                                        var order1 = parseInt(getJobOrder(job1), 10);
+                                        var order2 = parseInt(getJobOrder(job2), 10);
+
+                                        if (!isNaN(order1) && !isNaN(order2)) {
+                                            sort = order1 - order2;
+                                        } else {
+                                            sort = getJobOrder(job1).localeCompare(getJobOrder(job2));
+                                        }
+                                    }
 
                                     if(sort == 0){
                                         sort = getJobText(job1, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults)

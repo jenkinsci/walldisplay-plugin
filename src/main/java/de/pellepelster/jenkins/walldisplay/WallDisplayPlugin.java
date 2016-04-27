@@ -36,7 +36,7 @@ public class WallDisplayPlugin extends Plugin {
     public static final String[] buildRange = new String[]{"All", "Active this month", "Active this week", "Active today"};
 
     public static final String[] sortOrder = new String[]{"Job Name",
-            "Job Status"};
+            "Job Status", "Job Order"};
 
     @Exported
     public Configuration config;
