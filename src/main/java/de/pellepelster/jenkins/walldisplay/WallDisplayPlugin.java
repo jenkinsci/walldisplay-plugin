@@ -29,14 +29,13 @@ public class WallDisplayPlugin extends Plugin {
 
     public final static String PLUGIN_NAME = "jenkinswalldisplay";
 
-    public static final String[] themes = new String[]{"Default", "Plain", "Christmas", "Boss", "Dark", "Colorblind"};
+    static final String[] themes = new String[]{"Default", "Plain", "Christmas", "Boss", "Dark", "Colorblind"};
 
-    public static final String[] fontFamilies = new String[]{"Sans-Serif", "Arial", "Helvetica", "Verdana"};
+    static final String[] fontFamilies = new String[]{"Sans-Serif", "Arial", "Helvetica", "Verdana"};
 
-    public static final String[] buildRange = new String[]{"All", "Active this month", "Active this week", "Active today"};
+    static final String[] buildRange = new String[]{"All", "Active this month", "Active this week", "Active today"};
 
-    public static final String[] sortOrder = new String[]{"Job Name",
-            "Job Status", "Job Order"};
+    static final String[] sortOrder = new String[]{"Job Name", "Job Status", "Job Order"};
 
     @Exported
     public Configuration config;
