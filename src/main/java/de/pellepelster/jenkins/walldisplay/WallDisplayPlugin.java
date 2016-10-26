@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  * This plugin provides a application that monitors jobs in a way suitable for public wall displays
  *
  * @author Christian Pelster
- * @plugin jenkinswalldisplay
  */
 @ExportedBean
 public class WallDisplayPlugin extends Plugin {
