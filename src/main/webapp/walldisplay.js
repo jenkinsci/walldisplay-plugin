@@ -529,7 +529,7 @@ function getJobs(jobList){
                                 updateRunningJobs[jobInfo.name] = false;
                             },
                             error: function(e, xhr){
-                                debug("error getting api for job '" + jobName + "': '" + e.statusText + "'");
+                                debug("error getting api for job '" + jobInfo.name + "': '" + e.statusText + "'");
                                 updateRunningJobs[jobInfo.name] = false;
                             },
                             timeout: jenkinsTimeOut
