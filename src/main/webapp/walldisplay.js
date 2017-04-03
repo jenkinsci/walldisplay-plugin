@@ -49,7 +49,14 @@ function getQueueDivs(jobWidth, jobHeight, queuePosition){
         queueLeft -= increment + radius;
     }
 
-    return queueDivs;
+    queueDivContainer = $('<div />')
+    queueDivContainer.addClass('queue_divs')
+
+    $.each(queueDivs, function(index, queueDiv) {
+        queueDivContainer.append(queueDiv)
+    });
+
+    return queueDivContainer;
 }
 
 function updateWindowSizes(){
@@ -147,7 +154,7 @@ function repaint(){
         removeMessage();
 
         if(!updateRunning["repaint"]){
-            removeAllContainerJobs();
+            jobsToRemove = $('.job_wrapper').map(function() { return this.id; }).get();
 
             $.each(jobsToDisplay, function(index, oldJob){
                 if(typeof oldJob !== "undefined" && typeof oldJob.visited !== "undefined" && !oldJob.visited
@@ -225,7 +232,8 @@ function repaint(){
                             "left": left
                         };
 
-                        var percentageDiv = $('<div />');;
+                        var percentageDiv = $('<div />');
+                        percentageDiv.addClass("progress");
                         var jobOverdue = false;
                         if(isBuilding && job.lastBuild != null && job.lastBuild.timestamp != null
                             && job.lastSuccessfulBuild != null && job.lastSuccessfulBuild.duration != null){
@@ -255,6 +263,7 @@ function repaint(){
                         // - create the gravatar img ------------------------
                         if(!jobGravatarCache[job.name] || gravatarCounter[job.name] >= 5){
                             var jobGravatar = $('<img />');
+                            jobGravatar.addClass('gravatar')
                             jobGravatar.attr('src', getGravatarUrl(job, showGravatar, Math
                                 .round(jobDimensions.height * 0.80), gravatarUrl));
                             jobGravatar.attr('alt', getEmail(job));
@@ -297,10 +306,25 @@ function repaint(){
                         jobContent.css(jobDimensionsStyle);
                         jobContent.html(getJobText(job, showBuildNumber, showLastStableTimeAgo, showDetails, showJunitResults));
 
-                        // - create the job wrapper div ---------------------
-                        var jobWrapper = $('<div />').attr({
-                            "id": job.name
+                        jobContent.click({
+                            "job": job
+                        }, function(eventData){
+                            showJobinfo(eventData.data.job);
                         });
+
+                        // - create the job wrapper div ---------------------
+                        var jobWrapper = $('.job_wrapper#' + sanitizeJobId(job.name))[0];
+                        if (!jobWrapper) {
+                            jobWrapper = $('<div />').attr({
+                                "id": job.name
+                            });
+                        } else {
+                            jobWrapper = $(jobWrapper)
+                            // Don't remove elements that are being updated
+                            indexOfExistingElement = jobsToRemove.indexOf(job.name);
+                            jobsToRemove.splice(indexOfExistingElement, 1);
+                            jobWrapper.removeAttr('class');
+                        }
 
                         if(isBuildClaimed(job)){
                             jobWrapper.addClass("claimed");
@@ -316,6 +340,8 @@ function repaint(){
                         jobWrapper.addClass("job_wrapper");
                         jobWrapper.addClass(theme);
                         jobWrapper.addClass(jobColor);
+
+                        // - insert job content divs ------------------------------
 
                         if (showWeatherReport && jobHasHealthReport(job))
                         {
@@ -338,11 +364,12 @@ function repaint(){
                             });
 
                             jobWeatherReport.addClass("job_weather_report");
-                            jobWrapper.append(jobWeatherReport);
+                            replaceOrAppendInJobWrapper(jobWrapper, jobWeatherReport, ".job_weather_report")
                         }
 
-                        // - assemble job divs ------------------------------
-                        if(showGravatar) jobWrapper.append(jobGravatarCache[job.name]);
+                        if (showGravatar) {
+                            replaceOrAppendInJobWrapper(jobWrapper, jobGravatarCache[job.name], ".gravatar")
+                        }
 
                         $.each(job.property, function(index, property){
                             if(property.wallDisplayBgPicture != null && property.wallDisplayBgPicture != ""){
@@ -360,28 +387,24 @@ function repaint(){
                                     "width": Math.floor((jobWidth) / 6) + "px",
                                     "height": (jobHeight) + "px"
                                 });
+                                jobBg.addClass('job_bg')
                                 jobBg.addClass((!isBuilding ? "in" : "") + "activeJob");
-                                jobWrapper.append(jobBg);
+                                replaceOrAppendInJobWrapper(jobWrapper, prevContent, ".job_bg")
                             }
                         });
-                        jobWrapper.append(jobContent);
-                        jobWrapper.append(percentageDiv);
-                        $.each(queueDivs, function(index, queueDiv){
-                            jobWrapper.append(queueDiv);
-                        });
 
-                        jobContent.click({
-                            "job": job
-                        }, function(eventData){
-                            showJobinfo(eventData.data.job);
-                        });
+                        replaceOrAppendInJobWrapper(jobWrapper, jobContent, ".job_content")
+                        replaceOrAppendInJobWrapper(jobWrapper, percentageDiv, ".progress")
+                        replaceOrAppendInJobWrapper(jobWrapper, queueDivs, ".queue_divs")
 
-                        $("#jobContainer").prepend(jobWrapper);
+                        // - insert the job row ---------------------
+                        if ($('body > #' + sanitizeJobId(job.name)).length == 0) {
+                            $('body').prepend(jobWrapper);
+                        }
 
                         jobIndex++;
                     }
                 }
-
 
                 if(!blinkBgPicturesWhenBuilding){
                     $(".activeJob").clearQueue();
@@ -392,21 +415,29 @@ function repaint(){
                 }
             }
 
-            // Keeping cleanup and creation of jobs together to avoid screen
-			// flicker
-            removeAllJobs();
-            $("body").prepend($("#jobContainer").html())
-            removeAllContainerJobs();
+            // Remove any elements from the DOM that should no longer be getting rendered
+            $.each(jobsToRemove, function(idx, jobName) {
+                $('body > .job_wrapper#' + sanitizeJobId(jobName)).remove()
+            });
         }
     }
 }
 
 function removeAllJobs(){
-    $("body > .job").remove();
+    $("body > .job_wrapper").remove();
 }
 
-function removeAllContainerJobs(){
-    $("#jobContainer > .job").remove();
+function replaceOrAppendInJobWrapper(jobWrapper, elementToInsert, classToMatch) {
+    prevElement = jobWrapper.find(classToMatch)
+    if (prevElement.length == 0) {
+        jobWrapper.append(elementToInsert);
+    } else if (!prevElement[0].isEqualNode(elementToInsert[0])) {
+        prevElement.replaceWith(elementToInsert);
+    }
+}
+
+function sanitizeJobId(origId) {
+    return origId.replace( /(:|\.|\[|\]|,|\+)/g, "\\$1")
 }
 
 function getJobs(jobList){
@@ -607,10 +638,9 @@ function showJobinfo(job){
             // last and last completed will be the same if not building.
             addBuildDetails(jobInfoDiv, job.lastBuild, "Currently Building #" + job.lastBuild.number, url);    
             addBuildDetails(jobInfoDiv, job.lastCompletedBuild, "Last Completed Build #" + job.lastCompletedBuild.number, url);        
-        } 
-        else{
+        } else if (job.lastBuild) {
             addBuildDetails(jobInfoDiv, job.lastBuild, "Last Build #" + job.lastBuild.number, url);    
-        }        
+        }
         jobInfoDiv.click(function(){
             $("#JobInfo").remove();
         });
@@ -1035,11 +1065,24 @@ window.onresize = function(event){
     updateWindowSizes();
 };
 
-function setPaintInterval(){
+function setPaintInterval() {
+    prevWidth = window.innerWidth;
+    prevHeight = window.innerHeight;
+
     paintIntervalId = setInterval(function(){
         serverTime += paintInterval;
         if(!paintRunning){
             paintRunning = true;
+
+            newWidth = window.innerWidth;
+            newHeight = window.innerHeight;
+
+            if (newWidth != prevWidth || newHeight != prevHeight) {
+                prevHeight = newHeight;
+                prevWidth = newWidth;
+                removeAllJobs();
+            }
+
             repaint();
             paintRunning = false;
         }
