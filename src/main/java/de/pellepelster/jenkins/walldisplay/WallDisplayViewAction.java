@@ -18,7 +18,11 @@ public class WallDisplayViewAction implements Action {
 	private String viewOwnerUrl;
 
 	public WallDisplayViewAction(String viewName, String viewOwnerUrl) {
-		this.viewName = viewName;
+                try {
+                        this.viewName = URLEncoder.encode(viewName, ENCODING);
+                } catch (UnsupportedEncodingException e) {
+                        // TODO
+                }
 		this.viewOwnerUrl = viewOwnerUrl;
 	}
 
@@ -34,7 +38,6 @@ public class WallDisplayViewAction implements Action {
 		String hudsonUrl = getRootUrl();
 		try {
 			hudsonUrl = URLEncoder.encode(hudsonUrl, ENCODING);
-			viewName = URLEncoder.encode(viewName, ENCODING);
 		} catch (UnsupportedEncodingException e) {
 			// TODO
 		}
