@@ -88,7 +88,7 @@ html, body {
 
 #jobContainer
 {
-   visibility: hidden;
+   visibility: visible;
 }
 
 #Message
